@@ -1,10 +1,11 @@
-using BoogieAST;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using BoogieAST;
+using WasmToBoogie.Conversion;
 using WasmToBoogie.Parser;
 using WasmToBoogie.Parser.Ast;
-using WasmToBoogie.Conversion;
-using System.Text;
+
 namespace WasmToBoogie
 {
     public class WasmToBoogieMain
@@ -36,8 +37,8 @@ namespace WasmToBoogie
         // NEW: format + write without touching BoogieAST
         public void TranslateAndWrite(string outPath)
         {
-            var program = Translate();           // build program
-            var bpl = program.ToString();        // serialize
+            var program = Translate(); // build program
+            var bpl = program.ToString(); // serialize
             bpl = BoogiePrettyPrinter.IndentBoogie(bpl); // format
             Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
             File.WriteAllText(outPath, bpl, Encoding.UTF8);

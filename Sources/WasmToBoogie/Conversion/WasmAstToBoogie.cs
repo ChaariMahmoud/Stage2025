@@ -12,7 +12,15 @@ namespace WasmToBoogie.Conversion
         private readonly string contractName;
         private int labelCounter = 0;
 
-        
+        // map boogieName -> isMutable
+        private readonly Dictionary<string, bool> boogieGlobalIsMutable = new(
+            StringComparer.Ordinal
+        );
+
+        // (optionnel) boogieName -> init literal si connu (pour const)
+        private readonly Dictionary<string, float> boogieGlobalInitValue = new(
+            StringComparer.Ordinal
+        );
 
         // Module Boogie en construction
         private BoogieProgram? program;
@@ -48,6 +56,164 @@ namespace WasmToBoogie.Conversion
         // ============================================================
         // Helpers
         // ============================================================
+        // ============================
+        // Globals init (module-level)
+        // ============================
+
+        private void DeclareAllGlobals(WasmModule wasmModule)
+        {
+            foreach (var g in wasmModule.Globals)
+            {
+                var key = ResolveGlobalKey(g.Index, g.Name);
+                EnsureGlobalDecl(g, key);
+            }
+        }
+
+        private string EnsureGlobalDecl(WasmGlobal g, string watKey)
+        {
+            // mapping stable
+            string key = watKey.StartsWith("$", StringComparison.Ordinal) ? watKey : "$" + watKey;
+
+            if (!globalNameMap.TryGetValue(key, out var boogieName))
+            {
+                boogieName = SanitizeGlobalName(key);
+                globalNameMap[key] = boogieName;
+            }
+
+            // mémorise mutabilité
+            boogieGlobalIsMutable[boogieName] = g.IsMutable;
+
+
+           if (program != null && !declaredBoogieGlobals.Contains(boogieName))
+{
+    if (g.IsMutable)
+    {
+        program.Declarations.Add(
+            new BoogieGlobalVariable(new BoogieTypedIdent(boogieName, BoogieType.Real))
+        );
+    }
+    else
+    {
+        // ✅ const (tu as déjà BoogieConstant dans ton AST)
+        program.Declarations.Add(
+            new BoogieConstant(new BoogieTypedIdent(boogieName, BoogieType.Real))
+        );
+
+        // ✅ axiom const == init (si init numérique)
+        if (TryParseInitConst(g.InitConst, out var fv))
+        {
+            program.Declarations.Add(
+                new BoogieAxiom(
+                    new BoogieBinaryOperation(
+                        BoogieBinaryOperation.Opcode.EQ,
+                        new BoogieIdentifierExpr(boogieName),
+                        new BoogieLiteralExpr(new Pfloat(fv))
+                    )
+                )
+            );
+        }
+        else
+        {
+            // pas de BoogieCommentCmd ici (c'est un Cmd, pas une Declaration)
+            // au pire: ne rien ajouter, ou mettre un axiom "true" si tu veux.
+        }
+    }
+
+    declaredBoogieGlobals.Add(boogieName);
+}
+
+
+            return boogieName;
+        }
+
+        // Parse Binaryen wrapper init const string -> float
+        // Accepts: "5", "-3", "12.5", maybe "i32.const 5" (rare), etc.
+        private bool TryParseInitConst(string? init, out float value)
+        {
+            value = 0f;
+            if (string.IsNullOrWhiteSpace(init))
+                return false;
+
+            var s = init.Trim();
+
+            // Sometimes wrappers return something like "i32.const 5"
+            // Keep only the last token if it's numeric.
+            var parts = s.Split(
+                new[] { ' ', '\t', '\r', '\n' },
+                StringSplitOptions.RemoveEmptyEntries
+            );
+            if (parts.Length >= 2)
+                s = parts[^1];
+
+            return float.TryParse(
+                s,
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out value
+            );
+        }
+
+        private (BoogieProcedure proc, BoogieImplementation impl) BuildInitGlobals(
+            WasmModule wasmModule
+        )
+        {
+            var body = new BoogieStmtList();
+            var locals = new List<BoogieVariable>();
+
+            var mods = new List<BoogieGlobalVariable>();
+
+            foreach (var g in wasmModule.Globals)
+            {
+                var key = ResolveGlobalKey(g.Index, g.Name);
+                string bname = EnsureGlobalDecl(g, key);
+
+                // *** uniquement mutables ***
+                if (!g.IsMutable)
+                    continue;
+
+                mods.Add(new BoogieGlobalVariable(new BoogieTypedIdent(bname, BoogieType.Real)));
+
+                if (TryParseInitConst(g.InitConst, out var fv))
+                {
+                    body.AddStatement(
+                        new BoogieAssignCmd(
+                            new BoogieIdentifierExpr(bname),
+                            new BoogieLiteralExpr(new Pfloat(fv))
+                        )
+                    );
+                }
+                else
+                {
+                    body.AddStatement(
+                        new BoogieAssignCmd(
+                            new BoogieIdentifierExpr(bname),
+                            new BoogieFunctionCall("nd_real", new())
+                        )
+                    );
+                }
+            }
+
+            var proc = new BoogieProcedure(
+                "initGlobals",
+                new List<BoogieVariable>(),
+                new List<BoogieVariable>(),
+                attributes: null,
+                modSet: mods,
+                pre: null,
+                post: null
+            );
+
+            var impl = new BoogieImplementation(
+                "initGlobals",
+                new List<BoogieVariable>(),
+                new List<BoogieVariable>(),
+                locals,
+                body,
+                attributes: null
+            );
+
+            return (proc, impl);
+        }
 
         private static bool AllDigits(string s)
         {
@@ -95,7 +261,7 @@ namespace WasmToBoogie.Conversion
             n = Regex.Replace(n, @"[^A-Za-z0-9_]", "_");
             if (!char.IsLetter(n[0]) && n[0] != '_')
                 n = "_" + n;
-            return  n;
+            return n;
         }
 
         private string ResolveGlobalKey(int? index, string? name)
@@ -117,14 +283,6 @@ namespace WasmToBoogie.Conversion
             {
                 boogieName = SanitizeGlobalName(key);
                 globalNameMap[key] = boogieName;
-            }
-
-            if (program != null && !declaredBoogieGlobals.Contains(boogieName))
-            {
-                program.Declarations.Add(
-                    new BoogieGlobalVariable(new BoogieTypedIdent(boogieName, BoogieType.Real))
-                );
-                declaredBoogieGlobals.Add(boogieName);
             }
 
             return boogieName;
@@ -185,6 +343,10 @@ namespace WasmToBoogie.Conversion
                 }
 
             AddPrelude(p);
+            DeclareAllGlobals(wasmModule);
+            var (igProc, igImpl) = BuildInitGlobals(wasmModule);
+            p.Declarations.Add(igProc);
+            p.Declarations.Add(igImpl);
 
             foreach (var func in wasmModule.Functions)
             {
