@@ -1,3 +1,4 @@
 Corral program verifier version 1.0.0.0
-BoogieOutputs/dynamic_predule.bpl(67,7): Error: cannot refer to a global variable in this context: Max
-1 name resolution errors in BoogieOutputs/dynamic_predule.bpl
+BoogieOutputs/request.bpl(114,4): Error: call to undeclared procedure: InitRuntime
+BoogieOutputs/request.bpl(154,4): Error: call to undeclared procedure: InitRuntime
+2 name resolution errors in BoogieOutputs/request.bpl

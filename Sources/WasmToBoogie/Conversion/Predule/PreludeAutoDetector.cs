@@ -120,7 +120,7 @@ namespace WasmToBoogie.Conversion
                     break;
 
                 case IfNode iff:
-                u.UsesBoolCasts = true;
+                    u.UsesBoolCasts = true;
                     Walk(iff.Condition, u);
                     foreach (var x in iff.ThenBody)
                         Walk(x, u);
@@ -140,12 +140,12 @@ namespace WasmToBoogie.Conversion
                     break;
 
                 case BrIfNode brIf:
-                u.UsesBoolCasts = true;
+                    u.UsesBoolCasts = true;
                     Walk(brIf.Condition, u);
                     break;
 
                 case BrTableNode:
-                u.UsesBoolCasts = true;
+                    u.UsesBoolCasts = true;
                     // tu utilises idx := real_to_int(...) + ifs
                     u.UsesNumericCasts = true;
                     break;

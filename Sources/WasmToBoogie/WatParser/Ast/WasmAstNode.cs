@@ -2,7 +2,14 @@ using System.Collections.Generic;
 
 namespace WasmToBoogie.Parser.Ast
 {
-    public enum WasmValueType { I32, I64, F32, F64 }
+    public enum WasmValueType
+    {
+        I32,
+        I64,
+        F32,
+        F64,
+    }
+
     public abstract class WasmNode { }
 
     public class ConstNode : WasmNode
@@ -26,6 +33,8 @@ namespace WasmToBoogie.Parser.Ast
 
     public class IfNode : WasmNode
     {
+        // NEW: if (result i32) / (result f32) etc. Null => if statement (no value produced)
+        public WasmValueType? ResultType { get; set; } = null;
         public WasmNode Condition { get; set; }
         public List<WasmNode> ThenBody { get; set; } = new();
         public List<WasmNode>? ElseBody { get; set; } = null;
@@ -33,18 +42,21 @@ namespace WasmToBoogie.Parser.Ast
 
     public class BlockNode : WasmNode
     {
+        public WasmValueType? ResultType { get; set; } = null;
         public string? Label { get; set; }
         public List<WasmNode> Body { get; set; } = new();
     }
 
     public class LoopNode : WasmNode
     {
+        public WasmValueType? ResultType { get; set; } = null;
         public string? Label { get; set; }
         public List<WasmNode> Body { get; set; } = new();
     }
 
     public class BrNode : WasmNode
     {
+        
         public string Label { get; set; } // e.g., $label
     }
 
@@ -144,20 +156,22 @@ namespace WasmToBoogie.Parser.Ast
         public int ParamCount { get; set; } = 0;
         public int LocalCount { get; set; } = 0;
         public int ResultCount { get; set; }
-        public Dictionary<string, int> LocalIndexByName { get; set; } = new(); // params first [0..n-1], then locals
+        public Dictionary<string, int> LocalIndexByName { get; set; } = new();
     }
+
     public class WasmGlobal
     {
         public int Index { get; set; }
         public string? Name { get; set; }
         public bool IsMutable { get; set; }
-        public string ValType { get; set; } = "i32";
+        public string ValType { get; set; }
         public string? InitConst { get; set; }
     }
+
     public class WasmModule
     {
-            public List<WasmGlobal> Globals { get; } = new();
-    public Dictionary<string,int> GlobalIndexByName { get; } = new();
+        public List<WasmGlobal> Globals { get; } = new();
+        public Dictionary<string, int> GlobalIndexByName { get; } = new();
         public List<WasmFunction> Functions { get; set; } = new();
     }
 

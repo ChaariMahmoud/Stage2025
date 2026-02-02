@@ -30,11 +30,6 @@ namespace WasmToBoogie.Conversion
             program.Declarations.Add(
                 new BoogieGlobalVariable(new BoogieTypedIdent("$tmp3", BoogieType.Real))
             );
-
-            // Globals init flag
-            program.Declarations.Add(
-                new BoogieGlobalVariable(new BoogieTypedIdent("$globals_inited", BoogieType.Bool))
-            );
         }
     }
 }

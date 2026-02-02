@@ -4,6 +4,11 @@ var $tmp1: real;
 var $tmp2: real;
 var $tmp3: real;
 var $mem: [int]int;
+
+type mem = [int]int ;
+type mem_multiple = [int]mem; 
+var $mm : mem_multiple;
+
 var $mem_pages: int;
 function to_u8(x: int) returns (r: int);
 
