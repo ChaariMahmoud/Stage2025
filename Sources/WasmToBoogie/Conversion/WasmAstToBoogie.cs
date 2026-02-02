@@ -9,6 +9,149 @@ namespace WasmToBoogie.Conversion
 {
     public partial class WasmAstToBoogie
     {
+        private static void RemoveUnusedLabels(BoogieStmtList body)
+        {
+            if (body == null)
+                return;
+
+            // 1) Collect all referenced labels from goto targets
+            var used = new HashSet<string>(StringComparer.Ordinal);
+            CollectGotoTargets(body, used);
+
+            // 2) Remove BoogieSkipCmd labels not referenced
+            PruneDeadLabelSkips(body, used);
+        }
+
+        private static void CollectGotoTargets(BoogieStmtList stmts, HashSet<string> used)
+        {
+            if (stmts == null)
+                return;
+            if (stmts.BigBlocks == null)
+                return;
+
+            foreach (var bb in stmts.BigBlocks)
+            {
+                if (bb?.SimpleCmds == null)
+                    continue;
+
+                foreach (var cmd in bb.SimpleCmds)
+                {
+                    switch (cmd)
+                    {
+                        case BoogieGotoCmd g:
+                        {
+                            if (g.LabelNames != null)
+                            {
+                                foreach (var lab in g.LabelNames)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(lab))
+                                        used.Add(lab.Trim());
+                                }
+                            }
+                            break;
+                        }
+
+                        case BoogieIfCmd iff:
+                        {
+                            if (iff.ThenBody != null)
+                                CollectGotoTargets(iff.ThenBody, used);
+                            if (iff.ElseBody != null)
+                                CollectGotoTargets(iff.ElseBody, used);
+                            break;
+                        }
+
+                        case BoogieWhileCmd wh:
+                        {
+                            if (wh.Body != null)
+                                CollectGotoTargets(wh.Body, used);
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void PruneDeadLabelSkips(BoogieStmtList stmts, HashSet<string> used)
+        {
+            if (stmts == null)
+                return;
+            if (stmts.BigBlocks == null)
+                return;
+
+            foreach (var bb in stmts.BigBlocks)
+            {
+                if (bb?.SimpleCmds == null)
+                    continue;
+
+                // rebuild list
+                var kept = new List<BoogieCmd>(bb.SimpleCmds.Count);
+
+                foreach (var cmd in bb.SimpleCmds)
+                {
+                    // recurse into structured commands first
+                    if (cmd is BoogieIfCmd iff)
+                    {
+                        if (iff.ThenBody != null)
+                            PruneDeadLabelSkips(iff.ThenBody, used);
+                        if (iff.ElseBody != null)
+                            PruneDeadLabelSkips(iff.ElseBody, used);
+
+                        kept.Add(cmd);
+                        continue;
+                    }
+
+                    if (cmd is BoogieWhileCmd wh)
+                    {
+                        if (wh.Body != null)
+                            PruneDeadLabelSkips(wh.Body, used);
+
+                        kept.Add(cmd);
+                        continue;
+                    }
+
+                    // remove unused labels
+                    if (cmd is BoogieSkipCmd sk)
+                    {
+                        // In your AST, a "label command" is a skip whose Label is non-empty.
+                        if (!string.IsNullOrWhiteSpace(sk.Label))
+                        {
+                            var lab = NormalizeBoogieLabel(sk.Label);
+                            if (used.Contains(lab))
+                            {
+                                // keep it, but normalize to consistent form (optional)
+                                sk.Label = lab;
+                                kept.Add(cmd);
+                            }
+                            // else: drop it
+                            continue;
+                        }
+
+                        // empty skip => keep (harmless)
+                        kept.Add(cmd);
+                        continue;
+                    }
+
+                    // other commands: keep
+                    kept.Add(cmd);
+                }
+
+                bb.SimpleCmds = kept;
+            }
+        }
+
+        private static string NormalizeBoogieLabel(string raw)
+        {
+            // Your BoogieSkipCmd.ToString() adds ":" if missing,
+            // but goto uses bare label names. So normalize to bare.
+            var s = raw.Trim();
+            if (s.EndsWith(":"))
+                s = s.Substring(0, s.Length - 1).Trim();
+            return s;
+        }
+
         private readonly string contractName;
         private int labelCounter = 0;
 
@@ -24,6 +167,72 @@ namespace WasmToBoogie.Conversion
 
         // Module Boogie en construction
         private BoogieProgram? program;
+
+        private static bool ContainsReturn(WasmNode n)
+        {
+            switch (n)
+            {
+                case ReturnNode:
+                    return true;
+
+                case BlockNode b:
+                    foreach (var x in b.Body)
+                        if (ContainsReturn(x))
+                            return true;
+                    return false;
+
+                case LoopNode l:
+                    foreach (var x in l.Body)
+                        if (ContainsReturn(x))
+                            return true;
+                    return false;
+
+                case IfNode iff:
+                    if (ContainsReturn(iff.Condition))
+                        return true;
+                    foreach (var x in iff.ThenBody)
+                        if (ContainsReturn(x))
+                            return true;
+                    if (iff.ElseBody != null)
+                        foreach (var x in iff.ElseBody)
+                            if (ContainsReturn(x))
+                                return true;
+                    return false;
+
+                case UnaryOpNode u:
+                    return u.Operand != null && ContainsReturn(u.Operand);
+
+                case BinaryOpNode b2:
+                    return ContainsReturn(b2.Left) || ContainsReturn(b2.Right);
+
+                case LocalSetNode ls:
+                    return ls.Value != null && ContainsReturn(ls.Value);
+
+                case GlobalSetNode gs:
+                    return gs.Value != null && ContainsReturn(gs.Value);
+
+                case CallNode c:
+                    return c.Args != null && c.Args.Any(ContainsReturn);
+
+                case SelectNode s:
+                    return ContainsReturn(s.V1) || ContainsReturn(s.V2) || ContainsReturn(s.Cond);
+
+                case MemoryOpNode m:
+                    return (m.Address != null && ContainsReturn(m.Address))
+                        || (m.Value != null && ContainsReturn(m.Value));
+
+                default:
+                    return false;
+            }
+        }
+
+        private static bool ContainsReturn(List<WasmNode> xs)
+        {
+            foreach (var x in xs)
+                if (ContainsReturn(x))
+                    return true;
+            return false;
+        }
 
         // Générateurs uniques
         private readonly HashSet<int> popArgsMade = new();
@@ -42,13 +251,61 @@ namespace WasmToBoogie.Conversion
         private readonly HashSet<string> declaredBoogieGlobals = new(StringComparer.Ordinal);
         private HashSet<string>? currentModifiedGlobals;
 
-        private class LabelContext
+        private sealed class LabelContext
         {
+            // WAT label WITHOUT '$' (e.g., "$L" => "L"), null if unnamed
             public string? WatLabel;
-            public string? StartLabel; // loop "continue"
-            public string EndLabel = ""; // block/loop end ("break")
+
+            // True for loop, false for block/if
             public bool IsLoop;
-            public bool MarkEndUsed;
+
+            // Boogie labels
+            // - For loops: StartLabel is the "continue" target.
+            // - For blocks: StartLabel is unused (can remain null).
+            public string? StartLabel;
+
+            // EndLabel is the "break" target for blocks and loops.
+            public string EndLabel = "";
+
+            // Precomputed usage flags (set by PrecomputeLabelNeeds)
+            public bool NeedStartLabel; // only meaningful for loops
+            public bool NeedEndLabel; // block end OR loop end
+        }
+
+        private LabelContext ResolveTargetContext(string labOrDepth)
+        {
+            // Numeric depth: "0", "1", ...
+            if (AllDigits(labOrDepth))
+            {
+                int depth = int.Parse(labOrDepth);
+                if (depth < 0 || depth >= labelStack.Count)
+                    throw new Exception($"br depth out of range: {labOrDepth}");
+
+                // labelStack.ToArray() is top -> bottom, depth 0 = innermost
+                return labelStack.ToArray()[depth];
+            }
+
+            // Named label: "$L" or "L"
+            var norm = NormalizeLabel(labOrDepth);
+
+            foreach (var ctx in labelStack) // top -> bottom
+                if (ctx.WatLabel == norm)
+                    return ctx;
+
+            throw new Exception($"Unknown label target: {labOrDepth}");
+        }
+
+        private string ResolveBranchTargetLabel(string labOrDepth)
+        {
+            var ctx = ResolveTargetContext(labOrDepth);
+
+            // WASM semantics:
+            // - br to loop label => continue => jump to START
+            // - br to block/if   => break    => jump to END
+            if (ctx.IsLoop)
+                return ctx.StartLabel ?? ctx.EndLabel;
+            else
+                return ctx.EndLabel;
         }
 
         public WasmAstToBoogie(string contractName) => this.contractName = contractName;
@@ -83,45 +340,43 @@ namespace WasmToBoogie.Conversion
             // mémorise mutabilité
             boogieGlobalIsMutable[boogieName] = g.IsMutable;
 
+            if (program != null && !declaredBoogieGlobals.Contains(boogieName))
+            {
+                if (g.IsMutable)
+                {
+                    program.Declarations.Add(
+                        new BoogieGlobalVariable(new BoogieTypedIdent(boogieName, BoogieType.Real))
+                    );
+                }
+                else
+                {
+                    // ✅ const (tu as déjà BoogieConstant dans ton AST)
+                    program.Declarations.Add(
+                        new BoogieConstant(new BoogieTypedIdent(boogieName, BoogieType.Real))
+                    );
 
-           if (program != null && !declaredBoogieGlobals.Contains(boogieName))
-{
-    if (g.IsMutable)
-    {
-        program.Declarations.Add(
-            new BoogieGlobalVariable(new BoogieTypedIdent(boogieName, BoogieType.Real))
-        );
-    }
-    else
-    {
-        // ✅ const (tu as déjà BoogieConstant dans ton AST)
-        program.Declarations.Add(
-            new BoogieConstant(new BoogieTypedIdent(boogieName, BoogieType.Real))
-        );
+                    // ✅ axiom const == init (si init numérique)
+                    if (TryParseInitConst(g.InitConst, out var fv))
+                    {
+                        program.Declarations.Add(
+                            new BoogieAxiom(
+                                new BoogieBinaryOperation(
+                                    BoogieBinaryOperation.Opcode.EQ,
+                                    new BoogieIdentifierExpr(boogieName),
+                                    new BoogieLiteralExpr(new Pfloat(fv))
+                                )
+                            )
+                        );
+                    }
+                    else
+                    {
+                        // pas de BoogieCommentCmd ici (c'est un Cmd, pas une Declaration)
+                        // au pire: ne rien ajouter, ou mettre un axiom "true" si tu veux.
+                    }
+                }
 
-        // ✅ axiom const == init (si init numérique)
-        if (TryParseInitConst(g.InitConst, out var fv))
-        {
-            program.Declarations.Add(
-                new BoogieAxiom(
-                    new BoogieBinaryOperation(
-                        BoogieBinaryOperation.Opcode.EQ,
-                        new BoogieIdentifierExpr(boogieName),
-                        new BoogieLiteralExpr(new Pfloat(fv))
-                    )
-                )
-            );
-        }
-        else
-        {
-            // pas de BoogieCommentCmd ici (c'est un Cmd, pas une Declaration)
-            // au pire: ne rien ajouter, ou mettre un axiom "true" si tu veux.
-        }
-    }
-
-    declaredBoogieGlobals.Add(boogieName);
-}
-
+                declaredBoogieGlobals.Add(boogieName);
+            }
 
             return boogieName;
         }
@@ -288,29 +543,6 @@ namespace WasmToBoogie.Conversion
             return boogieName;
         }
 
-        private string ResolveBranchTarget(string labOrDepth)
-        {
-            if (AllDigits(labOrDepth))
-            {
-                int depth = int.Parse(labOrDepth);
-                if (depth < 0 || depth >= labelStack.Count)
-                    return functionExitLabel ?? (functionExitLabel = GenerateLabel("func_exit"));
-
-                var arr = labelStack.ToArray(); // top -> bottom
-                var ctx = arr[depth];
-                ctx.MarkEndUsed = true;
-
-                return ctx.IsLoop ? (ctx.StartLabel ?? ctx.EndLabel) : ctx.EndLabel;
-            }
-
-            var norm = NormalizeLabel(labOrDepth);
-            var hit = labelStack.FirstOrDefault(c => c.WatLabel == norm);
-            if (hit != null)
-                return hit.IsLoop ? (hit.StartLabel ?? hit.EndLabel) : hit.EndLabel;
-
-            return functionExitLabel ?? (functionExitLabel = GenerateLabel("func_exit"));
-        }
-
         // ============================================================
         // Public entry
         // ============================================================
@@ -395,10 +627,13 @@ namespace WasmToBoogie.Conversion
             }
 
             // Helper locals used by translation
-            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
-            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("entry_sp", BoogieType.Int)));
-            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
-            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
+             locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("entry_sp", BoogieType.Int)));
+       
+/*
+    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
+    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
+    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
+*/
 
             currentLocalMap = indexToId;
 
@@ -409,24 +644,12 @@ namespace WasmToBoogie.Conversion
                     new BoogieIdentifierExpr("$sp")
                 )
             );
-            body.AddStatement(
-                new BoogieAssignCmd(
-                    new BoogieIdentifierExpr("$tmp1"),
-                    new BoogieLiteralExpr(new Pfloat(0))
-                )
-            );
-            body.AddStatement(
-                new BoogieAssignCmd(
-                    new BoogieIdentifierExpr("$tmp2"),
-                    new BoogieLiteralExpr(new Pfloat(0))
-                )
-            );
-            body.AddStatement(
-                new BoogieAssignCmd(
-                    new BoogieIdentifierExpr("$tmp3"),
-                    new BoogieLiteralExpr(new Pfloat(0))
-                )
-            );
+            // Runtime init (stack pointer + tmps)
+body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+
+// Global variables init (only mutables)
+body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+
 
             // Args : callee pop ses args
             if (n > 0)
@@ -515,6 +738,7 @@ namespace WasmToBoogie.Conversion
                 new(),
                 new()
             );
+            RemoveUnusedLabels(body);
             var impl = new BoogieImplementation(proc.Name, inParams, outParams, locals, body);
 
             // reset état
@@ -536,7 +760,54 @@ namespace WasmToBoogie.Conversion
         {
             neededLoopStartLabels = new HashSet<string>(StringComparer.Ordinal);
             neededBlockEndLabels = new HashSet<string>(StringComparer.Ordinal);
-            var scope = new Stack<(string label, bool isLoop)>();
+
+            // We also need to handle DEPTH branches, which can target unnamed constructs.
+            // So we keep a parallel scope stack of "isLoop" and "watLabel" (may be null).
+            var scope = new Stack<(string? watLabel, bool isLoop)>();
+
+            void MarkTargetByDepth(string depthStr)
+            {
+                if (!AllDigits(depthStr))
+                    return;
+
+                int depth = int.Parse(depthStr);
+                if (depth < 0 || depth >= scope.Count)
+                    return;
+
+                // scope.ToArray(): top -> bottom
+                var target = scope.ToArray()[depth];
+
+                if (target.isLoop)
+                {
+                    // continue target (loop start)
+                    if (target.watLabel != null)
+                        neededLoopStartLabels!.Add(target.watLabel);
+                    // For unnamed loops, we can’t store a name; we’ll just emit labels always.
+                }
+                else
+                {
+                    // break target (block/if end)
+                    if (target.watLabel != null)
+                        neededBlockEndLabels!.Add(target.watLabel);
+                    // For unnamed blocks, we’ll emit end label always.
+                }
+            }
+
+            void MarkTargetByName(string rawLabel)
+            {
+                var target = NormalizeLabel(rawLabel);
+                foreach (var (lab, isLoop) in scope)
+                {
+                    if (lab == target)
+                    {
+                        if (isLoop)
+                            neededLoopStartLabels!.Add(lab);
+                        else
+                            neededBlockEndLabels!.Add(lab);
+                        break;
+                    }
+                }
+            }
 
             void Walk(WasmNode n)
             {
@@ -544,81 +815,124 @@ namespace WasmToBoogie.Conversion
                 {
                     case BlockNode blk:
                     {
-                        bool hasUser =
-                            !string.IsNullOrEmpty(blk.Label)
-                            && blk.Label!.StartsWith("$", StringComparison.Ordinal);
-                        if (hasUser)
-                            scope.Push((blk.Label!.Substring(1), false));
+                        string? wat =
+                            (
+                                blk.Label != null
+                                && blk.Label.StartsWith("$", StringComparison.Ordinal)
+                            )
+                                ? blk.Label.Substring(1)
+                                : null;
+
+                        scope.Push((wat, false));
                         foreach (var m in blk.Body)
                             Walk(m);
-                        if (hasUser)
-                            scope.Pop();
+                        scope.Pop();
                         break;
                     }
+
                     case LoopNode lp:
                     {
-                        bool hasUser =
-                            !string.IsNullOrEmpty(lp.Label)
-                            && lp.Label!.StartsWith("$", StringComparison.Ordinal);
-                        if (hasUser)
-                            scope.Push((lp.Label!.Substring(1), true));
+                        string? wat =
+                            (lp.Label != null && lp.Label.StartsWith("$", StringComparison.Ordinal))
+                                ? lp.Label.Substring(1)
+                                : null;
+
+                        scope.Push((wat, true));
                         foreach (var m in lp.Body)
                             Walk(m);
-                        if (hasUser)
-                            scope.Pop();
+                        scope.Pop();
                         break;
                     }
+
                     case IfNode iff:
                         Walk(iff.Condition);
+                        // "if" is also a structured construct (break targets end)
+                        scope.Push((null, false)); // unnamed if-scope for depth branches
                         foreach (var m in iff.ThenBody)
                             Walk(m);
                         if (iff.ElseBody != null)
                             foreach (var m in iff.ElseBody)
                                 Walk(m);
+                        scope.Pop();
                         break;
+
+                    case BrNode br:
+                        if (AllDigits(br.Label))
+                            MarkTargetByDepth(br.Label);
+                        else
+                            MarkTargetByName(br.Label);
+                        break;
+
+                    case BrIfNode bri:
+                        Walk(bri.Condition);
+                        if (AllDigits(bri.Label))
+                            MarkTargetByDepth(bri.Label);
+                        else
+                            MarkTargetByName(bri.Label);
+                        break;
+
+                    case BrTableNode bt:
+                        // selector expression is already on stack in your AST model,
+                        // but if bt has an expression node, walk it here (depends on your AST)
+                        foreach (var t in bt.Targets)
+                        {
+                            if (AllDigits(t))
+                                MarkTargetByDepth(t);
+                            else
+                                MarkTargetByName(t);
+                        }
+                        if (AllDigits(bt.Default))
+                            MarkTargetByDepth(bt.Default);
+                        else
+                            MarkTargetByName(bt.Default);
+                        break;
+
                     case BinaryOpNode b:
                         Walk(b.Left);
                         Walk(b.Right);
                         break;
+
                     case UnaryOpNode u:
                         if (u.Operand != null)
                             Walk(u.Operand);
                         break;
-                    case BrNode br:
-                    {
-                        var target = NormalizeLabel(br.Label);
-                        foreach (var (lab, isLoop) in scope)
-                        {
-                            if (lab == target)
-                            {
-                                if (isLoop)
-                                    neededLoopStartLabels!.Add(lab);
-                                else
-                                    neededBlockEndLabels!.Add(lab);
-                                break;
-                            }
-                        }
+
+                    case LocalSetNode ls:
+                        if (ls.Value != null)
+                            Walk(ls.Value);
                         break;
-                    }
-                    case BrIfNode bri:
-                    {
-                        Walk(bri.Condition);
-                        var target = NormalizeLabel(bri.Label);
-                        foreach (var (lab, isLoop) in scope)
-                        {
-                            if (lab == target)
-                            {
-                                if (isLoop)
-                                    neededLoopStartLabels!.Add(lab);
-                                else
-                                    neededBlockEndLabels!.Add(lab);
-                                break;
-                            }
-                        }
+
+                    case GlobalSetNode gs:
+                        if (gs.Value != null)
+                            Walk(gs.Value);
                         break;
-                    }
+
+                    case CallNode c:
+                        if (c.Args != null)
+                            foreach (var a in c.Args)
+                                Walk(a);
+                        break;
+
+                    case SelectNode s:
+                        Walk(s.V1);
+                        Walk(s.V2);
+                        Walk(s.Cond);
+                        break;
+
+                    case MemoryOpNode m:
+                        if (m.Address != null)
+                            Walk(m.Address);
+                        if (m.Value != null)
+                            Walk(m.Value);
+                        break;
+
+                    default:
+                        break;
                 }
             }
+
+            // Initialize scope with the implicit function “outermost” frame? Optional.
+            // Usually not needed unless you allow br to escape function body; you already use func_exit for that.
 
             foreach (var n in func.Body)
                 Walk(n);
@@ -1375,9 +1689,6 @@ namespace WasmToBoogie.Conversion
                     }
                     else if (bn.Op == "f32.max" || bn.Op == "f64.max")
                     {
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // y
-                        body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // x
-
                         var maxExpr = new BoogieFunctionCall(
                             "max_real",
                             new()
@@ -1468,7 +1779,7 @@ namespace WasmToBoogie.Conversion
 
                 case BrNode br:
                 {
-                    var target = ResolveBranchTarget(br.Label);
+                    var target = ResolveBranchTargetLabel(br.Label);
                     body.AddStatement(new BoogieGotoCmd(target));
                     break;
                 }
@@ -1477,7 +1788,7 @@ namespace WasmToBoogie.Conversion
                 {
                     TranslateNode(brIf.Condition, body);
                     body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new()));
-                    var target = ResolveBranchTarget(brIf.Label);
+                    var target = ResolveBranchTargetLabel(brIf.Label);
                     var thenBlk = new BoogieStmtList();
                     thenBlk.AddStatement(new BoogieGotoCmd(target));
                     var cond = new BoogieFunctionCall(
@@ -1518,7 +1829,7 @@ namespace WasmToBoogie.Conversion
                         )
                     );
                     var outBlk = new BoogieStmtList();
-                    outBlk.AddStatement(new BoogieGotoCmd(ResolveBranchTarget(bt.Default)));
+                    outBlk.AddStatement(new BoogieGotoCmd(ResolveBranchTargetLabel(bt.Default)));
 
                     var inBlk = new BoogieStmtList();
                     for (int i = 0; i < k; i++)
@@ -1529,10 +1840,12 @@ namespace WasmToBoogie.Conversion
                             new BoogieLiteralExpr(i)
                         );
                         var thenBlk = new BoogieStmtList();
-                        thenBlk.AddStatement(new BoogieGotoCmd(ResolveBranchTarget(bt.Targets[i])));
+                        thenBlk.AddStatement(
+                            new BoogieGotoCmd(ResolveBranchTargetLabel(bt.Targets[i]))
+                        );
                         inBlk.AddStatement(new BoogieIfCmd(condEq, thenBlk, null));
                     }
-                    inBlk.AddStatement(new BoogieGotoCmd(ResolveBranchTarget(bt.Default)));
+                    inBlk.AddStatement(new BoogieGotoCmd(ResolveBranchTargetLabel(bt.Default)));
 
                     body.AddStatement(new BoogieIfCmd(outCond, outBlk, inBlk));
                     break;
@@ -1583,26 +1896,116 @@ namespace WasmToBoogie.Conversion
 
                 case IfNode ifn:
                 {
+                    // 1) Evaluate condition, then pop it into $tmp1
                     TranslateNode(ifn.Condition, body);
                     body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new()));
-
-                    var thenBlock = new BoogieStmtList();
-                    foreach (var stmt in ifn.ThenBody)
-                        TranslateNode(stmt, thenBlock);
-
-                    BoogieStmtList? elseBlock = null;
-                    if (ifn.ElseBody != null)
-                    {
-                        elseBlock = new BoogieStmtList();
-                        foreach (var stmt in ifn.ElseBody)
-                            TranslateNode(stmt, elseBlock);
-                    }
 
                     var cond = new BoogieFunctionCall(
                         "real_to_bool",
                         new() { new BoogieIdentifierExpr("$tmp1") }
                     );
-                    body.AddStatement(new BoogieIfCmd(cond, thenBlock, elseBlock));
+
+                    // --------- CASE A: if-statement (no result) ----------
+                    if (ifn.ResultType == null)
+                    {
+                        var thenBlock = new BoogieStmtList();
+                        foreach (var stmt in ifn.ThenBody)
+                            TranslateNode(stmt, thenBlock);
+
+                        BoogieStmtList? elseBlock = null;
+                        if (ifn.ElseBody != null)
+                        {
+                            elseBlock = new BoogieStmtList();
+                            foreach (var stmt in ifn.ElseBody)
+                                TranslateNode(stmt, elseBlock);
+                        }
+
+                        body.AddStatement(new BoogieIfCmd(cond, thenBlock, elseBlock));
+                        break;
+                    }
+
+                    // If this is an if-expression but one branch returns (does not join),
+                    // do NOT build a phi-merge. Just emit it as a normal if-statement.
+                    // The return path already pushes the return value and jumps to func_exit.
+                    bool thenReturns = ContainsReturn(ifn.ThenBody);
+                    bool elseReturns = ifn.ElseBody != null && ContainsReturn(ifn.ElseBody);
+
+                    if (thenReturns || elseReturns)
+                    {
+                        var thenBlock = new BoogieStmtList();
+                        foreach (var stmt in ifn.ThenBody)
+                            TranslateNode(stmt, thenBlock);
+
+                        BoogieStmtList? elseBlock = null;
+                        if (ifn.ElseBody != null)
+                        {
+                            elseBlock = new BoogieStmtList();
+                            foreach (var stmt in ifn.ElseBody)
+                                TranslateNode(stmt, elseBlock);
+                        }
+
+                        body.AddStatement(new BoogieIfCmd(cond, thenBlock, elseBlock));
+                        break;
+                    }
+
+                    // --------- CASE B: if-expression (produces a value on stack) ----------
+                    // We must ensure: both branches leave exactly ONE value on the stack,
+                    // then we merge it into a variable and push it back once.
+
+                    // We'll use $tmp2 as the merge value holder (or create a fresh local).
+                    // Important: each branch must end with a value on the stack.
+
+                    var thenExpr = new BoogieStmtList();
+                    foreach (var stmt in ifn.ThenBody)
+                        TranslateNode(stmt, thenExpr);
+                    // capture branch result
+                    thenExpr.AddStatement(new BoogieCallCmd("popToTmp2", new(), new()));
+                    // store into $tmp3 as "phi" (use tmp3 to avoid clobbering tmp2 later)
+                    thenExpr.AddStatement(
+                        new BoogieAssignCmd(
+                            new BoogieIdentifierExpr("$tmp3"),
+                            new BoogieIdentifierExpr("$tmp2")
+                        )
+                    );
+
+                    var elseExpr = new BoogieStmtList();
+                    if (ifn.ElseBody != null)
+                    {
+                        foreach (var stmt in ifn.ElseBody)
+                            TranslateNode(stmt, elseExpr);
+                    }
+                    else
+                    {
+                        // In WASM, if (result T) must have an else in valid modules,
+                        // but in case Binaryen/inputs produce a missing else,
+                        // we choose a safe default: 0.0.
+                        elseExpr.AddStatement(
+                            new BoogieCallCmd(
+                                "push",
+                                new() { new BoogieLiteralExpr(new Pfloat(0)) },
+                                new()
+                            )
+                        );
+                    }
+                    elseExpr.AddStatement(new BoogieCallCmd("popToTmp2", new(), new()));
+                    elseExpr.AddStatement(
+                        new BoogieAssignCmd(
+                            new BoogieIdentifierExpr("$tmp3"),
+                            new BoogieIdentifierExpr("$tmp2")
+                        )
+                    );
+
+                    body.AddStatement(new BoogieIfCmd(cond, thenExpr, elseExpr));
+
+                    // After the if, push the merged value once
+                    body.AddStatement(
+                        new BoogieCallCmd(
+                            "push",
+                            new() { new BoogieIdentifierExpr("$tmp3") },
+                            new()
+                        )
+                    );
+
                     break;
                 }
 

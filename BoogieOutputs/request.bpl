@@ -3,7 +3,6 @@ var $sp: int;
 var $tmp1: real;
 var $tmp2: real;
 var $tmp3: real;
-var $globals_inited: bool;
 function bool_to_real(b: bool) : real
 {
     if b then (1.0) else (0.0)
@@ -12,53 +11,84 @@ function real_to_bool(r: real) : bool
 {
     if (r) == (0.0) then (false) else (true)
 }
+procedure {:inline true} InitRuntime();
+modifies $sp;
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+ensures(($sp) == (0));
+ensures((0) <= ($sp));
+implementation InitRuntime()
+{
+    $sp := 0;
+    $tmp1 := 0.0;
+    $tmp2 := 0.0;
+    $tmp3 := 0.0;
+}
+
 procedure {:inline true} push(val: real);
 modifies $sp;
 modifies $stack;
+requires((0) <= ($sp));
+ensures(($sp) == ((old($sp)) + (1)));
+ensures(($stack[old($sp)]) == (val));
+ensures(forall  i:int ::  (((i) != (old($sp))) ==> (($stack[i]) == (old($stack)[i]))));
+ensures((0) <= ($sp));
 implementation push(val: real)
 {
     $stack[$sp] := val;
     $sp := ($sp) + (1);
 }
 
-procedure popToTmp1();
+procedure {:inline true} popToTmp1();
 modifies $sp;
-modifies $stack;
 modifies $tmp1;
+requires(($sp) > (0));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
+ensures(($tmp1) == (old($stack)[(old($sp)) - (1)]));
+ensures((0) <= ($sp));
 implementation popToTmp1()
 {
-    assume (($sp) > (0));
     $sp := ($sp) - (1);
     $tmp1 := $stack[$sp];
 }
 
-procedure popToTmp2();
+procedure {:inline true} popToTmp2();
 modifies $sp;
-modifies $stack;
 modifies $tmp2;
+requires(($sp) > (0));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
+ensures(($tmp2) == (old($stack)[(old($sp)) - (1)]));
+ensures((0) <= ($sp));
 implementation popToTmp2()
 {
-    assume (($sp) > (0));
     $sp := ($sp) - (1);
     $tmp2 := $stack[$sp];
 }
 
-procedure popToTmp3();
+procedure {:inline true} popToTmp3();
 modifies $sp;
-modifies $stack;
 modifies $tmp3;
+requires(($sp) > (0));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
+ensures(($tmp3) == (old($stack)[(old($sp)) - (1)]));
+ensures((0) <= ($sp));
 implementation popToTmp3()
 {
-    assume (($sp) > (0));
     $sp := ($sp) - (1);
     $tmp3 := $stack[$sp];
 }
 
-procedure pop();
+procedure {:inline true} pop();
 modifies $sp;
+requires(($sp) > (0));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures((0) <= ($sp));
 implementation pop()
 {
-    assume (($sp) > (0));
     $sp := ($sp) - (1);
 }
 
@@ -76,9 +106,13 @@ implementation initGlobals()
 procedure {:inline true} popArgs1() returns (a1: real);
 modifies $sp;
 modifies $stack;
+requires(($sp) >= (1));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures((0) <= ($sp));
+ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
+ensures((a1) == (old($stack)[(old($sp)) - (1)]));
 implementation popArgs1() returns (a1: real)
 {
-    assume (($sp) >= (1));
     $sp := ($sp) - (1);
     a1 := $stack[$sp];
 }
@@ -94,14 +128,10 @@ implementation acquire_request()
 {
     var loc1: real;
     var loc2: real;
-    var idx: int;
     var entry_sp: int;
-    var load_i: int;
-    var store_i: int;
     entry_sp := $sp;
-    $tmp1 := 0.0;
-    $tmp2 := 0.0;
-    $tmp3 := 0.0;
+    call InitRuntime();
+    call initGlobals();
     loc1 := 0.0;
     loc2 := 0.0;
     call push(active_requests);
@@ -124,8 +154,9 @@ implementation acquire_request()
         call active_requests := popArgs1();
         call push(1.0);
         call loc2 := popArgs1();
-block_end_1:
     }
+    //codition ajouté manuellement
+    assert (active_requests) <= (MAX_REQUESTS);
     call push(loc2);
 }
 
@@ -139,14 +170,10 @@ modifies active_requests;
 implementation release_request()
 {
     var loc1: real;
-    var idx: int;
     var entry_sp: int;
-    var load_i: int;
-    var store_i: int;
     entry_sp := $sp;
-    $tmp1 := 0.0;
-    $tmp2 := 0.0;
-    $tmp3 := 0.0;
+    call InitRuntime();
+    call initGlobals();
     loc1 := 0.0;
     call push(active_requests);
     call loc1 := popArgs1();
@@ -164,5 +191,7 @@ implementation release_request()
         call push(($tmp2) - ($tmp1));
         call active_requests := popArgs1();
     }
+    //condition ajouté manuellement
+    assert (active_requests) <= (MAX_REQUESTS);
 }
 
