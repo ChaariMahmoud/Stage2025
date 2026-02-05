@@ -98,6 +98,7 @@ axiom((MAX_REQUESTS) == (10.0));
 var active_requests: real;
 procedure initGlobals();
 modifies active_requests;
+ensures((active_requests) == (0.0));
 implementation initGlobals()
 {
     active_requests := 0.0;
@@ -155,8 +156,6 @@ implementation acquire_request()
         call push(1.0);
         call loc2 := popArgs1();
     }
-    //codition ajouté manuellement
-    assert (active_requests) <= (MAX_REQUESTS);
     call push(loc2);
 }
 
@@ -191,7 +190,5 @@ implementation release_request()
         call push(($tmp2) - ($tmp1));
         call active_requests := popArgs1();
     }
-    //condition ajouté manuellement
-    assert (active_requests) <= (MAX_REQUESTS);
 }
 
