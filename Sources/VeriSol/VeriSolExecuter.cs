@@ -1,26 +1,23 @@
-﻿
-
-namespace VeriSolRunner
+﻿namespace VeriSolRunner
 {
-
-    using Microsoft.Extensions.Logging;
-    using SolidityAST;
-    using BoogieAST;
-    using SolToBoogie;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Reflection;
     using System.Linq;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using BoogieAST;
+    using Microsoft.Extensions.Logging;
+    using SharedConfig;
+    using SolidityAST;
+    using SolToBoogie;
     using VeriSolRunner.ExternalTools;
-using SharedConfig;
+
     // using Microsoft.Boogie.ExprExtensions;
 
     internal class VeriSolExecutor
-{
-        
+    {
         private string SolidityFilePath;
         private string SolidityFileDir;
         private string ContractName;
@@ -29,6 +26,7 @@ using SharedConfig;
         private string SolcPath;
         private bool TryProof;
         private bool TryRefutation;
+
         // private bool GenInlineAttrs;
         private ILogger Logger;
         private readonly string outFileName = "__SolToBoogieTest_out.bpl";
@@ -38,10 +36,20 @@ using SharedConfig;
         private readonly int CorralContextBound = 1; // always 1 for solidity
         private HashSet<Tuple<string, string>> ignoreMethods;
         private TranslatorFlags translatorFlags;
-        private bool printTransactionSequence = false; 
+        private bool printTransactionSequence = false;
         private BoogieProgram program = null;
 
-        public VeriSolExecutor(string solidityFilePath, string contractName, int corralRecursionLimit, HashSet<Tuple<string, string>> ignoreMethods, bool tryRefutation, bool tryProofFlag, ILogger logger, bool _printTransactionSequence, TranslatorFlags _translatorFlags = null)
+        public VeriSolExecutor(
+            string solidityFilePath,
+            string contractName,
+            int corralRecursionLimit,
+            HashSet<Tuple<string, string>> ignoreMethods,
+            bool tryRefutation,
+            bool tryProofFlag,
+            ILogger logger,
+            bool _printTransactionSequence,
+            TranslatorFlags _translatorFlags = null
+        )
         {
             this.SolidityFilePath = solidityFilePath;
             this.ContractName = contractName;
@@ -64,27 +72,34 @@ using SharedConfig;
             this.printTransactionSequence = _printTransactionSequence;
             //this.GenInlineAttrs = genInlineAttrs;
             this.translatorFlags = _translatorFlags;
-
         }
 
-         // Constructor for WASM mode
- public VeriSolExecutor(BoogieProgram program, string contractName, int corralRecursionLimit, HashSet<Tuple<string, string>> ignoreMethods, bool tryRefutation, bool tryProofFlag, ILogger logger)
+        // Constructor for WASM mode
+        public VeriSolExecutor(
+            BoogieProgram program,
+            string contractName,
+            int corralRecursionLimit,
+            HashSet<Tuple<string, string>> ignoreMethods,
+            bool tryRefutation,
+            bool tryProofFlag,
+            ILogger logger
+        )
         {
-    this.program = program;
-    this.ContractName = contractName;
-    this.CorralRecursionLimit = corralRecursionLimit;
-    this.ignoreMethods = new HashSet<Tuple<string, string>>(ignoreMethods);
-    this.Logger = logger;
-    this.TryProof = tryProofFlag;
-    this.TryRefutation = tryRefutation;
-    this.printTransactionSequence = false;
-    this.translatorFlags = new TranslatorFlags();
-    var baseName = Path.GetFileNameWithoutExtension(contractName);
-    this.outFileName = $"BoogieOutputs/{baseName}.bpl";
+            this.program = program;
+            this.ContractName = contractName;
+            this.CorralRecursionLimit = corralRecursionLimit;
+            this.ignoreMethods = new HashSet<Tuple<string, string>>(ignoreMethods);
+            this.Logger = logger;
+            this.TryProof = tryProofFlag;
+            this.TryRefutation = tryRefutation;
+            this.printTransactionSequence = false;
+            this.translatorFlags = new TranslatorFlags();
+            var baseName = Path.GetFileNameWithoutExtension(contractName);
+            this.outFileName = $"BoogieOutputs/{baseName}.bpl";
 
-    // Use centralized tool path configuration
-    this.CorralPath = ToolPaths.CorralPath;
-    this.BoogiePath = ToolPaths.BoogiePath;
+            // Use centralized tool path configuration
+            this.CorralPath = ToolPaths.CorralPath;
+            this.BoogiePath = ToolPaths.BoogiePath;
         }
 
         public int Execute()
@@ -95,20 +110,21 @@ using SharedConfig;
                     return 1;
             }
             else
-  {
-    Console.WriteLine($"📝 Writing Boogie program to {outFileName}");
-    var raw = this.program.ToString();                 // serialize
-    var pretty = BoogiePrettyPrinter.IndentBoogie(raw); // format
+            {
+                Console.WriteLine($"📝 Writing Boogie program to {outFileName}");
+                var raw = this.program.ToString(); // serialize
+                var pretty = BoogiePrettyPrinter.IndentBoogie(raw); // format
 
-    var dir = Path.GetDirectoryName(outFileName);
-    if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+                var dir = Path.GetDirectoryName(outFileName);
+                if (!string.IsNullOrEmpty(dir))
+                    Directory.CreateDirectory(dir);
 
-    // Write UTF-8
-    using (var writer = new StreamWriter(outFileName, false, System.Text.Encoding.UTF8))
-    {
-        writer.Write(pretty);
-    }
-}
+                // Write UTF-8
+                using (var writer = new StreamWriter(outFileName, false, System.Text.Encoding.UTF8))
+                {
+                    writer.Write(pretty);
+                }
+            }
 
             if (TryProof && FindProof())
             {
@@ -133,41 +149,41 @@ using SharedConfig;
             return 0;
         }
 
+        private bool FindProof()
+        {
+            var boogieArgs = new List<string>
+            {
+                // ✅ Do not include options not supported by Boogie 3.5.1.0
+                $"-inline:spec", // Used for spec inlining, compatible
+                $"-inlineDepth:{translatorFlags.InlineDepthForBoogie}",
+                $"-proc:BoogieEntry_*",
+                outFileName,
+            };
 
-private bool FindProof()
-{
-    var boogieArgs = new List<string>
-    {
-        // ✅ Do not include options not supported by Boogie 3.5.1.0
-        $"-inline:spec", // Used for spec inlining, compatible
-        $"-inlineDepth:{translatorFlags.InlineDepthForBoogie}",
-        $"-proc:BoogieEntry_*",
-        outFileName
-    };
+            var boogieArgString = string.Join(" ", boogieArgs);
+            Console.WriteLine($"... running {BoogiePath} {boogieArgString}");
+            var boogieOut = RunBinary(BoogiePath, boogieArgString);
+            Console.WriteLine("Boogie.Command = " + BoogiePath);
 
-    var boogieArgString = string.Join(" ", boogieArgs);
-    Console.WriteLine($"... running {BoogiePath} {boogieArgString}");
-    var boogieOut = RunBinary(BoogiePath, boogieArgString);
-    Console.WriteLine("Boogie.Command = " + BoogiePath);
+            var boogieOutFile = "boogie.txt";
+            using (var bFile = new StreamWriter(boogieOutFile))
+            {
+                bFile.Write(boogieOut);
+            }
 
-    var boogieOutFile = "boogie.txt";
-    using (var bFile = new StreamWriter(boogieOutFile))
-    {
-        bFile.Write(boogieOut);
-    }
-
-    if (CompareBoogieOutput(boogieOut))
-    {
-        Console.WriteLine($"\t*** Proof found! Formal Verification successful! (see {boogieOutFile})");
-        return true;
-    }
-    else
-    {
-        Console.WriteLine($"\t*** Did not find a proof (see {boogieOutFile})");
-        return false;
-    }
-}
-
+            if (CompareBoogieOutput(boogieOut))
+            {
+                Console.WriteLine(
+                    $"\t*** Proof found! Formal Verification successful! (see {boogieOutFile})"
+                );
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($"\t*** Did not find a proof (see {boogieOutFile})");
+                return false;
+            }
+        }
 
         private bool RunCorralForRefutation()
         {
@@ -182,7 +198,7 @@ private bool FindProof()
                 // printing info
                 $"/tryCTrace /printDataValues:1",
                 // Boogie file
-                outFileName
+                outFileName,
             };
 
             var corralArgString = string.Join(" ", corralArgs);
@@ -199,7 +215,9 @@ private bool FindProof()
             // compare Corral output against expected output
             if (CompareCorralOutput("Program has no bugs", corralOut))
             {
-                Console.WriteLine($"\t*** Formal Verification successful upto {CorralRecursionLimit} transactions (see {corralOutFile})");
+                Console.WriteLine(
+                    $"\t*** Formal Verification successful upto {CorralRecursionLimit} transactions (see {corralOutFile})"
+                );
                 return true;
             }
             else if (corralOut.Contains("Execution trace:"))
@@ -223,12 +241,13 @@ private bool FindProof()
                 }
                 return false;
             }
-            else 
+            else
             {
-                Console.WriteLine($"\t*** Corral may have aborted abnormally (see {corralOutFile})");
+                Console.WriteLine(
+                    $"\t*** Corral may have aborted abnormally (see {corralOutFile})"
+                );
                 return false;
             }
-
         }
 
         private void DisplayTraceUsingConcurrencyExplorer()
@@ -238,7 +257,9 @@ private bool FindProof()
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Console.WriteLine($"\tRun the command below to see the trace in a viewer (only supported on Windows):");
+                Console.WriteLine(
+                    $"\tRun the command below to see the trace in a viewer (only supported on Windows):"
+                );
                 Console.WriteLine($"\t{concExplorerName} {corralTraceFileName}");
             }
         }
@@ -248,7 +269,12 @@ private bool FindProof()
             // Only get lines that contain "Trace: Thread=1":
             var res = trace.Where(s => s.Contains("Trace: Thread=1"));
             // Remove irrelevant lines: "()", "(Done)", "(x = 0)":
-            res = res.Where(x => x.Contains("CALL ") || x.Contains("RETURN ") || x.Contains("ASSERTION FAILS ") || x.Contains("_verisolFirstArg"));
+            res = res.Where(x =>
+                x.Contains("CALL ")
+                || x.Contains("RETURN ")
+                || x.Contains("ASSERTION FAILS ")
+                || x.Contains("_verisolFirstArg")
+            );
             return res.ToArray();
         }
 
@@ -259,7 +285,8 @@ private bool FindProof()
             {
                 var strSplit = line.Split("Trace: Thread=1  ");
                 // This should never happen; TODO: Debug.Assert(false)?
-                if (strSplit.Count() == 0) continue;
+                if (strSplit.Count() == 0)
+                    continue;
                 // Strip braces from the 2nd string:
                 if (strSplit[1].Length > 2)
                 {
@@ -279,7 +306,7 @@ private bool FindProof()
             }
             return res;
         }
-        
+
         private string ConvertFunctionName(string origName)
         {
             string[] nameSplit = origName.Split("_");
@@ -304,7 +331,10 @@ private bool FindProof()
             }
             else
             {
-                Debug.Assert(false, $"Unreachable: Function name {origName} does not contain underscores");
+                Debug.Assert(
+                    false,
+                    $"Unreachable: Function name {origName} does not contain underscores"
+                );
                 return String.Empty;
             }
         }
@@ -349,7 +379,10 @@ private bool FindProof()
                 {
                     var func = elem.Substring("RETURN from ".Length);
                     Debug.Assert(callStack.Count > 0, "Call stack cannot be empty");
-                    Debug.Assert(func.TrimEnd().Equals(callStack.Peek().TrimEnd()), $"Top of stack {callStack.Peek()} does not match with return {func}");
+                    Debug.Assert(
+                        func.TrimEnd().Equals(callStack.Peek().TrimEnd()),
+                        $"Top of stack {callStack.Peek()} does not match with return {func}"
+                    );
                     callStack.Pop();
                 }
                 else if (elem.StartsWith("_verisolFirstArg"))
@@ -362,7 +395,9 @@ private bool FindProof()
                     collectArgs = false;
                     if (callStack.Count == 1)
                     {
-                        resultArray.Add($"{trace[i].Item1}: {ConvertFunctionName(callStack.Peek())} ({currentArgs.Substring(", ".Length)})");
+                        resultArray.Add(
+                            $"{trace[i].Item1}: {ConvertFunctionName(callStack.Peek())} ({currentArgs.Substring(", ".Length)})"
+                        );
                     }
                 }
                 else if (elem.StartsWith("(ASSERTION FAILS"))
@@ -371,7 +406,6 @@ private bool FindProof()
                 }
                 else if (elem.Contains("=") && !elem.Contains("=="))
                 {
-
                     if (collectArgs)
                     {
                         // Replace "T@Ref!val!0" with "address!0"
@@ -385,12 +419,15 @@ private bool FindProof()
                         else
                         {
                             currentArgs += ", " + elem;
-                        }                       
+                        }
                     }
                 }
                 else
                 {
-                    Debug.Assert(false, $"This should be unreachable, found a new class of statement {elem}");
+                    Debug.Assert(
+                        false,
+                        $"This should be unreachable, found a new class of statement {elem}"
+                    );
                 }
             }
 
@@ -422,7 +459,12 @@ private bool FindProof()
             {
                 BoogieTranslator translator = new BoogieTranslator();
                 Console.WriteLine($"... running SolToBoogie to translate Solidity to Boogie");
-                BoogieAST boogieAST = translator.Translate(solidityAST, ignoreMethods, translatorFlags, ContractName);
+                BoogieAST boogieAST = translator.Translate(
+                    solidityAST,
+                    ignoreMethods,
+                    translatorFlags,
+                    ContractName
+                );
 
                 // dump the Boogie program to a file
                 var outFilePath = Path.Combine(SolidityFileDir, outFileName);
@@ -439,43 +481,44 @@ private bool FindProof()
             return true;
         }
 
-private string RunBinary(string cmdName, string arguments)
-{
-    if (string.IsNullOrWhiteSpace(cmdName))
-    {
-        Console.WriteLine("❌ ERROR: Command path (cmdName) is empty!");
-        Console.WriteLine($"Arguments provided: {arguments}");
-        throw new InvalidOperationException("The path to the executable is empty. Check ExternalToolsManager.");
-    }
-    else
-    {
-        Console.WriteLine($"✅ Launching command: {cmdName} {arguments}");
-    }
+        private string RunBinary(string cmdName, string arguments)
+        {
+            if (string.IsNullOrWhiteSpace(cmdName))
+            {
+                Console.WriteLine("❌ ERROR: Command path (cmdName) is empty!");
+                Console.WriteLine($"Arguments provided: {arguments}");
+                throw new InvalidOperationException(
+                    "The path to the executable is empty. Check ExternalToolsManager."
+                );
+            }
+            else
+            {
+                Console.WriteLine($"✅ Launching command: {cmdName} {arguments}");
+            }
 
-    Process p = new Process();
-    p.StartInfo.UseShellExecute = false;
-    p.StartInfo.RedirectStandardInput = false;
-    p.StartInfo.RedirectStandardOutput = true;
-    p.StartInfo.RedirectStandardError = true;
-    p.StartInfo.CreateNoWindow = true;
-    p.StartInfo.FileName = cmdName;
-    p.StartInfo.Arguments = $"{arguments}";
-    p.Start();
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.FileName = cmdName;
+            p.StartInfo.Arguments = $"{arguments}";
+            p.Start();
 
-    string outputBinary = p.StandardOutput.ReadToEnd();
-    string errorMsg = p.StandardError.ReadToEnd();
+            string outputBinary = p.StandardOutput.ReadToEnd();
+            string errorMsg = p.StandardError.ReadToEnd();
 
-    if (!String.IsNullOrEmpty(errorMsg))
-    {
-        Console.WriteLine($"🔴 STDERR de {cmdName} : {errorMsg}");
-    }
+            if (!String.IsNullOrEmpty(errorMsg))
+            {
+                Console.WriteLine($"🔴 STDERR de {cmdName} : {errorMsg}");
+            }
 
-    p.StandardOutput.Close();
-    p.StandardError.Close();
+            p.StandardOutput.Close();
+            p.StandardError.Close();
 
-    return outputBinary;
-}
-
+            return outputBinary;
+        }
 
         private bool CompareCorralOutput(string expected, string actual)
         {
@@ -501,13 +544,14 @@ private string RunBinary(string cmdName, string arguments)
                 return false;
             }
             // Boogie program verifier finished with x verified, 0 errors
-            if (actual.Contains("Boogie program verifier finished with ") &&
-                actual.Contains(" verified, 0 errors"))
+            if (
+                actual.Contains("Boogie program verifier finished with ")
+                && actual.Contains(" verified, 0 errors")
+            )
             {
                 return true;
             }
             return false;
         }
-
     }
 }

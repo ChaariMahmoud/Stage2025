@@ -56,7 +56,6 @@ namespace WasmToBoogie.Parser.Ast
 
     public class BrNode : WasmNode
     {
-        
         public string Label { get; set; } // e.g., $label
     }
 

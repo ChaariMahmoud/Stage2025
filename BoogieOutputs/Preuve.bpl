@@ -10,6 +10,7 @@ var g_global_1: real;
 
 procedure InitGlobals();
  modifies g_global_1;
+ assert (g_global_1 > (0)) ;
 
  implementation InitGlobals(){
     g_global_1 :=0.0;
@@ -359,7 +360,7 @@ modifies $sp;
 modifies $stack;
 modifies $mem;
 modifies g_global_1;
-assert (g_global_1 > (0)) 
+
 implementation func_1()
 {
     var loc1: real;

@@ -416,13 +416,14 @@ namespace WasmToBoogie.Conversion
             var locals = new List<BoogieVariable>();
 
             var mods = new List<BoogieGlobalVariable>();
+            var post = new List<BoogieExpr>();
 
             foreach (var g in wasmModule.Globals)
             {
                 var key = ResolveGlobalKey(g.Index, g.Name);
                 string bname = EnsureGlobalDecl(g, key);
 
-                // *** uniquement mutables ***
+                // uniquement mutables
                 if (!g.IsMutable)
                     continue;
 
@@ -430,8 +431,18 @@ namespace WasmToBoogie.Conversion
 
                 if (TryParseInitConst(g.InitConst, out var fv))
                 {
+                    // assignment
                     body.AddStatement(
                         new BoogieAssignCmd(
+                            new BoogieIdentifierExpr(bname),
+                            new BoogieLiteralExpr(new Pfloat(fv))
+                        )
+                    );
+
+                    // ✅ ensures (bname == fv)
+                    post.Add(
+                        new BoogieBinaryOperation(
+                            BoogieBinaryOperation.Opcode.EQ,
                             new BoogieIdentifierExpr(bname),
                             new BoogieLiteralExpr(new Pfloat(fv))
                         )
@@ -439,12 +450,15 @@ namespace WasmToBoogie.Conversion
                 }
                 else
                 {
+                    // nondet init
                     body.AddStatement(
                         new BoogieAssignCmd(
                             new BoogieIdentifierExpr(bname),
                             new BoogieFunctionCall("nd_real", new())
                         )
                     );
+
+                    // pas d’ensures de valeur possible
                 }
             }
 
@@ -454,8 +468,8 @@ namespace WasmToBoogie.Conversion
                 new List<BoogieVariable>(),
                 attributes: null,
                 modSet: mods,
-                pre: null,
-                post: null
+                pre: new List<BoogieExpr>(), // requires (vide)
+                post: post // ✅ ensures
             );
 
             var impl = new BoogieImplementation(
@@ -627,13 +641,13 @@ namespace WasmToBoogie.Conversion
             }
 
             // Helper locals used by translation
-             locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("entry_sp", BoogieType.Int)));
-       
-/*
-    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
-    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
-    locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
-*/
+            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("entry_sp", BoogieType.Int)));
+
+            /*
+                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
+                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
+                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
+            */
 
             currentLocalMap = indexToId;
 
@@ -645,11 +659,10 @@ namespace WasmToBoogie.Conversion
                 )
             );
             // Runtime init (stack pointer + tmps)
-body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
 
-// Global variables init (only mutables)
-body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
-
+            // Global variables init (only mutables)
+            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
 
             // Args : callee pop ses args
             if (n > 0)
