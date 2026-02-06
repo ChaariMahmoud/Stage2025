@@ -734,13 +734,9 @@ namespace WasmToBoogie.Parser
                         }
                         if (p < tokens.Count && tokens[p] == ")")
                             p++;
-func.ResultCount = Math.Max(func.ResultCount, added);
+                        func.ResultCount = Math.Max(func.ResultCount, added);
                         continue;
                     }
-
-                    // Autres sous-listes dans le header qu’on ignore : (export ...), (type ...), etc.
-                    // ==> on saute proprement la sous-liste complète (balanced parentheses)
-                    // p est sur "("
                     int depth = 0;
                     do
                     {

@@ -125,14 +125,17 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
+
+//manual add
+requires 0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+ensures  0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+
 implementation acquire_request()
 {
     var loc1: real;
     var loc2: real;
     var entry_sp: int;
     entry_sp := $sp;
-    call InitRuntime();
-    call initGlobals();
     loc1 := 0.0;
     loc2 := 0.0;
     call push(active_requests);
@@ -166,13 +169,16 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
+
+//manual add
+requires 0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+ensures  0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+
 implementation release_request()
 {
     var loc1: real;
     var entry_sp: int;
     entry_sp := $sp;
-    call InitRuntime();
-    call initGlobals();
     loc1 := 0.0;
     call push(active_requests);
     call loc1 := popArgs1();
@@ -189,6 +195,81 @@ implementation release_request()
         call popToTmp2();
         call push(($tmp2) - ($tmp1));
         call active_requests := popArgs1();
+    }
+}
+
+procedure {:inline true} popDiscard1();
+modifies $sp;
+requires(($sp) >= (1));
+ensures(($sp) == ((old($sp)) - (1)));
+ensures((0) <= ($sp));
+implementation popDiscard1()
+{
+    $sp := ($sp) - (1);
+}
+
+procedure CorralChoice_request();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies active_requests;
+
+//manual add
+requires 0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+ensures  0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+
+implementation CorralChoice_request()
+{
+    var c: int;
+    havoc c;
+    assume (((0) <= (c)) && ((c) < (2)));
+    if ((c) == (0)) {
+        call acquire_request();
+        call popDiscard1();
+    } else if ((c) == (1)) {
+        call release_request();
+    }
+}
+
+procedure BoogieEntry_request();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies active_requests;
+
+//manual add
+requires 0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+ensures  0.0 <= active_requests && active_requests <= MAX_REQUESTS;
+
+implementation BoogieEntry_request()
+{
+    call InitRuntime();
+    call initGlobals();
+    call CorralChoice_request();
+    
+}
+
+procedure CorralEntry_request();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies active_requests;
+implementation CorralEntry_request()
+{
+    call InitRuntime();
+    call initGlobals();
+    while (true)
+    invariant 0.0 <= active_requests;
+    invariant active_requests <= MAX_REQUESTS;
+    {
+        call InitRuntime();
+        call CorralChoice_request();
     }
 }
 

@@ -2,4 +2,8 @@ Parsing BoogieOutputs/request.bpl
 Coalescing blocks...
 Inlining...
 
-Boogie program verifier finished with 0 verified, 0 errors
+Verifying BoogieEntry_request ...
+[TRACE] Using prover: z3
+  [0.023 s, solver resource count: 346, 0 proof obligations]  verified
+
+Boogie program verifier finished with 1 verified, 0 errors
