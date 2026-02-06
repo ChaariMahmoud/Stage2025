@@ -9,6 +9,211 @@ namespace WasmToBoogie.Conversion
 {
     public partial class WasmAstToBoogie
     {
+        private string BoogieFuncName(WasmFunction f) => SanitizeFunctionName(f.Name, contractName);
+
+        private List<BoogieGlobalVariable> BuildEntryModSet(WasmModule m)
+        {
+            var mods = new List<BoogieGlobalVariable>
+            {
+                new BoogieGlobalVariable(new BoogieTypedIdent("$tmp1", BoogieType.Real)),
+                new BoogieGlobalVariable(new BoogieTypedIdent("$tmp2", BoogieType.Real)),
+                new BoogieGlobalVariable(new BoogieTypedIdent("$tmp3", BoogieType.Real)),
+                new BoogieGlobalVariable(new BoogieTypedIdent("$sp", BoogieType.Int)),
+                new BoogieGlobalVariable(
+                    new BoogieTypedIdent(
+                        "$stack",
+                        new BoogieMapType(BoogieType.Int, BoogieType.Real)
+                    )
+                ),
+            };
+
+            bool memEnabled =
+                PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
+                && PreludeOptions.EnableMemory;
+
+            if (memEnabled)
+            {
+                mods.Add(
+                    new BoogieGlobalVariable(
+                        new BoogieTypedIdent(
+                            "$mem",
+                            new BoogieMapType(BoogieType.Int, BoogieType.Int)
+                        )
+                    )
+                );
+            }
+
+            // ✅ Tous les globals mutables du module (framing-safe)
+            foreach (var g in m.Globals)
+            {
+                if (!g.IsMutable)
+                    continue;
+                var key = ResolveGlobalKey(g.Index, g.Name);
+                var bname = EnsureGlobalDecl(g, key); // garantit déclaration + map stable
+                mods.Add(new BoogieGlobalVariable(new BoogieTypedIdent(bname, BoogieType.Real)));
+            }
+
+            return mods;
+        }
+
+        //private static BoogieIdentifierExpr Id(string x) => new BoogieIdentifierExpr(x);
+        private static BoogieLiteralExpr IntLit(int v) =>
+            new BoogieLiteralExpr(new System.Numerics.BigInteger(v));
+
+        private (BoogieProcedure proc, BoogieImplementation impl) BuildCorralChoice(WasmModule m)
+        {
+            string name = $"CorralChoice_{contractName}";
+            var body = new BoogieStmtList();
+            var locals = new List<BoogieVariable>();
+
+            int N = m.Functions.Count;
+
+            // locals: c:int
+            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("c", BoogieType.Int)));
+
+            // havoc c; assume 0 <= c < N;
+            body.AddStatement(new BoogieHavocCmd(Id("c")));
+            body.AddStatement(
+                new BoogieAssumeCmd(
+                    new BoogieBinaryOperation(
+                        BoogieBinaryOperation.Opcode.AND,
+                        new BoogieBinaryOperation(
+                            BoogieBinaryOperation.Opcode.LE,
+                            IntLit(0),
+                            Id("c")
+                        ),
+                        new BoogieBinaryOperation(
+                            BoogieBinaryOperation.Opcode.LT,
+                            Id("c"),
+                            IntLit(N)
+                        )
+                    )
+                )
+            );
+
+            // ✅ argTmp uniquement si au moins une fonction prend des paramètres
+            bool needArgTmp = m.Functions.Any(f => f.ParamCount > 0);
+            if (needArgTmp)
+                locals.Add(
+                    new BoogieLocalVariable(new BoogieTypedIdent("argTmp", BoogieType.Real))
+                );
+
+            BoogieStmtList elseChain = null;
+
+            for (int i = N - 1; i >= 0; i--)
+            {
+                var f = m.Functions[i];
+                string fname = BoogieFuncName(f);
+
+                var thenBlk = new BoogieStmtList();
+
+                // push args via havoc(argTmp) then push(argTmp)
+                if (f.ParamCount > 0)
+                {
+                    for (int k = 0; k < f.ParamCount; k++)
+                    {
+                        thenBlk.AddStatement(new BoogieHavocCmd(Id("argTmp")));
+                        thenBlk.AddStatement(
+                            new BoogieCallCmd("push", new List<BoogieExpr> { Id("argTmp") }, new())
+                        );
+                    }
+                }
+
+                thenBlk.AddStatement(new BoogieCallCmd(fname, new(), new()));
+
+                if (f.ResultCount > 0)
+                {
+                    EnsurePopDiscardProc(f.ResultCount);
+                    thenBlk.AddStatement(
+                        new BoogieCallCmd($"popDiscard{f.ResultCount}", new(), new())
+                    );
+                }
+
+                var cond = new BoogieBinaryOperation(
+                    BoogieBinaryOperation.Opcode.EQ,
+                    Id("c"),
+                    IntLit(i)
+                );
+                var ifcmd = new BoogieIfCmd(cond, thenBlk, elseChain);
+                var wrap = new BoogieStmtList();
+                wrap.AddStatement(ifcmd);
+                elseChain = wrap;
+            }
+
+            body.AppendStmtList(elseChain);
+
+            var mods = BuildEntryModSet(m);
+
+            var proc = new BoogieProcedure(
+                name,
+                new(),
+                new(),
+                attributes: null,
+                modSet: mods,
+                pre: new(),
+                post: new()
+            );
+            var impl = new BoogieImplementation(name, new(), new(), locals, body, attributes: null);
+            return (proc, impl);
+        }
+
+        private (BoogieProcedure proc, BoogieImplementation impl) BuildCorralEntry(WasmModule m)
+        {
+            string name = $"CorralEntry_{contractName}";
+            var body = new BoogieStmtList();
+            var locals = new List<BoogieVariable>();
+
+            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+
+            var loopBody = new BoogieStmtList();
+            loopBody.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            loopBody.AddStatement(new BoogieCallCmd($"CorralChoice_{contractName}", new(), new()));
+
+            body.AddStatement(new BoogieWhileCmd(new BoogieLiteralExpr(true), loopBody));
+
+            var mods = BuildEntryModSet(m);
+
+            var proc = new BoogieProcedure(
+                name,
+                new(),
+                new(),
+                attributes: null,
+                modSet: mods,
+                pre: new(),
+                post: new()
+            );
+            var impl = new BoogieImplementation(name, new(), new(), locals, body, attributes: null);
+            return (proc, impl);
+        }
+
+        private (BoogieProcedure proc, BoogieImplementation impl) BuildBoogieEntry(WasmModule m)
+        {
+            string name = $"BoogieEntry_{contractName}";
+            var body = new BoogieStmtList();
+            var locals = new List<BoogieVariable>();
+
+            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+
+            // ✅ une seule invocation nondet (sans re-reset)
+            body.AddStatement(new BoogieCallCmd($"CorralChoice_{contractName}", new(), new()));
+
+            var mods = BuildEntryModSet(m);
+
+            var proc = new BoogieProcedure(
+                name,
+                new(),
+                new(),
+                attributes: null,
+                modSet: mods,
+                pre: new(),
+                post: new()
+            );
+            var impl = new BoogieImplementation(name, new(), new(), locals, body, attributes: null);
+            return (proc, impl);
+        }
+
         private static void RemoveUnusedLabels(BoogieStmtList body)
         {
             if (body == null)
@@ -601,6 +806,18 @@ namespace WasmToBoogie.Conversion
                 p.Declarations.Add(impl);
             }
 
+            var (choiceP, choiceI) = BuildCorralChoice(wasmModule);
+            p.Declarations.Add(choiceP);
+            p.Declarations.Add(choiceI);
+
+            var (beP, beI) = BuildBoogieEntry(wasmModule);
+            p.Declarations.Add(beP);
+            p.Declarations.Add(beI);
+
+            var (ceP, ceI) = BuildCorralEntry(wasmModule);
+            p.Declarations.Add(ceP);
+            p.Declarations.Add(ceI);
+
             return p;
         }
 
@@ -659,10 +876,10 @@ namespace WasmToBoogie.Conversion
                 )
             );
             // Runtime init (stack pointer + tmps)
-            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            //  body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
 
             // Global variables init (only mutables)
-            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+            //  body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
 
             // Args : callee pop ses args
             if (n > 0)

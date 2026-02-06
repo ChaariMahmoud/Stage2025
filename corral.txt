@@ -1,4 +1,25 @@
 Corral program verifier version 1.0.0.0
-BoogieOutputs/request.bpl(114,4): Error: call to undeclared procedure: InitRuntime
-BoogieOutputs/request.bpl(154,4): Error: call to undeclared procedure: InitRuntime
-2 name resolution errors in BoogieOutputs/request.bpl
+Single threaded program detected
+Verifying program while tracking: {assertsPassed}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, active_requests}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, active_requests, $stack}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, active_requests, $stack, $tmp1}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, active_requests, $stack, $tmp1, $tmp2}
+Program has no bugs
+
+Boogie verification time: 0.53 s
+Time spent reading-writing programs: 0.11 s
+
+Time spent checking a program (6): 0.54 s
+Time spent checking a path (15): 0.28 s
+
+Number of procedures inlined: 43
+Number of variables tracked: 6
+Total Time: 1.0545292 s
+Total User CPU time: 0.9 s
