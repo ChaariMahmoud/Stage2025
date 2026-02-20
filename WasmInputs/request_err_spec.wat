@@ -1,4 +1,7 @@
 (module
+
+
+
   (;@inv 0 <= active_requests && active_requests <= MAX_REQUESTS;)
 
   (global $MAX_REQUESTS i32 (i32.const 10))
@@ -22,7 +25,7 @@
       )
       (else
         (global.set $active_requests
-          (i32.add (local.get $current) (i32.const 11))
+          (i32.add (local.get $current) (i32.const 3))
         )
         (local.set $ret (i32.const 1))
       )
@@ -44,7 +47,7 @@
     (if (i32.gt_s (local.get $current) (i32.const 0))
       (then
         (global.set $active_requests
-          (i32.sub (local.get $current) (i32.const 11))
+          (i32.sub (local.get $current) (i32.const 1))
         )
       )
     )

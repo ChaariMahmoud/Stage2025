@@ -27,6 +27,20 @@ namespace WasmToBoogie.Conversion
             return s;
         }
 
+        private static readonly List<BoogieAttribute> InlineAttrs = new()
+        {
+            new BoogieAttribute("inline", true),
+        };
+
+        private List<BoogieAttribute>? InlineAttrsIfNotEntry(string name)
+        {
+            if (name.StartsWith("BoogieEntry_", StringComparison.Ordinal))
+                return null;
+            if (name.StartsWith("CorralEntry_", StringComparison.Ordinal))
+                return null;
+            return new List<BoogieAttribute>(InlineAttrs); // copie safe
+        }
+
         private List<BoogieGlobalVariable> BuildEntryModSet(WasmModule m)
         {
             var mods = new List<BoogieGlobalVariable>
@@ -164,7 +178,7 @@ namespace WasmToBoogie.Conversion
                 name,
                 new(),
                 new(),
-                attributes: null,
+                attributes: InlineAttrsIfNotEntry(name),
                 modSet: mods,
                 pre: new(),
                 post: new()
@@ -219,8 +233,8 @@ namespace WasmToBoogie.Conversion
             var body = new BoogieStmtList();
             var locals = new List<BoogieVariable>();
 
-             body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
-             body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
 
             body.AddStatement(new BoogieCallCmd($"CorralChoice_{contractName}", new(), new()));
 
@@ -697,7 +711,7 @@ namespace WasmToBoogie.Conversion
                 "initGlobals",
                 new List<BoogieVariable>(),
                 new List<BoogieVariable>(),
-                attributes: null,
+                attributes: InlineAttrsIfNotEntry("initGlobals"),
                 modSet: mods,
                 pre: new List<BoogieExpr>(), // requires (vide)
                 post: post // ✅ ensures
@@ -1002,9 +1016,24 @@ namespace WasmToBoogie.Conversion
                         post.Add(specParser.Parse(ensSpec));
             }
 
-            var proc = new BoogieProcedure(funcName, inParams, outParams, new(), mods, pre, post);
+            var proc = new BoogieProcedure(
+                funcName,
+                inParams,
+                outParams,
+                attributes: InlineAttrsIfNotEntry(funcName),
+                modSet: mods,
+                pre: pre,
+                post: post
+            );
             RemoveUnusedLabels(body);
-            var impl = new BoogieImplementation(proc.Name, inParams, outParams, locals, body);
+            var impl = new BoogieImplementation(
+                proc.Name,
+                inParams,
+                outParams,
+                locals,
+                body,
+                attributes: null //InlineAttrsIfNotEntry(proc.Name)
+            );
 
             // reset état
             currentLocalMap = null;

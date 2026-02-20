@@ -1,3 +1,4 @@
 Corral program verifier version 1.0.0.0
-BoogieOutputs/request-spec.bpl(205,31): error: "(" expected
-Failed to read BoogieOutputs/request-spec.bpl
+BoogieOutputs/request-spec.bpl(134,4): Error: undeclared identifier: entry_sp
+BoogieOutputs/request-spec.bpl(173,4): Error: undeclared identifier: entry_sp
+2 name resolution errors in BoogieOutputs/request-spec.bpl
