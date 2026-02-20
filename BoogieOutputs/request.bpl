@@ -265,10 +265,10 @@ implementation CorralEntry_request()
     call InitRuntime();
     call initGlobals();
     while (true)
+    //manual add
     invariant 0.0 <= active_requests;
     invariant active_requests <= MAX_REQUESTS;
     {
-        call InitRuntime();
         call CorralChoice_request();
     }
 }

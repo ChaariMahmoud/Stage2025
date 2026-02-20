@@ -11,6 +11,22 @@ namespace WasmToBoogie.Conversion
     {
         private string BoogieFuncName(WasmFunction f) => SanitizeFunctionName(f.Name, contractName);
 
+        private ModuleSpec? moduleSpec;
+        private SpecToBoogieParser? specParser;
+
+        private static string SanitizeIdentifier(string raw)
+        {
+            if (string.IsNullOrEmpty(raw))
+                return "contract";
+
+            var s = Regex.Replace(raw, @"[^A-Za-z0-9_]", "_");
+
+            if (!char.IsLetter(s[0]) && s[0] != '_')
+                s = "_" + s;
+
+            return s;
+        }
+
         private List<BoogieGlobalVariable> BuildEntryModSet(WasmModule m)
         {
             var mods = new List<BoogieGlobalVariable>
@@ -170,7 +186,17 @@ namespace WasmToBoogie.Conversion
             loopBody.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
             loopBody.AddStatement(new BoogieCallCmd($"CorralChoice_{contractName}", new(), new()));
 
-            body.AddStatement(new BoogieWhileCmd(new BoogieLiteralExpr(true), loopBody));
+            var invariants = new List<BoogieExpr>();
+
+            if (moduleSpec != null && specParser != null)
+            {
+                foreach (var inv in moduleSpec.GlobalInvariants)
+                    invariants.Add(specParser.Parse(inv));
+            }
+
+            body.AddStatement(
+                new BoogieWhileCmd(new BoogieLiteralExpr(true), loopBody, invariants)
+            );
 
             var mods = BuildEntryModSet(m);
 
@@ -193,10 +219,9 @@ namespace WasmToBoogie.Conversion
             var body = new BoogieStmtList();
             var locals = new List<BoogieVariable>();
 
-            body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
-            body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
+             body.AddStatement(new BoogieCallCmd("InitRuntime", new(), new()));
+             body.AddStatement(new BoogieCallCmd("initGlobals", new(), new()));
 
-            // ✅ une seule invocation nondet (sans re-reset)
             body.AddStatement(new BoogieCallCmd($"CorralChoice_{contractName}", new(), new()));
 
             var mods = BuildEntryModSet(m);
@@ -513,7 +538,8 @@ namespace WasmToBoogie.Conversion
                 return ctx.EndLabel;
         }
 
-        public WasmAstToBoogie(string contractName) => this.contractName = contractName;
+        public WasmAstToBoogie(string contractName) =>
+            this.contractName = SanitizeIdentifier(contractName);
 
         // ============================================================
         // Helpers
@@ -770,6 +796,9 @@ namespace WasmToBoogie.Conversion
         {
             var p = new BoogieProgram();
             program = p;
+            moduleSpec = wasmModule.Spec;
+            if (moduleSpec != null)
+                specParser = new SpecToBoogieParser(EnsureGlobalVar);
 
             if (PreludeOptions.AutoDetect)
                 if (PreludeOptions.AutoDetect)
@@ -959,15 +988,21 @@ namespace WasmToBoogie.Conversion
                 foreach (var g in currentModifiedGlobals)
                     mods.Add(new BoogieGlobalVariable(new BoogieTypedIdent(g, BoogieType.Real)));
 
-            var proc = new BoogieProcedure(
-                funcName,
-                inParams,
-                outParams,
-                new(),
-                mods,
-                new(),
-                new()
-            );
+            var pre = new List<BoogieExpr>();
+            var post = new List<BoogieExpr>();
+
+            if (moduleSpec != null && func.Name != null && specParser != null)
+            {
+                if (moduleSpec.RequiresByFunc.TryGetValue(func.Name, out var reqs))
+                    foreach (var req in reqs)
+                        pre.Add(specParser.Parse(req));
+
+                if (moduleSpec.EnsuresByFunc.TryGetValue(func.Name, out var ens))
+                    foreach (var ensSpec in ens)
+                        post.Add(specParser.Parse(ensSpec));
+            }
+
+            var proc = new BoogieProcedure(funcName, inParams, outParams, new(), mods, pre, post);
             RemoveUnusedLabels(body);
             var impl = new BoogieImplementation(proc.Name, inParams, outParams, locals, body);
 
