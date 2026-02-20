@@ -163,6 +163,12 @@ namespace WasmToBoogie.Parser
                 throw new FileNotFoundException($"❌ WAT file not found: {filePath}");
 
             Console.WriteLine("📖 Reading WAT file: " + filePath);
+            string watText = File.ReadAllText(filePath);
+            var extractedSpec = SpecExtractor.ExtractFromWat(watText, strict: false);
+            Console.WriteLine(
+                $"📌 Specs: globalInv={extractedSpec.GlobalInvariants.Count}, "
+                    + $"requiresFuncs={extractedSpec.RequiresByFunc.Count}, ensuresFuncs={extractedSpec.EnsuresByFunc.Count}"
+            );
             string wasmPath = ConvertWatToWasm(filePath);
 
             IntPtr modulePtr = LoadWasmTextFile(wasmPath);
@@ -173,6 +179,12 @@ namespace WasmToBoogie.Parser
 
             // ✅ IMPORTANT: create ONE WasmModule (your previous code created it twice)
             var module = new WasmModule();
+            module.Spec = extractedSpec;
+
+            if (module.Spec != null)
+            {
+                module.Spec.PrettyPrint();
+            }
 
             // ---------------- Globals (module-level) ----------------
             int gCount = 0;

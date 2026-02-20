@@ -172,6 +172,7 @@ namespace WasmToBoogie.Parser.Ast
         public List<WasmGlobal> Globals { get; } = new();
         public Dictionary<string, int> GlobalIndexByName { get; } = new();
         public List<WasmFunction> Functions { get; set; } = new();
+        public ModuleSpec? Spec { get; set; }
     }
 
     public class ReturnNode : WasmNode { }
