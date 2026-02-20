@@ -41,6 +41,7 @@ procedure push(val: real);
   modifies $stack, $sp;
   ensures $sp == old($sp) + 1;
   ensures $stack[old($sp)] == val;
+  ensures (forall i: int :: i != old($sp) ==> $stack[i] == old($stack)[i]);
   ensures 0 <= $sp;
 
 
@@ -60,6 +61,7 @@ procedure popToTmp1();
   requires $sp > 0;
   modifies $sp, $tmp1;
   ensures $sp == old($sp) - 1;
+  ensures (forall i: int :: $stack[i] == old($stack)[i]);
   ensures $tmp1 == old($stack)[old($sp) - 1];
   ensures 0 <= $sp;
 
@@ -80,6 +82,7 @@ procedure popToTmp2();
   requires $sp > 0;
   modifies $sp, $tmp2;
   ensures $sp == old($sp) - 1;
+  ensures (forall i: int :: $stack[i] == old($stack)[i]);
   ensures $tmp2 == old($stack)[old($sp) - 1];
   ensures 0 <= $sp;
 
@@ -100,6 +103,7 @@ procedure popToTmp3();
   requires $sp > 0;
   modifies $sp, $tmp3;
   ensures $sp == old($sp) - 1;
+  ensures (forall i: int :: $stack[i] == old($stack)[i]);
   ensures $tmp3 == old($stack)[old($sp) - 1];
   ensures 0 <= $sp;
 
@@ -125,7 +129,7 @@ procedure initGlobals();
 
 
 
-implementation {:ForceInline} initGlobals()
+implementation initGlobals()
 {
 
   anon0:
@@ -140,6 +144,7 @@ procedure popArgs1() returns (a1: real);
   modifies $sp;
   ensures $sp == old($sp) - 1;
   ensures 0 <= $sp;
+  ensures (forall i: int :: $stack[i] == old($stack)[i]);
   ensures a1 == old($stack)[old($sp) - 1];
 
 
@@ -191,7 +196,7 @@ implementation {:ForceInline} acquire_request()
   anon4_Else:
     assume {:partition} !real_to_bool($tmp1);
     call {:si_unique_call 10} push(loc1);
-    call {:si_unique_call 11} push(3e0);
+    call {:si_unique_call 11} push(11e0);
     call {:si_unique_call 12} popToTmp1();
     call {:si_unique_call 13} popToTmp2();
     call {:si_unique_call 14} push($tmp2 + $tmp1);
@@ -235,7 +240,7 @@ implementation {:ForceInline} release_request()
   anon2_Then:
     assume {:partition} real_to_bool($tmp1);
     call {:si_unique_call 27} push(loc1);
-    call {:si_unique_call 28} push(1e0);
+    call {:si_unique_call 28} push(11e0);
     call {:si_unique_call 29} popToTmp1();
     call {:si_unique_call 30} popToTmp2();
     call {:si_unique_call 31} push($tmp2 - $tmp1);
@@ -267,14 +272,12 @@ implementation {:ForceInline} popDiscard1()
 
 
 
-procedure CorralChoice_request();
-  requires 0e0 <= active_requests && active_requests <= MAX_REQUESTS;
+procedure CorralChoice_request_spec();
   modifies $stack, $sp, $tmp1, $tmp2, active_requests;
-  ensures 0e0 <= active_requests && active_requests <= MAX_REQUESTS;
 
 
 
-implementation {:ForceInline} CorralChoice_request()
+implementation {:ForceInline} CorralChoice_request_spec()
 {
   var c: int;
 
@@ -305,39 +308,24 @@ implementation {:ForceInline} CorralChoice_request()
 
 
 
-procedure BoogieEntry_request();
-  requires 0e0 <= active_requests && active_requests <= MAX_REQUESTS;
-  modifies $tmp1, $tmp2, $tmp3, $sp, $stack, active_requests;
-  ensures 0e0 <= active_requests && active_requests <= MAX_REQUESTS;
-
-
-
-procedure CorralEntry_request();
+procedure BoogieEntry_request_spec();
   modifies $sp, $tmp1, $tmp2, $tmp3, active_requests, $stack;
 
 
 
-implementation CorralEntry_request()
+implementation BoogieEntry_request_spec()
 {
 
   anon0:
     call {:si_unique_call 36} InitRuntime();
     call {:si_unique_call 37} initGlobals();
-    goto anon2_LoopHead;
-
-  anon2_LoopHead:
-    assert 0e0 <= active_requests;
-    assert active_requests <= MAX_REQUESTS;
-    goto anon2_LoopDone, anon2_LoopBody;
-
-  anon2_LoopBody:
-    assume {:partition} true;
-    call {:si_unique_call 38} CorralChoice_request();
-    goto anon2_LoopHead;
-
-  anon2_LoopDone:
-    assume {:partition} !true;
+    call {:si_unique_call 38} CorralChoice_request_spec();
     return;
 }
+
+
+
+procedure CorralEntry_request_spec();
+  modifies $tmp1, $tmp2, $tmp3, $sp, $stack, active_requests;
 
 

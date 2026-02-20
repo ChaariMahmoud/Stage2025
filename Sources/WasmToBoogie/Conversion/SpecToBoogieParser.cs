@@ -89,10 +89,10 @@ namespace WasmToBoogie.Conversion
 
             // otherwise global variable
             if (s == "true")
-    return new BoogieLiteralExpr(true);
+                return new BoogieLiteralExpr(true);
 
-if (s == "false")
-    return new BoogieLiteralExpr(false);
+            if (s == "false")
+                return new BoogieLiteralExpr(false);
             string boogieName = resolveGlobal(s);
             return new BoogieIdentifierExpr(boogieName);
         }

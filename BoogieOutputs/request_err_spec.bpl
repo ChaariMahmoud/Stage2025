@@ -96,7 +96,7 @@ const MAX_REQUESTS: real;
 
 axiom((MAX_REQUESTS) == (10.0));
 var active_requests: real;
-procedure {:inline true} initGlobals();
+procedure initGlobals();
 modifies active_requests;
 ensures((active_requests) == (0.0));
 implementation initGlobals()
@@ -118,7 +118,7 @@ implementation popArgs1() returns (a1: real)
     a1 := $stack[$sp];
 }
 
-procedure {:inline true} acquire_request();
+procedure acquire_request();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -148,7 +148,7 @@ implementation acquire_request()
         call loc2 := popArgs1();
     } else {
         call push(loc1);
-        call push(11.0);
+        call push(3.0);
         call popToTmp1();
         call popToTmp2();
         call push(($tmp2) + ($tmp1));
@@ -159,7 +159,7 @@ implementation acquire_request()
     call push(loc2);
 }
 
-procedure {:inline true} release_request();
+procedure release_request();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -184,7 +184,7 @@ implementation release_request()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc1);
-        call push(11.0);
+        call push(1.0);
         call popToTmp1();
         call popToTmp2();
         call push(($tmp2) - ($tmp1));
@@ -202,14 +202,14 @@ implementation popDiscard1()
     $sp := ($sp) - (1);
 }
 
-procedure {:inline true} CorralChoice_request_spec();
+procedure CorralChoice_request_err_spec();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
-implementation CorralChoice_request_spec()
+implementation CorralChoice_request_err_spec()
 {
     var c: int;
     havoc c;
@@ -222,28 +222,28 @@ implementation CorralChoice_request_spec()
     }
 }
 
-procedure BoogieEntry_request_spec();
+procedure BoogieEntry_request_err_spec();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
-implementation BoogieEntry_request_spec()
+implementation BoogieEntry_request_err_spec()
 {
     call InitRuntime();
     call initGlobals();
-    call CorralChoice_request_spec();
+    call CorralChoice_request_err_spec();
 }
 
-procedure CorralEntry_request_spec();
+procedure CorralEntry_request_err_spec();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
-implementation CorralEntry_request_spec()
+implementation CorralEntry_request_err_spec()
 {
     call InitRuntime();
     call initGlobals();
@@ -251,7 +251,7 @@ implementation CorralEntry_request_spec()
     invariant ((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS));
     {
         call InitRuntime();
-        call CorralChoice_request_spec();
+        call CorralChoice_request_err_spec();
     }
 }
 
