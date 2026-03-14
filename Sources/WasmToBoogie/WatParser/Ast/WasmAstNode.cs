@@ -14,26 +14,25 @@ namespace WasmToBoogie.Parser.Ast
 
     public class ConstNode : WasmNode
     {
-        public string Type { get; set; } // e.g., i32
-        public string Value { get; set; } // e.g., 5
+        public string Type { get; set; }
+        public string Value { get; set; }
     }
 
     public class UnaryOpNode : WasmNode
     {
-        public string Op { get; set; } // e.g., drop, i32.eqz
+        public string Op { get; set; }
         public WasmNode Operand { get; set; }
     }
 
     public class BinaryOpNode : WasmNode
     {
-        public string Op { get; set; } // e.g., i32.add, i32.lt_s
+        public string Op { get; set; }
         public WasmNode Left { get; set; }
         public WasmNode Right { get; set; }
     }
 
     public class IfNode : WasmNode
     {
-        // NEW: if (result i32) / (result f32) etc. Null => if statement (no value produced)
         public WasmValueType? ResultType { get; set; } = null;
         public WasmNode Condition { get; set; }
         public List<WasmNode> ThenBody { get; set; } = new();
@@ -56,26 +55,26 @@ namespace WasmToBoogie.Parser.Ast
 
     public class BrNode : WasmNode
     {
-        public string Label { get; set; } // e.g., $label
+        public string Label { get; set; }
     }
 
     public class BrIfNode : WasmNode
     {
-        public string Label { get; set; } // e.g., $label
+        public string Label { get; set; }
         public WasmNode Condition { get; set; }
     }
 
     public class LocalGetNode : WasmNode
     {
         public int? Index { get; set; }
-        public string? Name { get; set; } // if used like (local.get $a)
+        public string? Name { get; set; }
     }
 
     public class LocalSetNode : WasmNode
     {
         public int? Index { get; set; }
         public string? Name { get; set; }
-        public WasmNode? Value { get; set; } // not used in current parser style (stack form)
+        public WasmNode? Value { get; set; }
     }
 
     public class LocalTeeNode : WasmNode

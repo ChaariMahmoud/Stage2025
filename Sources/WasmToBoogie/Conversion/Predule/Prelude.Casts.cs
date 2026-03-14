@@ -34,7 +34,116 @@ namespace WasmToBoogie.Conversion
                 program.Declarations.Add(
                     new BoogieFunctionDef("real_to_bool", new() { r }, BoogieType.Bool, body)
                 );
-            }
+            }     
+            // =====================
+// Axioms for bool_to_real / real_to_bool
+// =====================
+
+// axiom: forall b: bool :: bool_to_real(b) == 0.0 || bool_to_real(b) == 1.0
+{
+    var bVar = new BoogieIdentifierExpr("b");
+
+    var boolToReal_b = new BoogieFuncCallExpr(
+        "bool_to_real",
+        new List<BoogieExpr> { bVar }
+    );
+
+    var eq0 = new BoogieBinaryOperation(
+        BoogieBinaryOperation.Opcode.EQ,
+        boolToReal_b,
+        new BoogieLiteralExpr(new Pfloat(0))
+    );
+
+    // refaire l'appel (c'est OK, ou tu peux réutiliser la même expr)
+    var boolToReal_b2 = new BoogieFuncCallExpr(
+        "bool_to_real",
+        new List<BoogieExpr> { new BoogieIdentifierExpr("b") }
+    );
+
+    var eq1 = new BoogieBinaryOperation(
+        BoogieBinaryOperation.Opcode.EQ,
+        boolToReal_b2,
+        new BoogieLiteralExpr(new Pfloat(1))
+    );
+
+    var body = new BoogieBinaryOperation(BoogieBinaryOperation.Opcode.OR, eq0, eq1);
+
+    var forall = new BoogieQuantifiedExpr(
+        isForall: true,
+        qvars: new List<BoogieIdentifierExpr> { new BoogieIdentifierExpr("b") },
+        qvarTypes: new List<BoogieType> { BoogieType.Bool },
+        bodyExpr: body,
+        trigger: new List<BoogieExpr> { boolToReal_b } // trigger utile
+    );
+
+    program.Declarations.Add(new BoogieAxiom(forall));
+}
+
+// axiom: forall b: bool :: real_to_bool(bool_to_real(b)) == b
+{
+    var bVar = new BoogieIdentifierExpr("b");
+
+    var boolToReal_b = new BoogieFuncCallExpr(
+        "bool_to_real",
+        new List<BoogieExpr> { bVar }
+    );
+
+    var realToBool_boolToReal_b = new BoogieFuncCallExpr(
+        "real_to_bool",
+        new List<BoogieExpr> { boolToReal_b }
+    );
+
+    var body = new BoogieBinaryOperation(
+        BoogieBinaryOperation.Opcode.EQ,
+        realToBool_boolToReal_b,
+        bVar
+    );
+
+    var forall = new BoogieQuantifiedExpr(
+        isForall: true,
+        qvars: new List<BoogieIdentifierExpr> { new BoogieIdentifierExpr("b") },
+        qvarTypes: new List<BoogieType> { BoogieType.Bool },
+        bodyExpr: body,
+        trigger: new List<BoogieExpr> { realToBool_boolToReal_b } // trigger utile
+    );
+
+    program.Declarations.Add(new BoogieAxiom(forall));
+}
+
+// (optionnel mais souvent très utile)
+// axiom: forall r: real :: (real_to_bool(r) == false) <==> (r == 0.0)
+{
+    var rVar = new BoogieIdentifierExpr("r");
+
+    var realToBool_r = new BoogieFuncCallExpr(
+        "real_to_bool",
+        new List<BoogieExpr> { rVar }
+    );
+
+    var lhs = new BoogieBinaryOperation(
+        BoogieBinaryOperation.Opcode.EQ,
+        realToBool_r,
+        new BoogieLiteralExpr(false)
+    );
+
+    var rhs = new BoogieBinaryOperation(
+        BoogieBinaryOperation.Opcode.EQ,
+        rVar,
+        new BoogieLiteralExpr(new Pfloat(0))
+    );
+
+    var body = new BoogieBinaryOperation(BoogieBinaryOperation.Opcode.IFF, lhs, rhs);
+
+    var forall = new BoogieQuantifiedExpr(
+        isForall: true,
+        qvars: new List<BoogieIdentifierExpr> { new BoogieIdentifierExpr("r") },
+        qvarTypes: new List<BoogieType> { BoogieType.Real },
+        bodyExpr: body,
+        trigger: new List<BoogieExpr> { realToBool_r }
+    );
+
+    program.Declarations.Add(new BoogieAxiom(forall));
+}
         }
 
         private void AddPreludeNumericCasts(BoogieProgram program)

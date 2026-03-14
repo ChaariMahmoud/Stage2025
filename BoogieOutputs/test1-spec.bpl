@@ -11,7 +11,7 @@ function real_to_bool(r: real) : bool
 {
     if (r) == (0.0) then (false) else (true)
 }
-procedure {:inline true} InitRuntime();
+procedure {:inline true} InitRuntime(); 
 modifies $sp;
 modifies $tmp1;
 modifies $tmp2;

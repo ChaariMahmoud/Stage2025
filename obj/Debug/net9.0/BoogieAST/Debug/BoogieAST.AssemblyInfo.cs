@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BoogieAST")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.1.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1-alpha+59678c49e0565ecac23307cda08d588cadf4b122")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.1.1-alpha+10dcd5eca633c21d2f62193e78711596d61c07f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("BoogieAST")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BoogieAST")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.1.1.0")]

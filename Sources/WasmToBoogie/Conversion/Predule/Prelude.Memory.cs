@@ -149,7 +149,7 @@ namespace WasmToBoogie.Conversion
                     "mem_write_u8",
                     ins,
                     new(), // no outputs
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     memModSet,
                     new(),
                     new()
@@ -184,7 +184,7 @@ namespace WasmToBoogie.Conversion
                     "mem_write_u16",
                     ins,
                     new(),
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     memModSet,
                     new(),
                     new()
@@ -244,7 +244,7 @@ namespace WasmToBoogie.Conversion
                     "mem_write_u32",
                     ins,
                     new(),
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     memModSet,
                     new(),
                     new()
@@ -347,7 +347,7 @@ namespace WasmToBoogie.Conversion
                     "mem_write_u64",
                     ins,
                     new(),
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     memModSet,
                     new(),
                     new()
@@ -410,7 +410,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_u8",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(), // no modifies
                     new(),
                     new()
@@ -460,7 +460,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_s8",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -524,7 +524,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_u16",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -607,7 +607,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_s16",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -671,7 +671,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_u32",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -781,7 +781,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_s32",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -844,7 +844,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_u64",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
@@ -1011,7 +1011,7 @@ namespace WasmToBoogie.Conversion
                     "mem_read_s64",
                     ins,
                     outs,
-                    new() { new BoogieAttribute("inline", true) },
+                    new() { new BoogieAttribute("inline", 1) },
                     new(),
                     new(),
                     new()
