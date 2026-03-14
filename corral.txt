@@ -1,4 +1,28 @@
 Corral program verifier version 1.0.0.0
-BoogieOutputs/request-spec.bpl(134,4): Error: undeclared identifier: entry_sp
-BoogieOutputs/request-spec.bpl(173,4): Error: undeclared identifier: entry_sp
-2 name resolution errors in BoogieOutputs/request-spec.bpl
+Single threaded program detected
+Verifying program while tracking: {assertsPassed}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, temp}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, temp, $stack}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, temp, $stack, $tmp1}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $sp, temp, $stack, $tmp1, $tmp2}
+Program has a potential bug: True bug
+(1,1): error PF5001: This assertion can fail
+
+Execution trace:
+
+Boogie verification time: 2.61 s
+Time spent reading-writing programs: 0.25 s
+
+Time spent checking a program (6): 2.52 s
+Time spent checking a path (16): 0.80 s
+
+Number of procedures inlined: 130
+Number of variables tracked: 6
+Total Time: 3.7336988 s
+Total User CPU time: 4.26 s

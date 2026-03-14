@@ -22,7 +22,7 @@
       )
       (else
         (global.set $active_requests
-          (i32.add (local.get $current) (i32.const 11))
+          (i32.add (local.get $current) (i32.const 1))
         )
         (local.set $ret (i32.const 1))
       )
@@ -44,7 +44,7 @@
     (if (i32.gt_s (local.get $current) (i32.const 0))
       (then
         (global.set $active_requests
-          (i32.sub (local.get $current) (i32.const 11))
+          (i32.sub (local.get $current) (i32.const 1))
         )
       )
     )

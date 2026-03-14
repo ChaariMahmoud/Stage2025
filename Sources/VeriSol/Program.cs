@@ -53,7 +53,7 @@
                 var executor = new VeriSolExecutor(
                     program,
                     contractName,
-                    corralRecursionLimit: 4,
+                    corralRecursionLimit: 10,
                     ignoreMethods: new HashSet<Tuple<string, string>>(),
                     tryRefutation: true,
                     tryProofFlag: true,

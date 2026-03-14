@@ -93,7 +93,7 @@ namespace WasmToBoogie.Conversion
                 $"popArgs{n}",
                 new(),
                 outs,
-                new() { new BoogieAttribute("inline", true) },
+                new() { new BoogieAttribute("inline", 1) },
                 new()
                 {
                     new BoogieGlobalVariable(new BoogieTypedIdent("$sp", BoogieType.Int)),
@@ -178,7 +178,7 @@ namespace WasmToBoogie.Conversion
                 $"popDiscard{n}",
                 new(),
                 new(),
-                new() { new BoogieAttribute("inline", true) },
+                new() { new BoogieAttribute("inline", 1) },
                 new() { new BoogieGlobalVariable(new BoogieTypedIdent("$sp", BoogieType.Int)) },
                 requires,
                 ensures

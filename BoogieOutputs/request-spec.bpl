@@ -11,7 +11,13 @@ function real_to_bool(r: real) : bool
 {
     if (r) == (0.0) then (false) else (true)
 }
-procedure {:inline true} InitRuntime();
+
+axiom(forall  b:bool :: {bool_to_real(b)} (((bool_to_real(b)) == (0.0)) || ((bool_to_real(b)) == (1.0))));
+
+axiom(forall  b:bool :: {real_to_bool(bool_to_real(b))} ((real_to_bool(bool_to_real(b))) == (b)));
+
+axiom(forall  r:real :: {real_to_bool(r)} (((real_to_bool(r)) == (false)) <==> ((r) == (0.0))));
+procedure {:inline 1} InitRuntime();
 modifies $sp;
 modifies $tmp1;
 modifies $tmp2;
@@ -26,7 +32,7 @@ implementation InitRuntime()
     $tmp3 := 0.0;
 }
 
-procedure {:inline true} push(val: real);
+procedure {:inline 1} push(val: real);
 modifies $sp;
 modifies $stack;
 requires((0) <= ($sp));
@@ -40,7 +46,7 @@ implementation push(val: real)
     $sp := ($sp) + (1);
 }
 
-procedure {:inline true} popToTmp1();
+procedure {:inline 1} popToTmp1();
 modifies $sp;
 modifies $tmp1;
 requires(($sp) > (0));
@@ -54,7 +60,7 @@ implementation popToTmp1()
     $tmp1 := $stack[$sp];
 }
 
-procedure {:inline true} popToTmp2();
+procedure {:inline 1} popToTmp2();
 modifies $sp;
 modifies $tmp2;
 requires(($sp) > (0));
@@ -68,7 +74,7 @@ implementation popToTmp2()
     $tmp2 := $stack[$sp];
 }
 
-procedure {:inline true} popToTmp3();
+procedure {:inline 1} popToTmp3();
 modifies $sp;
 modifies $tmp3;
 requires(($sp) > (0));
@@ -82,7 +88,7 @@ implementation popToTmp3()
     $tmp3 := $stack[$sp];
 }
 
-procedure {:inline true} pop();
+procedure {:inline 1} pop();
 modifies $sp;
 requires(($sp) > (0));
 ensures(($sp) == ((old($sp)) - (1)));
@@ -96,7 +102,7 @@ const MAX_REQUESTS: real;
 
 axiom((MAX_REQUESTS) == (10.0));
 var active_requests: real;
-procedure {:inline true} initGlobals();
+procedure {:inline 1} initGlobals();
 modifies active_requests;
 ensures((active_requests) == (0.0));
 implementation initGlobals()
@@ -104,7 +110,7 @@ implementation initGlobals()
     active_requests := 0.0;
 }
 
-procedure {:inline true} popArgs1() returns (a1: real);
+procedure {:inline 1} popArgs1() returns (a1: real);
 modifies $sp;
 modifies $stack;
 requires(($sp) >= (1));
@@ -118,7 +124,7 @@ implementation popArgs1() returns (a1: real)
     a1 := $stack[$sp];
 }
 
-procedure {:inline true} acquire_request();
+procedure {:inline 1} acquire_request();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -148,7 +154,7 @@ implementation acquire_request()
         call loc2 := popArgs1();
     } else {
         call push(loc1);
-        call push(11.0);
+        call push(1.0);
         call popToTmp1();
         call popToTmp2();
         call push(($tmp2) + ($tmp1));
@@ -159,7 +165,7 @@ implementation acquire_request()
     call push(loc2);
 }
 
-procedure {:inline true} release_request();
+procedure {:inline 1} release_request();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -184,7 +190,7 @@ implementation release_request()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc1);
-        call push(11.0);
+        call push(1.0);
         call popToTmp1();
         call popToTmp2();
         call push(($tmp2) - ($tmp1));
@@ -192,7 +198,7 @@ implementation release_request()
     }
 }
 
-procedure {:inline true} popDiscard1();
+procedure {:inline 1} popDiscard1();
 modifies $sp;
 requires(($sp) >= (1));
 ensures(($sp) == ((old($sp)) - (1)));
@@ -202,13 +208,15 @@ implementation popDiscard1()
     $sp := ($sp) - (1);
 }
 
-procedure {:inline true} CorralChoice_request_spec();
+procedure {:inline 1} CorralChoice_request_spec();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
+requires(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
+ensures(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
 implementation CorralChoice_request_spec()
 {
     var c: int;
@@ -217,8 +225,10 @@ implementation CorralChoice_request_spec()
     if ((c) == (0)) {
         call acquire_request();
         call popDiscard1();
+        assert (((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
     } else if ((c) == (1)) {
         call release_request();
+        assert (((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
     }
 }
 
@@ -229,11 +239,28 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
+requires(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
+ensures(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
 implementation BoogieEntry_request_spec()
 {
-    call InitRuntime();
+    var c: int;
     call initGlobals();
-    call CorralChoice_request_spec();
+    call InitRuntime();
+    while (true)
+    invariant (0) <= ($sp);
+    invariant ((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS));
+    invariant (MAX_REQUESTS) == (real(int(MAX_REQUESTS)));
+    invariant (active_requests) == (real(int(active_requests)));
+    {
+        havoc c;
+        assume (((0) <= (c)) && ((c) < (2)));
+        if ((c) == (0)) {
+            call acquire_request();
+            call popDiscard1();
+        } else if ((c) == (1)) {
+            call release_request();
+        }
+    }
 }
 
 procedure CorralEntry_request_spec();
@@ -243,14 +270,14 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies active_requests;
+requires(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
+ensures(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
 implementation CorralEntry_request_spec()
 {
     call InitRuntime();
     call initGlobals();
     while (true)
-    invariant ((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS));
     {
-        call InitRuntime();
         call CorralChoice_request_spec();
     }
 }

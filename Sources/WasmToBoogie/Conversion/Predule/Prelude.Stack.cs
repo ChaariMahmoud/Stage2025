@@ -59,7 +59,7 @@ namespace WasmToBoogie.Conversion
 
         private static void AddInitRuntime(BoogieProgram program)
         {
-            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", true) };
+            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", 1) };
 
             var modifies = new List<BoogieGlobalVariable>
             {
@@ -99,7 +99,7 @@ namespace WasmToBoogie.Conversion
                 new BoogieFormalParam(new BoogieTypedIdent("val", BoogieType.Real)),
             };
 
-            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", true) };
+            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", 1) };
 
             var modifies = new List<BoogieGlobalVariable>
             {
@@ -170,7 +170,7 @@ namespace WasmToBoogie.Conversion
 
         private static void AddPopToTmp(BoogieProgram program, string procName, string tmpGlobal)
         {
-            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", true) };
+            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", 1) };
 
             var modifies = new List<BoogieGlobalVariable>
             {
@@ -236,7 +236,7 @@ namespace WasmToBoogie.Conversion
 
         private static void AddPop(BoogieProgram program)
         {
-            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", true) };
+            var attrs = new List<BoogieAttribute> { new BoogieAttribute("inline", 1) };
 
             var modifies = new List<BoogieGlobalVariable>
             {
