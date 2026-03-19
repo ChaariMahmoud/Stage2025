@@ -1,18 +1,10 @@
 (module
-
-
-
   (;@inv 0 <= active_requests && active_requests <= MAX_REQUESTS;)
-
   (global $MAX_REQUESTS i32 (i32.const 10))
-
   (global $active_requests (mut i32) (i32.const 0))
-
-
 
   (;@requires 0 <= active_requests && active_requests <= MAX_REQUESTS;)
   (;@ensures  0 <= active_requests && active_requests <= MAX_REQUESTS;)
-
   (func $acquire_request (result i32)
     (local $current i32)
     (local $ret i32)
@@ -33,9 +25,6 @@
 
     (local.get $ret)
   )
-
-
-
   (;@requires 0 <= active_requests && active_requests <= MAX_REQUESTS;)
   (;@ensures  0 <= active_requests && active_requests <= MAX_REQUESTS;)
 

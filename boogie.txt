@@ -1,65 +1,9 @@
-Parsing BoogieOutputs/sanity_check2_violeted.bpl
+Parsing BoogieOutputs/request-spec.bpl
 Coalescing blocks...
 Inlining...
 
-Verifying BoogieEntry_sanity_check2_violeted ...
+Verifying BoogieEntry_request_spec ...
 [TRACE] Using prover: z3
-  [0.112 s, solver resource count: 118786, 156 proof obligations]  error
-(0,0): Error: a postcondition could not be proved on this return path
-BoogieOutputs/sanity_check2_violeted.bpl(132,1): Related location: this is the postcondition that could not be proved
-Execution trace:
-    BoogieOutputs/sanity_check2_violeted.bpl(225,5): anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(105,16): inline$initGlobals$0$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(27,16): inline$InitRuntime$0$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(225,5): anon0$2
-    BoogieOutputs/sanity_check2_violeted.bpl(227,5): anon4_LoopHead
-    BoogieOutputs/sanity_check2_violeted.bpl(231,9): anon4_LoopBody
-    BoogieOutputs/sanity_check2_violeted.bpl(234,13): anon5_Then
-    BoogieOutputs/sanity_check2_violeted.bpl(133,16): inline$heat_step$0$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$7$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$7$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$7$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(118,16): inline$popArgs1$2$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(120,9): inline$popArgs1$2$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(118,16): inline$popArgs1$2$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$8$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$8$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$8$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$9$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$9$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$9$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$3$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(59,9): inline$popToTmp1$3$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$3$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(71,16): inline$popToTmp2$2$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(73,9): inline$popToTmp2$2$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(71,16): inline$popToTmp2$2$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$10$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$10$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$10$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$4$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(59,9): inline$popToTmp1$4$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$4$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(148,9): inline$heat_step$0$anon2_Then
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$11$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$11$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$11$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$12$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$12$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$12$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$5$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(59,9): inline$popToTmp1$5$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(57,16): inline$popToTmp1$5$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(71,16): inline$popToTmp2$3$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(73,9): inline$popToTmp2$3$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(71,16): inline$popToTmp2$3$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$13$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(45,17): inline$push$13$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(43,16): inline$push$13$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(118,16): inline$popArgs1$3$Entry
-    BoogieOutputs/sanity_check2_violeted.bpl(120,9): inline$popArgs1$3$anon0
-    BoogieOutputs/sanity_check2_violeted.bpl(118,16): inline$popArgs1$3$Return
-    BoogieOutputs/sanity_check2_violeted.bpl(148,9): inline$heat_step$0$anon2_Then$6
-    BoogieOutputs/sanity_check2_violeted.bpl(133,16): inline$heat_step$0$Return
+  [0.152 s, solver resource count: 227046, 192 proof obligations]  verified
 
-Boogie program verifier finished with 0 verified, 1 error
+Boogie program verifier finished with 1 verified, 0 errors
