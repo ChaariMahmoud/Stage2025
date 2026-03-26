@@ -1,9 +1,74 @@
-Parsing BoogieOutputs/request-spec.bpl
+Parsing BoogieOutputs/request_err_spec.bpl
 Coalescing blocks...
 Inlining...
 
-Verifying BoogieEntry_request_spec ...
+Verifying BoogieEntry_request_err_spec ...
 [TRACE] Using prover: z3
-  [0.152 s, solver resource count: 227046, 192 proof obligations]  verified
+  [0.080 s, solver resource count: 246190, 192 proof obligations]  error
+(0,0): Error: a postcondition could not be proved on this return path
+BoogieOutputs/request_err_spec.bpl(135,1): Related location: this is the postcondition that could not be proved
+Execution trace:
+    BoogieOutputs/request_err_spec.bpl(247,5): anon0
+    BoogieOutputs/request_err_spec.bpl(108,16): inline$initGlobals$0$Return
+    BoogieOutputs/request_err_spec.bpl(27,16): inline$InitRuntime$0$Return
+    BoogieOutputs/request_err_spec.bpl(247,5): anon0$2
+    BoogieOutputs/request_err_spec.bpl(249,5): anon4_LoopHead
+    BoogieOutputs/request_err_spec.bpl(255,9): anon4_LoopBody
+    BoogieOutputs/request_err_spec.bpl(258,13): anon5_Then
+    BoogieOutputs/request_err_spec.bpl(136,16): inline$acquire_request$0$Entry
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$7$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$7$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$7$Return
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$2$Entry
+    BoogieOutputs/request_err_spec.bpl(123,9): inline$popArgs1$2$anon0
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$2$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$8$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$8$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$8$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$9$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$9$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$9$Return
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$3$Entry
+    BoogieOutputs/request_err_spec.bpl(59,9): inline$popToTmp1$3$anon0
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$3$Return
+    BoogieOutputs/request_err_spec.bpl(71,16): inline$popToTmp2$2$Entry
+    BoogieOutputs/request_err_spec.bpl(73,9): inline$popToTmp2$2$anon0
+    BoogieOutputs/request_err_spec.bpl(71,16): inline$popToTmp2$2$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$10$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$10$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$10$Return
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$4$Entry
+    BoogieOutputs/request_err_spec.bpl(59,9): inline$popToTmp1$4$anon0
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$4$Return
+    BoogieOutputs/request_err_spec.bpl(156,9): inline$acquire_request$0$anon4_Else
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$11$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$11$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$11$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$12$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$12$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$12$Return
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$5$Entry
+    BoogieOutputs/request_err_spec.bpl(59,9): inline$popToTmp1$5$anon0
+    BoogieOutputs/request_err_spec.bpl(57,16): inline$popToTmp1$5$Return
+    BoogieOutputs/request_err_spec.bpl(71,16): inline$popToTmp2$3$Entry
+    BoogieOutputs/request_err_spec.bpl(73,9): inline$popToTmp2$3$anon0
+    BoogieOutputs/request_err_spec.bpl(71,16): inline$popToTmp2$3$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$13$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$13$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$13$Return
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$3$Entry
+    BoogieOutputs/request_err_spec.bpl(123,9): inline$popArgs1$3$anon0
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$3$Return
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$14$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$14$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$14$Return
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$4$Entry
+    BoogieOutputs/request_err_spec.bpl(123,9): inline$popArgs1$4$anon0
+    BoogieOutputs/request_err_spec.bpl(121,16): inline$popArgs1$4$Return
+    BoogieOutputs/request_err_spec.bpl(156,9): inline$acquire_request$0$anon4_Else$8
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$15$Entry
+    BoogieOutputs/request_err_spec.bpl(45,17): inline$push$15$anon0
+    BoogieOutputs/request_err_spec.bpl(43,16): inline$push$15$Return
+    BoogieOutputs/request_err_spec.bpl(136,16): inline$acquire_request$0$Return
 
-Boogie program verifier finished with 1 verified, 0 errors
+Boogie program verifier finished with 0 verified, 1 error
