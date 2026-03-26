@@ -1,0 +1,9 @@
+=== Counterexample Summary ===
+File: BoogieOutputs/request_err_spec.bpl
+Line: 165
+Failing procedure: acquire_request
+Failing call: push(loc2);
+Reason: assertion failure
+Transaction sequence: acquire_request -> release_request -> acquire_request -> acquire_request
+
+        See raw Corral output inside corral.txt
