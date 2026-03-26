@@ -435,13 +435,13 @@ Format: (tid,k)  filename(line,col): blockName   (extra info)
 (1,0)    BoogieOutputs/request_err_spec.bpl(281,9): anon2_LoopBody  (RETURN from CorralChoice_request_err_spec )
 (1,0)    BoogieOutputs/request_err_spec.bpl(281,9): anon2_LoopBody  (Done)
 
-Boogie verification time: 2.47 s
+Boogie verification time: 2.55 s
 Time spent reading-writing programs: 0.07 s
 
-Time spent checking a program (1): 2.50 s
-Time spent checking a path (1): 0.18 s
+Time spent checking a program (1): 2.59 s
+Time spent checking a path (1): 0.17 s
 
 Number of procedures inlined: 192
 Number of variables tracked: 7
-Total Time: 2.8994858 s
-Total User CPU time: 3.21 s
+Total Time: 2.9960564 s
+Total User CPU time: 3.32 s
