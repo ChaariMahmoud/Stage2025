@@ -164,7 +164,7 @@ dotnet bin/Debug/VeriSol.dll --wasm <file.wat>
 **Author:** Mahmoud Chaari  
 **Email:** [chaarimahmoud55@gmail.com](mailto:chaarimahmoud55@gmail.com)  
 **Affiliation:** Laboratoire de Recherche de l’EPITA (LRE) – Sorbonne Université, EDITE  
-**Keywords:** WebAssembly, Boogie, Formal Verification, Z3, Corral, .NET 9.0  
+**Keywords:** WebAssembly, Boogie, Formal Verification, Z3, Corral 
 
 ---
 

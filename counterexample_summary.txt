@@ -4,6 +4,11 @@ Line: 165
 Failing procedure: acquire_request
 Failing call: push(loc2);
 Reason: assertion failure
+Failure kind: assertion failure
+Violated property: requires(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));
 Transaction sequence: acquire_request -> release_request -> acquire_request -> acquire_request
+
+Explanation:
+The execution reaches acquire_request after the transaction sequence acquire_request -> release_request -> acquire_request -> acquire_request. The failing call is `push(loc2);`. The violated property appears to be `requires(((0.0) <= (active_requests)) && ((active_requests) <= (MAX_REQUESTS)));`. This indicates that the generated Boogie execution reaches a state that does not satisfy the expected safety condition.
 
         See raw Corral output inside corral.txt
