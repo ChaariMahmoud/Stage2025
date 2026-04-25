@@ -1,0 +1,199 @@
+using System.Collections.Generic;
+
+namespace WasmToBoogie.Parser.Ast
+{
+    public enum WasmValueType
+    {
+        I32,
+        I64,
+        F32,
+        F64,
+    }
+
+    public abstract class WasmNode { }
+
+    public class ConstNode : WasmNode
+    {
+        public string Type { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class UnaryOpNode : WasmNode
+    {
+        public string Op { get; set; }
+        public WasmNode Operand { get; set; }
+    }
+
+    public class BinaryOpNode : WasmNode
+    {
+        public string Op { get; set; }
+        public WasmNode Left { get; set; }
+        public WasmNode Right { get; set; }
+    }
+
+    public class IfNode : WasmNode
+    {
+        public WasmValueType? ResultType { get; set; } = null;
+        public WasmNode Condition { get; set; }
+        public List<WasmNode> ThenBody { get; set; } = new();
+        public List<WasmNode>? ElseBody { get; set; } = null;
+    }
+
+    public class BlockNode : WasmNode
+    {
+        public WasmValueType? ResultType { get; set; } = null;
+        public string? Label { get; set; }
+        public List<WasmNode> Body { get; set; } = new();
+    }
+
+    public class LoopNode : WasmNode
+    {
+        public WasmValueType? ResultType { get; set; } = null;
+        public string? Label { get; set; }
+        public List<WasmNode> Body { get; set; } = new();
+    }
+
+    public class BrNode : WasmNode
+    {
+        public string Label { get; set; }
+    }
+
+    public class BrIfNode : WasmNode
+    {
+        public string Label { get; set; }
+        public WasmNode Condition { get; set; }
+    }
+
+    public class LocalGetNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class LocalSetNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; }
+        public WasmNode? Value { get; set; }
+    }
+
+    public class LocalTeeNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public class CallNode : WasmNode
+    {
+        public string Target { get; set; }
+        public List<WasmNode> Args { get; set; } = new(); // e.g., $compute or function index
+    }
+
+    public class CallIndirectNode : WasmNode
+    {
+        public string? TypeUse { get; set; } // e.g. "0" or "$t0" if present
+        public WasmNode CalleeIndex { get; set; } // expression producing the table index
+        public List<WasmNode> Args { get; set; } = new();
+    }
+
+    public class ReturnCallNode : WasmNode
+    {
+        public string Target { get; set; }
+        public List<WasmNode> Args { get; set; } = new();
+    }
+
+    public class ReturnCallIndirectNode : WasmNode
+    {
+        public string? TypeUse { get; set; }
+        public WasmNode CalleeIndex { get; set; }
+        public List<WasmNode> Args { get; set; } = new();
+    }
+
+    public class GlobalDeclNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; }
+        public bool IsMutable { get; set; }
+        public WasmValueType ValType { get; set; }
+        public WasmNode? Init { get; set; }
+    }
+
+    public class GlobalGetNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; } // e.g., $g
+    }
+
+    public class GlobalSetNode : WasmNode
+    {
+        public int? Index { get; set; }
+        public string? Name { get; set; } // e.g., $g
+        public WasmNode? Value { get; set; } // folded form: (global.set $g (i32.const 5))
+    }
+
+    public class RawInstructionNode : WasmNode
+    {
+        public string Instruction { get; set; }
+    }
+
+    public class UnreachableNode : WasmNode { }
+
+    public class SelectNode : WasmNode
+    {
+        public WasmNode V1 { get; set; } // first value
+        public WasmNode V2 { get; set; } // second value
+        public WasmNode Cond { get; set; } // condition (nonzero = true)
+    }
+
+    public class WasmFunction
+    {
+        public string? Name { get; set; }
+        public List<WasmNode> Body { get; set; } = new();
+
+        // new: signature info (filled by parser)
+        public int ParamCount { get; set; } = 0;
+        public int LocalCount { get; set; } = 0;
+        public int ResultCount { get; set; }
+        public Dictionary<string, int> LocalIndexByName { get; set; } = new();
+            public List<string?> ParamNames { get; set; } = new();
+    public List<WasmValueType> ParamTypes { get; set; } = new();
+    public List<WasmValueType> ResultTypes { get; set; } = new();
+    }
+
+    public class WasmGlobal
+    {
+        public int Index { get; set; }
+        public string? Name { get; set; }
+        public bool IsMutable { get; set; }
+        public string ValType { get; set; }
+        public string? InitConst { get; set; }
+    }
+
+    public class WasmModule
+    {
+        public List<WasmGlobal> Globals { get; } = new();
+        public Dictionary<string, int> GlobalIndexByName { get; } = new();
+        public List<WasmFunction> Functions { get; set; } = new();
+        public ModuleSpec? Spec { get; set; }
+    }
+
+    public class ReturnNode : WasmNode { }
+
+    public class NopNode : WasmNode { }
+
+    public class BrTableNode : WasmNode
+    {
+        public List<string> Targets { get; set; } = new();
+        public string Default { get; set; } = "";
+    }
+
+    public class MemoryOpNode : WasmNode
+    {
+        public string Op { get; set; } // "i32.load", "i32.store8", ...
+        public int Offset { get; set; } = 0; // from "offset=..."
+        public int Align { get; set; } = 0; // from "align=..."
+        public WasmNode? Address { get; set; } // folded form: (i32.load (i32.const ...))
+        public WasmNode? Value { get; set; } // folded store form: (i32.store (addr) (val))
+        public int MemoryIndex { get; set; } = 0;
+    }
+}
