@@ -180,6 +180,8 @@ namespace WasmToBoogie.Parser
             // ✅ IMPORTANT: create ONE WasmModule (your previous code created it twice)
             var module = new WasmModule();
             module.Spec = extractedSpec;
+            ParseModuleImportsExportsAndTypes(watText, module);
+            AddFunctionImportsToIndexSpace(module);
 
             if (module.Spec != null)
             {
@@ -267,6 +269,7 @@ namespace WasmToBoogie.Parser
             }
 
             // ---------------- Functions ----------------
+
             int fnCount = GetFunctionCount(modulePtr);
             Console.WriteLine($"🔢 Number of functions: {fnCount}");
 
@@ -281,7 +284,21 @@ namespace WasmToBoogie.Parser
                     {
                         var nm = Marshal.PtrToStringAnsi(namePtr);
                         if (!string.IsNullOrEmpty(nm))
-                            funcName = "$" + nm; // keep '$'
+                            funcName = nm.StartsWith("$", StringComparison.Ordinal) ? nm : "$" + nm;
+
+                        bool isImportedFunction =
+                            funcName != null
+                            && module.Imports.Any(i =>
+                                i.Kind == WasmImportKind.Func && i.InternalName == funcName
+                            );
+
+                        if (isImportedFunction)
+                        {
+                            Console.WriteLine(
+                                $"⏭️ Skipping imported function from Binaryen function list: {funcName}"
+                            );
+                            continue;
+                        }
                     }
                 }
                 catch
@@ -315,6 +332,12 @@ namespace WasmToBoogie.Parser
                     Console.WriteLine($"\n🕽️ ParseNode call at index {idx}");
                     body.Add(ParseNode(tokens, ref idx));
                 }
+
+                body = FlattenExecutableBody(body);
+
+                Console.WriteLine($"🧪 DEBUG BODY COUNT {funcName}: {body.Count}");
+                foreach (var n in body)
+                    Console.WriteLine($"   node = {n.GetType().Name}");
 
                 var func = new WasmFunction { Body = body, Name = funcName };
 
@@ -354,6 +377,23 @@ namespace WasmToBoogie.Parser
                 );
 
                 module.Functions.Add(func);
+                int globalFuncIndex = module.FunctionIndexSpace.Count;
+
+                module.FunctionIndexSpace.Add(
+                    new WasmFunctionRef
+                    {
+                        Index = globalFuncIndex,
+                        Name = func.Name,
+                        IsImport = false,
+                        Function = func,
+                        Import = null,
+                    }
+                );
+
+                if (!string.IsNullOrEmpty(func.Name))
+                    module.FunctionIndexByName[func.Name] = globalFuncIndex;
+
+                Console.WriteLine($"   🔗 func index {globalFuncIndex}: defined {func.Name}");
             }
 
             Console.WriteLine($"✅ WAT AST generated with {module.Functions.Count} functions.");
@@ -450,7 +490,436 @@ namespace WasmToBoogie.Parser
             return module;
         }
 
+        private void ParseModuleImportsExportsAndTypes(string wat, WasmModule module)
+        {
+            var tokens = Tokenize(wat);
+            int index = 0;
+
+            while (index < tokens.Count)
+            {
+                if (tokens[index] != "(")
+                {
+                    index++;
+                    continue;
+                }
+
+                int start = index;
+                index++;
+
+                if (index >= tokens.Count)
+                    break;
+
+                string head = tokens[index++];
+
+                if (head == "module")
+                {
+                    continue;
+                }
+                else if (head == "type")
+                {
+                    ParseTypeDecl(tokens, ref index, module);
+                }
+                else if (head == "import")
+                {
+                    ParseImportDecl(tokens, ref index, module);
+                }
+                else if (head == "export")
+                {
+                    ParseExportDecl(tokens, ref index, module);
+                }
+                else
+                {
+                    index = start;
+                    SkipSExpr(tokens, ref index);
+                }
+            }
+
+            Console.WriteLine($"📥 Imports parsed: {module.Imports.Count}");
+            Console.WriteLine($"📤 Exports parsed: {module.Exports.Count}");
+            Console.WriteLine($"🔤 Types parsed: {module.Types.Count}");
+        }
+
+        private void ParseTypeDecl(List<string> tokens, ref int index, WasmModule module)
+        {
+            int typeIndex = module.Types.Count;
+
+            if (index < tokens.Count && tokens[index].StartsWith("$", StringComparison.Ordinal))
+            {
+                index++;
+            }
+            else if (
+                index < tokens.Count
+                && tokens[index].StartsWith("(;", StringComparison.Ordinal)
+            )
+            {
+                string raw = tokens[index++];
+                var digits = new string(raw.Where(char.IsDigit).ToArray());
+                if (int.TryParse(digits, out var parsed))
+                    typeIndex = parsed;
+            }
+
+            var type = new WasmFuncType { Index = typeIndex };
+
+            while (index < tokens.Count && tokens[index] != ")")
+            {
+                if (tokens[index] == "(" && index + 1 < tokens.Count && tokens[index + 1] == "func")
+                {
+                    index += 2;
+
+                    while (index < tokens.Count && tokens[index] != ")")
+                    {
+                        if (
+                            tokens[index] == "("
+                            && index + 1 < tokens.Count
+                            && tokens[index + 1] == "param"
+                        )
+                        {
+                            index += 2;
+
+                            while (index < tokens.Count && tokens[index] != ")")
+                            {
+                                if (NumTypes.Contains(tokens[index]))
+                                    type.ParamTypes.Add(ParseWasmValueType(tokens[index]));
+
+                                index++;
+                            }
+
+                            ExpectToken(tokens, ref index, ")");
+                            continue;
+                        }
+
+                        if (
+                            tokens[index] == "("
+                            && index + 1 < tokens.Count
+                            && tokens[index + 1] == "result"
+                        )
+                        {
+                            index += 2;
+
+                            while (index < tokens.Count && tokens[index] != ")")
+                            {
+                                if (NumTypes.Contains(tokens[index]))
+                                    type.ResultTypes.Add(ParseWasmValueType(tokens[index]));
+
+                                index++;
+                            }
+
+                            ExpectToken(tokens, ref index, ")");
+                            continue;
+                        }
+
+                        index++;
+                    }
+
+                    ExpectToken(tokens, ref index, ")");
+                    continue;
+                }
+
+                index++;
+            }
+
+            ExpectToken(tokens, ref index, ")");
+
+            module.Types.RemoveAll(t => t.Index == typeIndex);
+            module.Types.Add(type);
+
+            Console.WriteLine(
+                $"   🔤 type {typeIndex}: params={type.ParamTypes.Count}, results={type.ResultTypes.Count}"
+            );
+        }
+
+        private void ParseImportDecl(List<string> tokens, ref int index, WasmModule module)
+        {
+            string moduleName = Unquote(tokens[index++]);
+            string fieldName = Unquote(tokens[index++]);
+
+            if (tokens[index] != "(")
+                throw new Exception("Malformed import: expected import descriptor.");
+
+            var descriptorTokens = ExtractCurrentSExprTokens(tokens, index);
+
+            Console.WriteLine(
+                "DEBUG import descriptor tokens: " + string.Join(" ", descriptorTokens)
+            );
+
+            index++;
+            string kind = tokens[index++];
+
+            if (kind == "func")
+            {
+                string? internalName = null;
+
+                if (index < tokens.Count && tokens[index].StartsWith("$", StringComparison.Ordinal))
+                    internalName = tokens[index++];
+
+                var paramTypes = new List<WasmValueType>();
+                var resultTypes = new List<WasmValueType>();
+
+                for (int i = 0; i < descriptorTokens.Count; i++)
+                {
+                    if (descriptorTokens[i] == "type" && i + 1 < descriptorTokens.Count)
+                    {
+                        int typeId = ParseTypeIndex(descriptorTokens[i + 1]);
+
+                        var typeInfo = module.Types.FirstOrDefault(t => t.Index == typeId);
+
+                        if (typeInfo != null)
+                        {
+                            paramTypes.AddRange(typeInfo.ParamTypes);
+                            resultTypes.AddRange(typeInfo.ResultTypes);
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                $"⚠️ Type {typeId} not found for import {moduleName}.{fieldName}"
+                            );
+                        }
+                    }
+
+                    if (descriptorTokens[i] == "param")
+                    {
+                        i++;
+
+                        while (i < descriptorTokens.Count && descriptorTokens[i] != ")")
+                        {
+                            if (descriptorTokens[i].StartsWith("$", StringComparison.Ordinal))
+                            {
+                                i++;
+                                continue;
+                            }
+
+                            if (NumTypes.Contains(descriptorTokens[i]))
+                                paramTypes.Add(ParseWasmValueType(descriptorTokens[i]));
+
+                            i++;
+                        }
+                    }
+
+                    if (descriptorTokens[i] == "result")
+                    {
+                        i++;
+
+                        while (i < descriptorTokens.Count && descriptorTokens[i] != ")")
+                        {
+                            if (NumTypes.Contains(descriptorTokens[i]))
+                                resultTypes.Add(ParseWasmValueType(descriptorTokens[i]));
+
+                            i++;
+                        }
+                    }
+                }
+
+                SkipUntilMatchingClose(tokens, ref index);
+                ExpectToken(tokens, ref index, ")");
+
+                var import = new WasmImport
+                {
+                    ModuleName = moduleName,
+                    FieldName = fieldName,
+                    InternalName = internalName ?? "$" + fieldName,
+                    Kind = WasmImportKind.Func,
+                    ParamTypes = paramTypes,
+                    ResultTypes = resultTypes,
+                    ParamCount = paramTypes.Count,
+                    ResultCount = resultTypes.Count,
+                    IsResolved = false,
+                };
+
+                module.Imports.Add(import);
+
+                Console.WriteLine(
+                    $"   📥 import func {moduleName}.{fieldName} as {import.InternalName} "
+                        + $"params={paramTypes.Count}, results={resultTypes.Count}"
+                );
+
+                return;
+            }
+
+            var importKind = kind switch
+            {
+                "global" => WasmImportKind.Global,
+                "memory" => WasmImportKind.Memory,
+                "table" => WasmImportKind.Table,
+                _ => throw new Exception($"Unsupported import kind: {kind}"),
+            };
+
+            SkipUntilMatchingClose(tokens, ref index);
+            ExpectToken(tokens, ref index, ")");
+
+            module.Imports.Add(
+                new WasmImport
+                {
+                    ModuleName = moduleName,
+                    FieldName = fieldName,
+                    InternalName = "$" + fieldName,
+                    Kind = importKind,
+                    IsResolved = false,
+                }
+            );
+
+            Console.WriteLine($"   📥 import {kind} {moduleName}.{fieldName}");
+        }
+
+        private void AddFunctionImportsToIndexSpace(WasmModule module)
+        {
+            foreach (var imp in module.Imports.Where(i => i.Kind == WasmImportKind.Func))
+            {
+                int idx = module.FunctionIndexSpace.Count;
+
+                module.FunctionIndexSpace.Add(
+                    new WasmFunctionRef
+                    {
+                        Index = idx,
+                        Name = imp.InternalName,
+                        IsImport = true,
+                        Import = imp,
+                        Function = null,
+                    }
+                );
+
+                if (!string.IsNullOrEmpty(imp.InternalName))
+                    module.FunctionIndexByName[imp.InternalName] = idx;
+
+                Console.WriteLine($"   🔗 func index {idx}: import {imp.InternalName}");
+            }
+        }
+
+        private void ParseExportDecl(List<string> tokens, ref int index, WasmModule module)
+        {
+            // We enter after "( export"
+            if (index >= tokens.Count)
+                throw new Exception("Malformed export declaration.");
+
+            string exportName = Unquote(tokens[index++]);
+
+            if (tokens[index] != "(")
+                throw new Exception("Malformed export: expected export descriptor.");
+
+            index++;
+            string kind = tokens[index++];
+
+            string target = tokens[index++];
+            ExpectToken(tokens, ref index, ")"); // close descriptor
+            ExpectToken(tokens, ref index, ")"); // close export
+
+            var exportKind = kind switch
+            {
+                "func" => WasmExportKind.Func,
+                "global" => WasmExportKind.Global,
+                "memory" => WasmExportKind.Memory,
+                "table" => WasmExportKind.Table,
+                _ => throw new Exception($"Unsupported export kind: {kind}"),
+            };
+
+            int? indexTarget = null;
+            string? internalName = null;
+
+            if (int.TryParse(target, out var n))
+                indexTarget = n;
+            else
+                internalName = target;
+
+            module.Exports.Add(
+                new WasmExport
+                {
+                    ExportName = exportName,
+                    Kind = exportKind,
+                    InternalName = internalName,
+                    Index = indexTarget,
+                }
+            );
+
+            Console.WriteLine(
+                $"   📤 export {kind} {exportName} -> {internalName ?? indexTarget?.ToString() ?? "?"}"
+            );
+        }
+
+        private static string Unquote(string s)
+        {
+            if (s.Length >= 2 && s[0] == '"' && s[^1] == '"')
+                return s.Substring(1, s.Length - 2);
+
+            return s;
+        }
+
+        private static int ParseTypeIndex(string token)
+        {
+            if (int.TryParse(token, out var n))
+                return n;
+
+            var digits = new string(token.Where(char.IsDigit).ToArray());
+            if (int.TryParse(digits, out n))
+                return n;
+
+            throw new Exception($"Invalid type index: {token}");
+        }
+
+        private void SkipSExpr(List<string> tokens, ref int index)
+        {
+            if (index >= tokens.Count || tokens[index] != "(")
+                return;
+
+            int depth = 0;
+
+            while (index < tokens.Count)
+            {
+                if (tokens[index] == "(")
+                    depth++;
+                else if (tokens[index] == ")")
+                    depth--;
+
+                index++;
+
+                if (depth == 0)
+                    break;
+            }
+        }
+
+        private void SkipUntilMatchingClose(List<string> tokens, ref int index)
+        {
+            int depth = 1;
+
+            while (index < tokens.Count && depth > 0)
+            {
+                if (tokens[index] == "(")
+                    depth++;
+                else if (tokens[index] == ")")
+                    depth--;
+
+                index++;
+            }
+        }
+
         // ---------------- signature helpers ----------------
+
+        private static List<string> ExtractCurrentSExprTokens(List<string> tokens, int startIndex)
+        {
+            var result = new List<string>();
+
+            if (startIndex >= tokens.Count || tokens[startIndex] != "(")
+                return result;
+
+            int depth = 0;
+            int i = startIndex;
+
+            while (i < tokens.Count)
+            {
+                string t = tokens[i];
+                result.Add(t);
+
+                if (t == "(")
+                    depth++;
+                else if (t == ")")
+                    depth--;
+
+                i++;
+
+                if (depth == 0)
+                    break;
+            }
+
+            return result;
+        }
 
         private void InferSignatureFromBody(WasmFunction func)
         {
@@ -620,238 +1089,236 @@ namespace WasmToBoogie.Parser
             "f64.max",
         };
 
-private void PopulateFunctionSignature(List<string> tokens, WasmFunction func)
-{
-    // reset metadata collected from textual header scan
-    func.ParamNames.Clear();
-    func.ParamTypes.Clear();
-    func.ResultTypes.Clear();
-
-    for (int i = 0; i + 1 < tokens.Count; i++)
-    {
-        if (tokens[i] != "(" || tokens[i + 1] != "func")
-            continue;
-
-        int p = i + 2;
-
-        // optional function name
-        if (p < tokens.Count && tokens[p].StartsWith("$", StringComparison.Ordinal))
+        private void PopulateFunctionSignature(List<string> tokens, WasmFunction func)
         {
-            func.Name ??= tokens[p];
-            p++;
-        }
+            // reset metadata collected from textual header scan
+            func.ParamNames.Clear();
+            func.ParamTypes.Clear();
+            func.ResultTypes.Clear();
 
-        int parsedParamCount = 0;
-        int parsedLocalCount = 0;
-        int parsedResultCount = 0;
-
-        while (p < tokens.Count - 1)
-        {
-            if (tokens[p] == ")")
+            for (int i = 0; i + 1 < tokens.Count; i++)
             {
-                p++;
-                break;
-            }
+                if (tokens[i] != "(" || tokens[i + 1] != "func")
+                    continue;
 
-            if (tokens[p] != "(")
-                break;
+                int p = i + 2;
 
-            string head = tokens[p + 1];
-
-            // stop when body starts
-            if (BodyStarters.Contains(head))
-                break;
-
-            if (head == "param")
-            {
-                p += 2; // skip "(" "param"
-
-                while (p < tokens.Count && tokens[p] != ")")
+                // optional function name
+                if (p < tokens.Count && tokens[p].StartsWith("$", StringComparison.Ordinal))
                 {
-                    if (tokens[p].StartsWith("$", StringComparison.Ordinal))
+                    func.Name ??= tokens[p];
+                    p++;
+                }
+
+                int parsedParamCount = 0;
+                int parsedLocalCount = 0;
+                int parsedResultCount = 0;
+
+                while (p < tokens.Count - 1)
+                {
+                    if (tokens[p] == ")")
                     {
-                        string name = tokens[p];
                         p++;
+                        break;
+                    }
 
-                        if (p < tokens.Count && NumTypes.Contains(tokens[p]))
+                    if (tokens[p] != "(")
+                        break;
+
+                    string head = tokens[p + 1];
+
+                    // stop when body starts
+                    if (BodyStarters.Contains(head))
+                        break;
+
+                    if (head == "param")
+                    {
+                        p += 2; // skip "(" "param"
+
+                        while (p < tokens.Count && tokens[p] != ")")
                         {
-                            string ty = tokens[p];
+                            if (tokens[p].StartsWith("$", StringComparison.Ordinal))
+                            {
+                                string name = tokens[p];
+                                p++;
 
-                            func.LocalIndexByName[name] = parsedParamCount;
-                            func.ParamNames.Add(name);
-                            func.ParamTypes.Add(ParseWasmValueType(ty));
+                                if (p < tokens.Count && NumTypes.Contains(tokens[p]))
+                                {
+                                    string ty = tokens[p];
 
-                            parsedParamCount++;
+                                    func.LocalIndexByName[name] = parsedParamCount;
+                                    func.ParamNames.Add(name);
+                                    func.ParamTypes.Add(ParseWasmValueType(ty));
+
+                                    parsedParamCount++;
+                                    p++;
+                                }
+                                else
+                                {
+                                    throw new Exception(
+                                        $"Malformed param declaration in function {func.Name ?? "<anonymous>"}: missing type after parameter name {name}"
+                                    );
+                                }
+                            }
+                            else if (NumTypes.Contains(tokens[p]))
+                            {
+                                string ty = tokens[p];
+
+                                func.ParamNames.Add(null);
+                                func.ParamTypes.Add(ParseWasmValueType(ty));
+
+                                parsedParamCount++;
+                                p++;
+                            }
+                            else
+                            {
+                                p++;
+                            }
+                        }
+
+                        if (p < tokens.Count && tokens[p] == ")")
+                            p++;
+
+                        continue;
+                    }
+
+                    if (head == "local")
+                    {
+                        p += 2; // skip "(" "local"
+
+                        while (p < tokens.Count && tokens[p] != ")")
+                        {
+                            if (tokens[p].StartsWith("$", StringComparison.Ordinal))
+                            {
+                                string name = tokens[p];
+                                p++;
+
+                                if (p < tokens.Count && NumTypes.Contains(tokens[p]))
+                                {
+                                    func.LocalIndexByName[name] =
+                                        func.ParamCount + parsedLocalCount;
+                                    parsedLocalCount++;
+                                    p++;
+                                }
+                                else
+                                {
+                                    throw new Exception(
+                                        $"Malformed local declaration in function {func.Name ?? "<anonymous>"}: missing type after local name {name}"
+                                    );
+                                }
+                            }
+                            else if (NumTypes.Contains(tokens[p]))
+                            {
+                                parsedLocalCount++;
+                                p++;
+                            }
+                            else
+                            {
+                                p++;
+                            }
+                        }
+
+                        if (p < tokens.Count && tokens[p] == ")")
+                            p++;
+
+                        continue;
+                    }
+
+                    if (head == "result")
+                    {
+                        p += 2; // skip "(" "result"
+
+                        while (p < tokens.Count && tokens[p] != ")")
+                        {
+                            if (NumTypes.Contains(tokens[p]))
+                            {
+                                string ty = tokens[p];
+                                func.ResultTypes.Add(ParseWasmValueType(ty));
+                                parsedResultCount++;
+                            }
                             p++;
                         }
-                        else
-                        {
-                            throw new Exception(
-                                $"Malformed param declaration in function {func.Name ?? "<anonymous>"}: missing type after parameter name {name}"
-                            );
-                        }
-                    }
-                    else if (NumTypes.Contains(tokens[p]))
-                    {
-                        string ty = tokens[p];
 
-                        func.ParamNames.Add(null);
-                        func.ParamTypes.Add(ParseWasmValueType(ty));
-
-                        parsedParamCount++;
-                        p++;
-                    }
-                    else
-                    {
-                        p++;
-                    }
-                }
-
-                if (p < tokens.Count && tokens[p] == ")")
-                    p++;
-
-                continue;
-            }
-
-            if (head == "local")
-            {
-                p += 2; // skip "(" "local"
-
-                while (p < tokens.Count && tokens[p] != ")")
-                {
-                    if (tokens[p].StartsWith("$", StringComparison.Ordinal))
-                    {
-                        string name = tokens[p];
-                        p++;
-
-                        if (p < tokens.Count && NumTypes.Contains(tokens[p]))
-                        {
-                            func.LocalIndexByName[name] = func.ParamCount + parsedLocalCount;
-                            parsedLocalCount++;
+                        if (p < tokens.Count && tokens[p] == ")")
                             p++;
-                        }
-                        else
-                        {
-                            throw new Exception(
-                                $"Malformed local declaration in function {func.Name ?? "<anonymous>"}: missing type after local name {name}"
-                            );
-                        }
+
+                        continue;
                     }
-                    else if (NumTypes.Contains(tokens[p]))
+
+                    // skip any other header sub-expression
+                    int depth = 0;
+                    do
                     {
-                        parsedLocalCount++;
+                        if (tokens[p] == "(")
+                            depth++;
+                        else if (tokens[p] == ")")
+                            depth--;
                         p++;
-                    }
-                    else
-                    {
-                        p++;
-                    }
+                    } while (p < tokens.Count && depth > 0);
                 }
 
-                if (p < tokens.Count && tokens[p] == ")")
-                    p++;
+                // trust wrapper counts if already filled; otherwise use parsed counts
+                if (func.ParamCount == 0)
+                    func.ParamCount = parsedParamCount;
 
-                continue;
+                if (func.ResultCount == 0)
+                    func.ResultCount = parsedResultCount;
+
+                // local count may still come from body scan / wrapper logic outside this method
+                if (func.LocalCount == 0 && parsedLocalCount > 0)
+                    func.LocalCount = parsedLocalCount;
+
+                break;
             }
 
-            if (head == "result")
+            // safety: if wrapper count differs from parsed metadata, keep wrapper count
+            // but ensure metadata size is consistent enough for later use
+            if (func.ParamTypes.Count > func.ParamCount)
+                func.ParamTypes = func.ParamTypes.Take(func.ParamCount).ToList();
+
+            if (func.ParamNames.Count > func.ParamCount)
+                func.ParamNames = func.ParamNames.Take(func.ParamCount).ToList();
+
+            if (func.ResultTypes.Count > func.ResultCount)
+                func.ResultTypes = func.ResultTypes.Take(func.ResultCount).ToList();
+
+            for (int k = 0; k < func.ParamCount + func.LocalCount; k++)
             {
-                p += 2; // skip "(" "result"
-
-                while (p < tokens.Count && tokens[p] != ")")
-                {
-                    if (NumTypes.Contains(tokens[p]))
-                    {
-                        string ty = tokens[p];
-                        func.ResultTypes.Add(ParseWasmValueType(ty));
-                        parsedResultCount++;
-                    }
-                    p++;
-                }
-
-                if (p < tokens.Count && tokens[p] == ")")
-                    p++;
-
-                continue;
+                var auto = "$" + k;
+                if (!func.LocalIndexByName.ContainsKey(auto))
+                    func.LocalIndexByName[auto] = k;
             }
 
-            // skip any other header sub-expression
-            int depth = 0;
-            do
+            Console.WriteLine(
+                $"🧭 Signature: name={func.Name ?? "<anonymous>"}, params={func.ParamCount}, locals={func.LocalCount}, results={func.ResultCount}"
+            );
+
+            if (func.ParamCount > 0)
             {
-                if (tokens[p] == "(")
-                    depth++;
-                else if (tokens[p] == ")")
-                    depth--;
-                p++;
-            } while (p < tokens.Count && depth > 0);
+                Console.WriteLine(
+                    "   Param names: "
+                        + string.Join(", ", func.ParamNames.Select(x => x ?? "<unnamed>"))
+                );
+                Console.WriteLine("   Param types: " + string.Join(", ", func.ParamTypes));
+            }
+
+            if (func.ResultCount > 0)
+            {
+                Console.WriteLine("   Result types: " + string.Join(", ", func.ResultTypes));
+            }
         }
 
-        // trust wrapper counts if already filled; otherwise use parsed counts
-        if (func.ParamCount == 0)
-            func.ParamCount = parsedParamCount;
-
-        if (func.ResultCount == 0)
-            func.ResultCount = parsedResultCount;
-
-        // local count may still come from body scan / wrapper logic outside this method
-        if (func.LocalCount == 0 && parsedLocalCount > 0)
-            func.LocalCount = parsedLocalCount;
-
-        break;
-    }
-
-    // safety: if wrapper count differs from parsed metadata, keep wrapper count
-    // but ensure metadata size is consistent enough for later use
-    if (func.ParamTypes.Count > func.ParamCount)
-        func.ParamTypes = func.ParamTypes.Take(func.ParamCount).ToList();
-
-    if (func.ParamNames.Count > func.ParamCount)
-        func.ParamNames = func.ParamNames.Take(func.ParamCount).ToList();
-
-    if (func.ResultTypes.Count > func.ResultCount)
-        func.ResultTypes = func.ResultTypes.Take(func.ResultCount).ToList();
-
-    for (int k = 0; k < func.ParamCount + func.LocalCount; k++)
-    {
-        var auto = "$" + k;
-        if (!func.LocalIndexByName.ContainsKey(auto))
-            func.LocalIndexByName[auto] = k;
-    }
-
-    Console.WriteLine(
-        $"🧭 Signature: name={func.Name ?? "<anonymous>"}, params={func.ParamCount}, locals={func.LocalCount}, results={func.ResultCount}"
-    );
-
-    if (func.ParamCount > 0)
-    {
-        Console.WriteLine(
-            "   Param names: " + string.Join(", ", func.ParamNames.Select(x => x ?? "<unnamed>"))
-        );
-        Console.WriteLine(
-            "   Param types: " + string.Join(", ", func.ParamTypes)
-        );
-    }
-
-    if (func.ResultCount > 0)
-    {
-        Console.WriteLine(
-            "   Result types: " + string.Join(", ", func.ResultTypes)
-        );
-    }
-}
-
-private static WasmValueType ParseWasmValueType(string s)
-{
-    return s switch
-    {
-        "i32" => WasmValueType.I32,
-        "i64" => WasmValueType.I64,
-        "f32" => WasmValueType.F32,
-        "f64" => WasmValueType.F64,
-        _ => throw new Exception($"Unsupported wasm value type: {s}")
-    };
-}
+        private static WasmValueType ParseWasmValueType(string s)
+        {
+            return s switch
+            {
+                "i32" => WasmValueType.I32,
+                "i64" => WasmValueType.I64,
+                "f32" => WasmValueType.F32,
+                "f64" => WasmValueType.F64,
+                _ => throw new Exception($"Unsupported wasm value type: {s}"),
+            };
+        }
 
         // ---------------- label verification ----------------
 
@@ -1137,6 +1604,33 @@ private static WasmValueType ParseWasmValueType(string s)
                     .Replace(")", " ) ")
                     .Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries)
             );
+        }
+
+        private static List<WasmNode> FlattenExecutableBody(List<WasmNode> nodes)
+        {
+            var result = new List<WasmNode>();
+
+            foreach (var n in nodes)
+            {
+                if (n is NopNode)
+                    continue;
+
+                if (n is BlockNode b && b.Label == "type")
+                    continue;
+
+                if (
+                    n is BlockNode b2
+                    && (b2.Label == null || b2.Label == "module" || b2.Label == "func")
+                )
+                {
+                    result.AddRange(FlattenExecutableBody(b2.Body));
+                    continue;
+                }
+
+                result.Add(n);
+            }
+
+            return result;
         }
 
         private WasmNode ParseNode(List<string> tokens, ref int index)
@@ -1551,10 +2045,30 @@ private static WasmValueType ParseWasmValueType(string s)
                 }
                 else if (op == "module" || op == "type" || op == "func")
                 {
-                    Console.WriteLine($"  ⚙️ Structure block: {op}");
                     var inner = new List<WasmNode>();
+
                     while (index < tokens.Count && tokens[index] != ")")
+                    {
+                        if (tokens[index].StartsWith("$", StringComparison.Ordinal))
+                        {
+                            index++;
+                            continue;
+                        }
+
+                        if (tokens[index] == "(" && index + 1 < tokens.Count)
+                        {
+                            string head = tokens[index + 1];
+
+                            if (head == "param" || head == "result" || head == "local")
+                            {
+                                SkipSExpr(tokens, ref index);
+                                continue;
+                            }
+                        }
+
                         inner.Add(ParseNode(tokens, ref index));
+                    }
+
                     ExpectToken(tokens, ref index, ")");
                     return new BlockNode { Label = op, Body = inner };
                 }

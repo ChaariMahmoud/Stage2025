@@ -90,44 +90,44 @@ namespace WasmToBoogie.Conversion
         private static BoogieLiteralExpr IntLit(int v) =>
             new BoogieLiteralExpr(new System.Numerics.BigInteger(v));
 
-private void EmitHavocPushArgs(WasmFunction f, BoogieStmtList blk)
-{
-    for (int k = 0; k < f.ParamCount; k++)
-    {
-        blk.AddStatement(new BoogieHavocCmd(Id("argTmp")));
-
-        if (k < f.ParamTypes.Count)
+        private void EmitHavocPushArgs(WasmFunction f, BoogieStmtList blk)
         {
-            var ty = f.ParamTypes[k];
-
-            if (ty == WasmValueType.I32 || ty == WasmValueType.I64)
+            for (int k = 0; k < f.ParamCount; k++)
             {
-                blk.AddStatement(
-                    new BoogieAssumeCmd(
-                        new BoogieBinaryOperation(
-                            BoogieBinaryOperation.Opcode.EQ,
-                            Id("argTmp"),
-                            new BoogieFunctionCall(
-                                "real",
-                                new List<BoogieExpr>
-                                {
+                blk.AddStatement(new BoogieHavocCmd(Id("argTmp")));
+
+                if (k < f.ParamTypes.Count)
+                {
+                    var ty = f.ParamTypes[k];
+
+                    if (ty == WasmValueType.I32 || ty == WasmValueType.I64)
+                    {
+                        blk.AddStatement(
+                            new BoogieAssumeCmd(
+                                new BoogieBinaryOperation(
+                                    BoogieBinaryOperation.Opcode.EQ,
+                                    Id("argTmp"),
                                     new BoogieFunctionCall(
-                                        "int",
-                                        new List<BoogieExpr> { Id("argTmp") }
+                                        "real",
+                                        new List<BoogieExpr>
+                                        {
+                                            new BoogieFunctionCall(
+                                                "int",
+                                                new List<BoogieExpr> { Id("argTmp") }
+                                            ),
+                                        }
                                     )
-                                }
+                                )
                             )
-                        )
-                    )
+                        );
+                    }
+                }
+
+                blk.AddStatement(
+                    new BoogieCallCmd("push", new List<BoogieExpr> { Id("argTmp") }, new())
                 );
             }
         }
-
-        blk.AddStatement(
-            new BoogieCallCmd("push", new List<BoogieExpr> { Id("argTmp") }, new())
-        );
-    }
-}
 
         private (BoogieProcedure proc, BoogieImplementation impl) BuildCorralChoice(WasmModule m)
         {
@@ -175,7 +175,7 @@ private void EmitHavocPushArgs(WasmFunction f, BoogieStmtList blk)
                 var thenBlk = new BoogieStmtList();
 
                 // Havoc/push des arguments éventuels
-EmitHavocPushArgs(f, thenBlk);
+                EmitHavocPushArgs(f, thenBlk);
 
                 thenBlk.AddStatement(new BoogieCallCmd(fname, new(), new()));
 
@@ -232,38 +232,40 @@ EmitHavocPushArgs(f, thenBlk);
             }
             return invs;
         }
-private List<BoogieExpr> GetIntegerCastingInvariants(WasmModule m)
-{
-    var invs = new List<BoogieExpr>();
 
-    foreach (var g in m.Globals)
-    {
-        // seulement les globals entiers
-        if (g.ValType == "i32" || g.ValType == "i64")
+        private List<BoogieExpr> GetIntegerCastingInvariants(WasmModule m)
         {
-            string name = ResolveGlobalKey(g.Index, g.Name);
+            var invs = new List<BoogieExpr>();
 
-            invs.Add(
-                new BoogieBinaryOperation(
-                    BoogieBinaryOperation.Opcode.EQ,
-                    Id(name),
-                    new BoogieFunctionCall(
-                        "real",
-                        new List<BoogieExpr>
-                        {
+            foreach (var g in m.Globals)
+            {
+                // seulement les globals entiers
+                if (g.ValType == "i32" || g.ValType == "i64")
+                {
+                    string name = ResolveGlobalKey(g.Index, g.Name);
+
+                    invs.Add(
+                        new BoogieBinaryOperation(
+                            BoogieBinaryOperation.Opcode.EQ,
+                            Id(name),
                             new BoogieFunctionCall(
-                                "int",
-                                new List<BoogieExpr> { Id(name) }
+                                "real",
+                                new List<BoogieExpr>
+                                {
+                                    new BoogieFunctionCall(
+                                        "int",
+                                        new List<BoogieExpr> { Id(name) }
+                                    ),
+                                }
                             )
-                        }
-                    )
-                )
-            );
-        }
-    }
+                        )
+                    );
+                }
+            }
 
-    return invs;
-}
+            return invs;
+        }
+
         private (BoogieProcedure proc, BoogieImplementation impl) BuildCorralEntry(WasmModule m)
         {
             var invs = GetGlobalInvariantExprs();
@@ -350,7 +352,7 @@ private List<BoogieExpr> GetIntegerCastingInvariants(WasmModule m)
 
                 var thenBlk = new BoogieStmtList();
 
-EmitHavocPushArgs(f, thenBlk);
+                EmitHavocPushArgs(f, thenBlk);
 
                 thenBlk.AddStatement(new BoogieCallCmd(fname, new(), new()));
 
@@ -387,7 +389,7 @@ EmitHavocPushArgs(f, thenBlk);
             // invariants métier
             loopInvs.AddRange(invs);
             // integer casting invariants
-//loopInvs.AddRange(GetIntegerCastingInvariants(m));
+            //loopInvs.AddRange(GetIntegerCastingInvariants(m));
 
             body.AddStatement(new BoogieWhileCmd(new BoogieLiteralExpr(true), loopBody, loopInvs));
 
@@ -648,6 +650,7 @@ EmitHavocPushArgs(f, thenBlk);
         private readonly Dictionary<string, string> globalNameMap = new(StringComparer.Ordinal);
         private readonly HashSet<string> declaredBoogieGlobals = new(StringComparer.Ordinal);
         private HashSet<string>? currentModifiedGlobals;
+        private WasmModule? currentModule;
 
         private sealed class LabelContext
         {
@@ -995,7 +998,12 @@ EmitHavocPushArgs(f, thenBlk);
             var (igProc, igImpl) = BuildInitGlobals(wasmModule);
             p.Declarations.Add(igProc);
             p.Declarations.Add(igImpl);
-
+            foreach (var import in wasmModule.Imports.Where(i => i.Kind == WasmImportKind.Func))
+            {
+                var (proc, impl) = TranslateImportedFunction(import);
+                p.Declarations.Add(proc);
+                p.Declarations.Add(impl);
+            }
             foreach (var func in wasmModule.Functions)
             {
                 var (proc, impl) = TranslateFunction(func);
@@ -1021,6 +1029,84 @@ EmitHavocPushArgs(f, thenBlk);
         // ============================================================
         // Function translation
         // ============================================================
+        private (BoogieProcedure, BoogieImplementation) TranslateImportedFunction(WasmImport import)
+        {
+            string name = SanitizeFunctionName(import.InternalName, contractName);
+
+            var locals = new List<BoogieVariable>();
+            var body = new BoogieStmtList();
+
+            int n = import.ParamCount;
+            int r = import.ResultCount;
+
+            if (n > 0)
+            {
+                EnsurePopDiscardProc(n);
+                body.AddStatement(new BoogieCallCmd($"popDiscard{n}", new(), new()));
+            }
+
+            for (int i = 0; i < r; i++)
+            {
+                body.AddStatement(new BoogieHavocCmd(Id("$tmp1")));
+
+                if (i < import.ResultTypes.Count)
+                {
+                    var ty = import.ResultTypes[i];
+
+                    if (ty == WasmValueType.I32 || ty == WasmValueType.I64)
+                    {
+                        body.AddStatement(
+                            new BoogieAssumeCmd(
+                                new BoogieBinaryOperation(
+                                    BoogieBinaryOperation.Opcode.EQ,
+                                    Id("$tmp1"),
+                                    new BoogieFunctionCall(
+                                        "real",
+                                        new List<BoogieExpr>
+                                        {
+                                            new BoogieFunctionCall(
+                                                "int",
+                                                new List<BoogieExpr> { Id("$tmp1") }
+                                            ),
+                                        }
+                                    )
+                                )
+                            )
+                        );
+                    }
+                }
+
+                body.AddStatement(
+                    new BoogieCallCmd("push", new List<BoogieExpr> { Id("$tmp1") }, new())
+                );
+            }
+
+            var mods = new List<BoogieGlobalVariable>
+            {
+                new BoogieGlobalVariable(new BoogieTypedIdent("$tmp1", BoogieType.Real)),
+                new BoogieGlobalVariable(new BoogieTypedIdent("$sp", BoogieType.Int)),
+                new BoogieGlobalVariable(
+                    new BoogieTypedIdent(
+                        "$stack",
+                        new BoogieMapType(BoogieType.Int, BoogieType.Real)
+                    )
+                ),
+            };
+
+            var proc = new BoogieProcedure(
+                name,
+                new(),
+                new(),
+                attributes: InlineAttrsIfNotEntry(name),
+                modSet: mods,
+                pre: new List<BoogieExpr>(),
+                post: new List<BoogieExpr>()
+            );
+
+            var impl = new BoogieImplementation(name, new(), new(), locals, body, attributes: null);
+
+            return (proc, impl);
+        }
 
         private (BoogieProcedure, BoogieImplementation) TranslateFunction(WasmFunction func)
         {
@@ -1512,6 +1598,7 @@ EmitHavocPushArgs(f, thenBlk);
                     if (call.Args != null)
                         foreach (var a in call.Args)
                             TranslateNode(a, body);
+
                     string target = MapCalleeName(call.Target);
                     body.AddStatement(new BoogieCallCmd(target, new(), new()));
                     break;

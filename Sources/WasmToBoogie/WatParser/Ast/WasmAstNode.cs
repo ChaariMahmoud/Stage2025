@@ -155,9 +155,9 @@ namespace WasmToBoogie.Parser.Ast
         public int LocalCount { get; set; } = 0;
         public int ResultCount { get; set; }
         public Dictionary<string, int> LocalIndexByName { get; set; } = new();
-            public List<string?> ParamNames { get; set; } = new();
-    public List<WasmValueType> ParamTypes { get; set; } = new();
-    public List<WasmValueType> ResultTypes { get; set; } = new();
+        public List<string?> ParamNames { get; set; } = new();
+        public List<WasmValueType> ParamTypes { get; set; } = new();
+        public List<WasmValueType> ResultTypes { get; set; } = new();
     }
 
     public class WasmGlobal
@@ -171,10 +171,22 @@ namespace WasmToBoogie.Parser.Ast
 
     public class WasmModule
     {
+        public List<WasmFuncType> Types { get; set; } = new();
+
         public List<WasmGlobal> Globals { get; } = new();
         public Dictionary<string, int> GlobalIndexByName { get; } = new();
+
         public List<WasmFunction> Functions { get; set; } = new();
+
+        public List<WasmFunctionRef> FunctionIndexSpace { get; set; } = new();
+        public Dictionary<string, int> FunctionIndexByName { get; set; } = new();
+
         public ModuleSpec? Spec { get; set; }
+
+        public List<WasmImport> Imports { get; set; } = new();
+        public List<WasmExport> Exports { get; set; } = new();
+
+        public LinkingMode LinkingMode { get; set; } = LinkingMode.Off;
     }
 
     public class ReturnNode : WasmNode { }
@@ -195,5 +207,67 @@ namespace WasmToBoogie.Parser.Ast
         public WasmNode? Address { get; set; } // folded form: (i32.load (i32.const ...))
         public WasmNode? Value { get; set; } // folded store form: (i32.store (addr) (val))
         public int MemoryIndex { get; set; } = 0;
+    }
+
+    public enum LinkingMode
+    {
+        On,
+        Off,
+    }
+
+    public enum WasmImportKind
+    {
+        Func,
+        Global,
+        Memory,
+        Table,
+    }
+
+    public class WasmFuncType
+    {
+        public int Index { get; set; }
+        public List<WasmValueType> ParamTypes { get; set; } = new();
+        public List<WasmValueType> ResultTypes { get; set; } = new();
+    }
+
+    public class WasmFunctionRef
+    {
+        public int Index { get; set; }
+        public string? Name { get; set; }
+        public bool IsImport { get; set; }
+        public WasmImport? Import { get; set; }
+        public WasmFunction? Function { get; set; }
+    }
+
+    public class WasmImport
+    {
+        public string ModuleName { get; set; } = "";
+        public string FieldName { get; set; } = "";
+        public string? InternalName { get; set; }
+        public WasmImportKind Kind { get; set; }
+
+        public int ParamCount { get; set; }
+        public int ResultCount { get; set; }
+        public List<WasmValueType> ParamTypes { get; set; } = new();
+        public List<WasmValueType> ResultTypes { get; set; } = new();
+
+        public bool IsResolved { get; set; } = false;
+        public WasmFunction? LinkedFunction { get; set; }
+    }
+
+    public enum WasmExportKind
+    {
+        Func,
+        Global,
+        Memory,
+        Table,
+    }
+
+    public class WasmExport
+    {
+        public string ExportName { get; set; } = "";
+        public WasmExportKind Kind { get; set; }
+        public string? InternalName { get; set; }
+        public int? Index { get; set; }
     }
 }
