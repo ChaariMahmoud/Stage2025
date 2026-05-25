@@ -1,6 +1,4 @@
 (module
-
-
   (global $MAX_REQUESTS i32 (i32.const 10))
   (global $active_requests (mut i32) (i32.const 0))
 
