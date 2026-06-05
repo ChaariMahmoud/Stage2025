@@ -903,8 +903,18 @@ namespace WasmToBoogie.Conversion
         {
             if (string.IsNullOrEmpty(target))
                 return target;
+
             string name = target[0] == '$' ? target[1..] : target;
-            return AllDigits(name) ? "func_" + name : name;
+
+            if (AllDigits(name))
+                return "func_" + name;
+
+            name = Regex.Replace(name, @"[^A-Za-z0-9_]", "_");
+
+            if (!char.IsLetter(name[0]) && name[0] != '_')
+                name = "_" + name;
+
+            return name;
         }
 
         private static string SanitizeFunctionName(string? watName, string contractName)
@@ -1143,11 +1153,9 @@ namespace WasmToBoogie.Conversion
             // Helper locals used by translation
             locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("entry_sp", BoogieType.Int)));
 
-            /*
-                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
-                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
-                locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
-            */
+            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("idx", BoogieType.Int)));
+            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("load_i", BoogieType.Int)));
+            locals.Add(new BoogieLocalVariable(new BoogieTypedIdent("store_i", BoogieType.Int)));
 
             currentLocalMap = indexToId;
 

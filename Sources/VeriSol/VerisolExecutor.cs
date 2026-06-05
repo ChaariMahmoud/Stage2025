@@ -107,6 +107,17 @@ namespace VeriSolRunner
                 WriteBoogieProgramToFile();
             }
 
+            // Translation-only mode used by the benchmark.
+            // The Boogie file is generated, but Boogie and Corral are not executed.
+            if (!TryProof && !TryRefutation)
+            {
+                Console.WriteLine(
+                    "✅ Translation-only mode: Boogie file generated, verification skipped."
+                );
+                Console.WriteLine($"✅ Boogie output: {outFileName}");
+                return 0;
+            }
+
             if (TryProof && FindProof())
                 return 0;
 
