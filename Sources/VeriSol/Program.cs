@@ -47,6 +47,18 @@
                 string wasmFile = args[1];
                 string contractName = Path.GetFileNameWithoutExtension(wasmFile);
 
+                bool noBoogie = args.Contains("--no-boogie");
+
+                bool wasmTryProofFlag = true;
+                bool wasmTryRefutation = true;
+
+                if (noBoogie)
+                {
+                    Console.WriteLine("🚀 Translation-only mode enabled (--no-boogie)");
+                    wasmTryProofFlag = false;
+                    wasmTryRefutation = false;
+                }
+
                 var wasmTranslator = new WasmToBoogieMain(wasmFile, contractName);
                 var program = wasmTranslator.Translate();
 
@@ -55,8 +67,8 @@
                     contractName,
                     corralRecursionLimit: 10,
                     ignoreMethods: new HashSet<Tuple<string, string>>(),
-                    tryRefutation: true,
-                    tryProofFlag: true,
+                    tryRefutation: wasmTryRefutation,
+                    tryProofFlag: wasmTryProofFlag,
                     logger: LoggerFactory
                         .Create(builder => builder.AddConsole())
                         .CreateLogger("WasmMode")

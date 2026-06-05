@@ -303,6 +303,334 @@ implementation initGlobals()
     global_0 := 8192.0;
 }
 
+procedure {:inline 1} require_auth();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation require_auth()
+{
+}
+
+procedure {:inline 1} eosio_assert();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation eosio_assert()
+{
+}
+
+procedure {:inline 1} db_find_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_find_i64()
+{
+}
+
+procedure {:inline 1} current_receiver();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation current_receiver()
+{
+}
+
+procedure {:inline 1} abort();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation abort()
+{
+}
+
+procedure {:inline 1} memset();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation memset()
+{
+}
+
+procedure {:inline 1} db_store_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_store_i64()
+{
+}
+
+procedure {:inline 1} memcpy();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation memcpy()
+{
+}
+
+procedure {:inline 1} memmove();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation memmove()
+{
+}
+
+procedure {:inline 1} __extendsftf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __extendsftf2()
+{
+}
+
+procedure {:inline 1} __floatsitf();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __floatsitf()
+{
+}
+
+procedure {:inline 1} __multf3();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __multf3()
+{
+}
+
+procedure {:inline 1} __floatunsitf();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __floatunsitf()
+{
+}
+
+procedure {:inline 1} __divtf3();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __divtf3()
+{
+}
+
+procedure {:inline 1} __addtf3();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __addtf3()
+{
+}
+
+procedure {:inline 1} __extenddftf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __extenddftf2()
+{
+}
+
+procedure {:inline 1} __eqtf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __eqtf2()
+{
+}
+
+procedure {:inline 1} __letf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __letf2()
+{
+}
+
+procedure {:inline 1} __netf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __netf2()
+{
+}
+
+procedure {:inline 1} __subtf3();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __subtf3()
+{
+}
+
+procedure {:inline 1} __trunctfdf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __trunctfdf2()
+{
+}
+
+procedure {:inline 1} __getf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __getf2()
+{
+}
+
+procedure {:inline 1} __trunctfsf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __trunctfsf2()
+{
+}
+
+procedure {:inline 1} prints_l();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation prints_l()
+{
+}
+
+procedure {:inline 1} __unordtf2();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __unordtf2()
+{
+}
+
+procedure {:inline 1} __fixunstfsi();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __fixunstfsi()
+{
+}
+
+procedure {:inline 1} __fixtfsi();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation __fixtfsi()
+{
+}
+
+procedure {:inline 1} db_update_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_update_i64()
+{
+}
+
+procedure {:inline 1} is_account();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation is_account()
+{
+}
+
+procedure {:inline 1} require_recipient();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation require_recipient()
+{
+}
+
+procedure {:inline 1} has_auth();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation has_auth()
+{
+}
+
+procedure {:inline 1} db_lowerbound_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_lowerbound_i64()
+{
+}
+
+procedure {:inline 1} db_next_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_next_i64()
+{
+}
+
+procedure {:inline 1} db_remove_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_remove_i64()
+{
+}
+
+procedure {:inline 1} action_data_size();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation action_data_size()
+{
+}
+
+procedure {:inline 1} read_action_data();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation read_action_data()
+{
+}
+
+procedure {:inline 1} eosio_assert_code();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation eosio_assert_code()
+{
+}
+
+procedure {:inline 1} db_get_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_get_i64()
+{
+}
+
+procedure {:inline 1} send_inline();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation send_inline()
+{
+}
+
+procedure {:inline 1} db_previous_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_previous_i64()
+{
+}
+
+procedure {:inline 1} db_end_i64();
+modifies $tmp1;
+modifies $sp;
+modifies $stack;
+implementation db_end_i64()
+{
+}
+
 procedure {:inline 1} popArgs1() returns (a1: real);
 modifies $sp;
 modifies $stack;
@@ -328,6 +656,9 @@ implementation fimport_0()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -362,6 +693,9 @@ implementation fimport_1()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -404,6 +738,9 @@ implementation fimport_2()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -419,6 +756,9 @@ modifies $mem;
 implementation fimport_3()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
 }
 
@@ -432,6 +772,9 @@ modifies $mem;
 implementation fimport_4()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
 }
 
@@ -468,6 +811,9 @@ implementation fimport_5()
     var arg2: real;
     var arg3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -518,6 +864,9 @@ implementation fimport_6()
     var arg5: real;
     var arg6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (6));
     call arg1, arg2, arg3, arg4, arg5, arg6 := popArgs6();
@@ -536,6 +885,9 @@ implementation fimport_7()
     var arg2: real;
     var arg3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -554,6 +906,9 @@ implementation fimport_8()
     var arg2: real;
     var arg3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -571,6 +926,9 @@ implementation fimport_9()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -588,6 +946,9 @@ implementation fimport_10()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -634,6 +995,9 @@ implementation fimport_11()
     var arg4: real;
     var arg5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (5));
     call arg1, arg2, arg3, arg4, arg5 := popArgs5();
@@ -651,6 +1015,9 @@ implementation fimport_12()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -671,6 +1038,9 @@ implementation fimport_13()
     var arg4: real;
     var arg5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (5));
     call arg1, arg2, arg3, arg4, arg5 := popArgs5();
@@ -691,6 +1061,9 @@ implementation fimport_14()
     var arg4: real;
     var arg5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (5));
     call arg1, arg2, arg3, arg4, arg5 := popArgs5();
@@ -708,6 +1081,9 @@ implementation fimport_15()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -727,6 +1103,9 @@ implementation fimport_16()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -746,6 +1125,9 @@ implementation fimport_17()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -765,6 +1147,9 @@ implementation fimport_18()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -785,6 +1170,9 @@ implementation fimport_19()
     var arg4: real;
     var arg5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (5));
     call arg1, arg2, arg3, arg4, arg5 := popArgs5();
@@ -802,6 +1190,9 @@ implementation fimport_20()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -821,6 +1212,9 @@ implementation fimport_21()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -838,6 +1232,9 @@ implementation fimport_22()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -855,6 +1252,9 @@ implementation fimport_23()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -874,6 +1274,9 @@ implementation fimport_24()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -891,6 +1294,9 @@ implementation fimport_25()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -908,6 +1314,9 @@ implementation fimport_26()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -927,6 +1336,9 @@ implementation fimport_27()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -943,6 +1355,9 @@ implementation fimport_28()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -959,6 +1374,9 @@ implementation fimport_29()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -975,6 +1393,9 @@ implementation fimport_30()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -994,6 +1415,9 @@ implementation fimport_31()
     var arg3: real;
     var arg4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -1011,6 +1435,9 @@ implementation fimport_32()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1027,6 +1454,9 @@ implementation fimport_33()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1042,6 +1472,9 @@ modifies $mem;
 implementation fimport_34()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
 }
 
@@ -1057,6 +1490,9 @@ implementation fimport_35()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1074,6 +1510,9 @@ implementation fimport_36()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1092,6 +1531,9 @@ implementation fimport_37()
     var arg2: real;
     var arg3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -1109,6 +1551,9 @@ implementation fimport_38()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1126,6 +1571,9 @@ implementation fimport_39()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1144,6 +1592,9 @@ implementation fimport_40()
     var arg2: real;
     var arg3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -1159,6 +1610,9 @@ modifies $mem;
 implementation func_0()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     call func_3();
 }
@@ -1177,6 +1631,9 @@ implementation func_1()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1274,7 +1731,7 @@ label$3_end_3:
 label$2_end_2:
     call push(0.0);
     call push(8220.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     goto func_exit_9;
 label$1_end_1:
@@ -1293,6 +1750,9 @@ implementation func_2()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1309,6 +1769,9 @@ implementation func_3()
 {
     var loc1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     loc1 := 0.0;
     call push(global_0);
@@ -1361,6 +1824,9 @@ modifies $mem;
 implementation func_4()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     call push(8208.0);
 }
@@ -1382,6 +1848,9 @@ implementation func_5()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1593,6 +2062,9 @@ implementation func_6()
     var arg3: real;
     var loc1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -1663,6 +2135,9 @@ implementation func_7()
     var loc1: real;
     var loc2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1731,6 +2206,9 @@ implementation func_8()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1749,6 +2227,9 @@ implementation func_9()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1775,6 +2256,9 @@ implementation func_10()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -1797,6 +2281,9 @@ implementation func_11()
     var loc1: real;
     var loc2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1917,6 +2404,9 @@ implementation func_12()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1937,6 +2427,9 @@ implementation func_13()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1964,6 +2457,9 @@ implementation func_14()
     var arg1: real;
     var arg2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -1983,10 +2479,13 @@ implementation func_15()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    call fimport$4();
+    call fimport_4();
     assume (false);
 }
 
@@ -2005,6 +2504,9 @@ implementation func_16()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -2157,7 +2659,7 @@ label$3_end_58:
     call push(arg2);
     call push(loc2);
     call push(loc1);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg2);
     call push(loc1);
@@ -2173,7 +2675,7 @@ label$3_end_58:
     call push(arg1);
     goto func_exit_55;
 label$2_end_56:
-    call fimport$4();
+    call fimport_4();
     assume (false);
 func_exit_55:
 }
@@ -2197,6 +2699,9 @@ implementation func_17()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -2406,7 +2911,7 @@ label$8_end_71:
     }
     goto label$2_end_64;
 label$4_end_66:
-    call fimport$4();
+    call fimport_4();
     assume (false);
 label$3_end_65:
     // // unhandled raw instruction: i32.shr_u
@@ -2426,7 +2931,7 @@ label$2_end_64:
     call push(arg2);
     call push(loc3);
     call push(loc1);
-    call fimport$7();
+    call fimport_7();
     call pop();
 label$1_end_63:
     call push(loc5);
@@ -2490,6 +2995,9 @@ implementation func_18()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -2506,10 +3014,13 @@ implementation func_19()
 {
     var arg1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    call fimport$4();
+    call fimport_4();
     assume (false);
 }
 
@@ -2536,6 +3047,9 @@ implementation func_20()
     var loc8: real;
     var loc9: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -2561,7 +3075,7 @@ implementation func_20()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(0.0);
     call loc2 := popArgs1();
     // // unhandled raw instruction: i64.shr_u
@@ -2673,7 +3187,7 @@ label$2_end_84:
 label$1_end_83:
     call push(loc7);
     call push(8245.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call loc7 := popArgs1();
     call push(arg3);
@@ -2804,14 +3318,14 @@ label$7_end_94:
 label$6_end_92:
     call push(loc7);
     call push(8265.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc9);
     call push(0.0);
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call push(8280.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc1);
     call push(40.0);
     call popToTmp1();
@@ -2861,7 +3375,7 @@ label$6_end_92:
     call push(loc4);
     call push(-2147483648.0);
     call push(loc4);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -2899,7 +3413,7 @@ label$6_end_92:
     call loc2 := popArgs1();
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
     goto label$11_end_103;
 label$13_end_105:
     call push(1.0);
@@ -2911,7 +3425,7 @@ label$12_end_104:
 label$11_end_103:
     call push(loc2);
     call push(8308.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -2923,7 +3437,7 @@ label$11_end_103:
     idx := (real_to_int($tmp1)) + (8);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -2933,7 +3447,7 @@ label$11_end_103:
     }
     call push(0.0);
     call push(8980.0);
-    call fimport$1();
+    call fimport_1();
 label$14_end_107:
     call push(56.0);
     call func_7();
@@ -3113,7 +3627,7 @@ label$14_end_107:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(40.0);
-    call fimport$6();
+    call fimport_6();
     call loc8 := popArgs1();
     call push(loc8);
     call popToTmp2();
@@ -3442,6 +3956,9 @@ implementation func_21()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -3553,7 +4070,7 @@ label$1_end_130:
     call push(arg2);
     call push(0.0);
     call push(0.0);
-    call fimport$37();
+    call fimport_37();
     call loc4 := popArgs1();
     call push(loc4);
     call push(-1.0);
@@ -3587,7 +4104,7 @@ label$1_end_130:
 label$6_end_141:
     call push(0.0);
     call push(8957.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_140:
     call push(loc4);
     call func_1();
@@ -3598,7 +4115,7 @@ label$4_end_139:
     call push(arg2);
     call push(loc3);
     call push(loc4);
-    call fimport$37();
+    call fimport_37();
     call pop();
     call push(loc2);
     call push(loc3);
@@ -3909,6 +4426,9 @@ implementation func_22()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -3962,7 +4482,7 @@ implementation func_22()
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -3977,7 +4497,7 @@ label$1_end_153:
     call push(loc4);
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -4036,7 +4556,7 @@ label$1_end_153:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -4051,7 +4571,7 @@ label$2_end_158:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(loc4);
@@ -4105,7 +4625,7 @@ label$2_end_158:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -4120,7 +4640,7 @@ label$3_end_159:
     call push(loc4);
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -4179,7 +4699,7 @@ label$3_end_159:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -4194,7 +4714,7 @@ label$4_end_164:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(loc4);
@@ -4248,7 +4768,7 @@ label$4_end_164:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -4263,7 +4783,7 @@ label$5_end_165:
     call push(loc4);
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -4313,6 +4833,9 @@ implementation func_23()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -4755,6 +5278,9 @@ implementation func_24()
     var loc9: real;
     var loc10: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -4887,7 +5413,7 @@ label$2_end_197:
 label$1_end_196:
     call push(loc6);
     call push(8245.0);
-    call fimport$1();
+    call fimport_1();
     // // unhandled raw instruction: i32.and
     call popToTmp1();
     if (real_to_bool($tmp1)) {
@@ -4910,7 +5436,7 @@ label$6_end_205:
     call popToTmp2();
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call push(8341.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call loc6 := popArgs1();
     call push(loc1);
@@ -4964,7 +5490,7 @@ label$6_end_205:
     call push(loc3);
     call push(-2147483648.0);
     call push(loc3);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -5002,7 +5528,7 @@ label$6_end_205:
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_208:
     call push(loc8);
     call push(0.0);
@@ -5010,13 +5536,13 @@ label$8_end_208:
     call popToTmp2();
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call push(8370.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc8);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (32);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(arg3);
     call push(8.0);
     call popToTmp1();
@@ -5157,14 +5683,14 @@ label$10_end_214:
 label$9_end_212:
     call push(loc6);
     call push(8430.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc10);
     call push(0.0);
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call push(8447.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(loc8);
     call popToTmp1();
@@ -5175,7 +5701,7 @@ label$9_end_212:
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8476.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc1);
     call push(arg3);
     call popToTmp2();
@@ -5708,6 +6234,9 @@ implementation func_25()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -5741,14 +6270,14 @@ implementation func_25()
     }
     call push(0.0);
     call push(9037.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_245:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -5758,7 +6287,7 @@ label$1_end_245:
     }
     call push(0.0);
     call push(9083.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_246:
     call push(arg3);
     call popToTmp1();
@@ -5787,7 +6316,7 @@ label$2_end_246:
     }
     call push(0.0);
     call push(9193.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_247:
     call push(arg2);
     call push(arg2);
@@ -5821,7 +6350,7 @@ label$3_end_247:
     }
     call push(0.0);
     call push(9236.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -5840,7 +6369,7 @@ label$4_end_251:
     }
     call push(0.0);
     call push(9255.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_252:
     call push(arg2);
     call push(16.0);
@@ -5875,7 +6404,7 @@ label$5_end_252:
     }
     call push(0.0);
     call push(9273.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_253:
     // // unhandled raw instruction: i64.shr_u
     call loc4 := popArgs1();
@@ -5938,7 +6467,7 @@ label$7_end_254:
     }
     call push(0.0);
     call push(9134.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_255:
     call push(loc1);
     call loc5 := popArgs1();
@@ -6030,7 +6559,7 @@ label$8_end_255:
     call push(0.0);
     call push(loc1);
     call push(40.0);
-    call fimport$27();
+    call fimport_27();
     call push(loc4);
     call push(arg1);
     call popToTmp1();
@@ -6088,6 +6617,9 @@ implementation func_26()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -6159,7 +6691,7 @@ implementation func_26()
     call push(arg2);
     call push(2147483647.0);
     // // unhandled raw instruction: i64.shr_u
-    call fimport$2();
+    call fimport_2();
     call arg1 := popArgs1();
     call push(arg1);
     call push(0.0);
@@ -6189,7 +6721,7 @@ implementation func_26()
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$4_end_265:
     call push(loc1);
     call push(arg3);
@@ -6220,7 +6752,7 @@ label$4_end_265:
     goto label$1_end_261;
 label$3_end_263:
     call push(loc2);
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -6230,7 +6762,7 @@ label$3_end_263:
     }
     call push(0.0);
     call push(8980.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_268:
     call push(32.0);
     call func_7();
@@ -6275,7 +6807,7 @@ label$5_end_268:
     call push(($tmp2) + ($tmp1));
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc1);
     call push(arg1);
@@ -6295,7 +6827,7 @@ label$5_end_268:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(loc1);
@@ -6318,7 +6850,7 @@ label$5_end_268:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(16.0);
-    call fimport$6();
+    call fimport_6();
     call loc4 := popArgs1();
     call push(loc4);
     call popToTmp2();
@@ -6640,6 +7172,9 @@ implementation func_27()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -6774,7 +7309,7 @@ implementation func_27()
     call push(loc4);
     call push(loc3);
     call push(arg3);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc1);
     call push(loc4);
@@ -7200,7 +7735,7 @@ label$10_end_315:
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) - ($tmp1));
-    call fimport$38();
+    call fimport_38();
     call push(loc1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (64);
@@ -7335,6 +7870,9 @@ implementation func_28()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -7446,7 +7984,7 @@ label$1_end_328:
     call push(arg2);
     call push(0.0);
     call push(0.0);
-    call fimport$37();
+    call fimport_37();
     call loc3 := popArgs1();
     call push(loc3);
     call push(-1.0);
@@ -7480,7 +8018,7 @@ label$1_end_328:
 label$6_end_339:
     call push(0.0);
     call push(8957.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_338:
     call push(loc3);
     call func_1();
@@ -7491,7 +8029,7 @@ label$4_end_337:
     call push(arg2);
     call push(loc1);
     call push(loc3);
-    call fimport$37();
+    call fimport_37();
     call pop();
     call push(32.0);
     call func_7();
@@ -7528,12 +8066,12 @@ label$4_end_337:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$7_end_343:
     call push(loc4);
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(0.0);
@@ -7559,7 +8097,7 @@ label$7_end_343:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_344:
     call push(loc2);
     call push(24.0);
@@ -7568,7 +8106,7 @@ label$8_end_344:
     call push(($tmp2) + ($tmp1));
     call push(loc6);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(8.0);
@@ -7776,6 +8314,9 @@ implementation func_29()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -7809,14 +8350,14 @@ implementation func_29()
     }
     call push(0.0);
     call push(9037.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_354:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -7826,7 +8367,7 @@ label$1_end_354:
     }
     call push(0.0);
     call push(9083.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_355:
     call push(arg3);
     call popToTmp1();
@@ -7855,7 +8396,7 @@ label$2_end_355:
     }
     call push(0.0);
     call push(9193.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_356:
     call push(arg2);
     call push(arg2);
@@ -7889,7 +8430,7 @@ label$3_end_356:
     }
     call push(0.0);
     call push(9236.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -7910,7 +8451,7 @@ label$4_end_360:
     }
     call push(0.0);
     call push(9255.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_361:
     call push(loc3);
     // // unhandled raw instruction: i64.shr_u
@@ -7923,7 +8464,7 @@ label$5_end_361:
     }
     call push(0.0);
     call push(9134.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_362:
     call push(loc1);
     call loc5 := popArgs1();
@@ -7938,7 +8479,7 @@ label$6_end_362:
     call push(loc1);
     call push(arg2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(arg3);
@@ -7962,7 +8503,7 @@ label$6_end_362:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg2);
     call popToTmp1();
@@ -7972,7 +8513,7 @@ label$6_end_362:
     call push(0.0);
     call push(loc1);
     call push(16.0);
-    call fimport$27();
+    call fimport_27();
     call push(loc3);
     call push(arg1);
     call popToTmp1();
@@ -8029,6 +8570,9 @@ implementation func_30()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -8471,6 +9015,9 @@ implementation func_31()
     var loc8: real;
     var loc9: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (5));
     call arg1, arg2, arg3, arg4, arg5 := popArgs5();
@@ -8494,7 +9041,7 @@ implementation func_31()
     call push(arg1);
     call func_32();
     call push(8502.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call loc2 := popArgs1();
     call push(loc1);
@@ -8546,7 +9093,7 @@ implementation func_31()
     call push(loc3);
     call push(2147483647.0);
     call push(arg2);
-    call fimport$2();
+    call fimport_2();
     call loc4 := popArgs1();
     call push(loc4);
     call push(0.0);
@@ -8584,13 +9131,13 @@ implementation func_31()
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_393:
     call push(loc2);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call push(8522.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc1);
     call push(128.0);
     call popToTmp1();
@@ -8687,7 +9234,7 @@ label$4_end_400:
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
     goto label$2_end_396;
 label$3_end_397:
     call push(0.0);
@@ -8708,7 +9255,7 @@ label$3_end_397:
     call push(int_to_real(load_i));
     call push(2147483647.0);
     call push(arg3);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -8746,26 +9293,26 @@ label$3_end_397:
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_396:
     call push(loc6);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call push(8548.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call push(arg3);
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call push(8572.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
-    call fimport$0();
+    call fimport_0();
     call push(arg3);
-    call fimport$28();
+    call fimport_28();
     call push(8596.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -8825,7 +9372,7 @@ label$2_end_396:
     call push(loc3);
     call push(-2147483648.0);
     call push(loc3);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -8863,17 +9410,17 @@ label$2_end_396:
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
     goto label$6_end_409;
 label$7_end_410:
     call push(0.0);
     call push(8622.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_409:
     call push(arg2);
-    call fimport$29();
+    call fimport_29();
     call push(arg3);
-    call fimport$29();
+    call fimport_29();
     call push(0.0);
     call loc4 := popArgs1();
     call push(arg4);
@@ -9002,14 +9549,14 @@ label$9_end_415:
 label$8_end_413:
     call push(loc4);
     call push(8430.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc9);
     call push(0.0);
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call push(8641.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc7);
     call push(loc5);
     call popToTmp1();
@@ -9020,7 +9567,7 @@ label$8_end_413:
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8476.0);
-    call fimport$1();
+    call fimport_1();
     // // unhandled raw instruction: i32.and
     call popToTmp1();
     if (real_to_bool($tmp1)) {
@@ -9043,9 +9590,9 @@ label$13_end_423:
     call popToTmp2();
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call push(8341.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg3);
-    call fimport$30();
+    call fimport_30();
     call loc2 := popArgs1();
     call push(loc1);
     call push(48.0);
@@ -9406,6 +9953,9 @@ implementation func_32()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -9474,7 +10024,7 @@ implementation func_32()
     call push(loc3);
     call push(-2147483648.0);
     call push(1.0);
-    call fimport$2();
+    call fimport_2();
     call arg1 := popArgs1();
     call push(arg1);
     call push(0.0);
@@ -9512,7 +10062,7 @@ implementation func_32()
     call loc2 := popArgs1();
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$4_end_454:
     call push(loc1);
     call popToTmp1();
@@ -9666,6 +10216,9 @@ implementation func_33()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -9777,7 +10330,7 @@ label$1_end_468:
     call push(arg2);
     call push(0.0);
     call push(0.0);
-    call fimport$37();
+    call fimport_37();
     call loc3 := popArgs1();
     call push(loc3);
     call push(-1.0);
@@ -9811,7 +10364,7 @@ label$1_end_468:
 label$6_end_479:
     call push(0.0);
     call push(8957.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_478:
     call push(loc3);
     call func_1();
@@ -9822,7 +10375,7 @@ label$4_end_477:
     call push(arg2);
     call push(loc1);
     call push(loc3);
-    call fimport$37();
+    call fimport_37();
     call pop();
     call push(24.0);
     call func_7();
@@ -9852,12 +10405,12 @@ label$4_end_477:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$7_end_483:
     call push(loc4);
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(arg2);
@@ -10051,6 +10604,9 @@ implementation func_34()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -10117,7 +10673,7 @@ implementation func_34()
     call push(arg2);
     call push(2147483647.0);
     // // unhandled raw instruction: i64.shr_u
-    call fimport$2();
+    call fimport_2();
     call arg1 := popArgs1();
     call push(arg1);
     call push(0.0);
@@ -10155,12 +10711,12 @@ implementation func_34()
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
     goto label$1_end_493;
 label$2_end_494:
     call push(0.0);
     call push(8864.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_493:
     call push(loc2);
     call popToTmp1();
@@ -10178,7 +10734,7 @@ label$1_end_493:
     call popToTmp2();
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call push(8888.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(loc2);
     call popToTmp1();
@@ -10363,6 +10919,9 @@ implementation func_35()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -10474,7 +11033,7 @@ label$1_end_513:
     call push(arg2);
     call push(0.0);
     call push(0.0);
-    call fimport$37();
+    call fimport_37();
     call loc3 := popArgs1();
     call push(loc3);
     call push(-1.0);
@@ -10508,7 +11067,7 @@ label$1_end_513:
 label$6_end_524:
     call push(0.0);
     call push(8957.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_523:
     call push(loc3);
     call func_1();
@@ -10519,7 +11078,7 @@ label$4_end_522:
     call push(arg2);
     call push(loc1);
     call push(loc3);
-    call fimport$37();
+    call fimport_37();
     call pop();
     call push(32.0);
     call func_7();
@@ -10542,12 +11101,12 @@ label$4_end_522:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$7_end_528:
     call push(loc4);
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc1);
     call push(8.0);
@@ -10566,7 +11125,7 @@ label$7_end_528:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_529:
     call push(loc2);
     call push(16.0);
@@ -10575,7 +11134,7 @@ label$8_end_529:
     call push(($tmp2) + ($tmp1));
     call push(loc6);
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(8.0);
@@ -10790,6 +11349,9 @@ implementation func_36()
     var loc7: real;
     var loc8: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -10816,14 +11378,14 @@ implementation func_36()
     }
     call push(0.0);
     call push(9594.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_537:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -10833,7 +11395,7 @@ label$1_end_537:
     }
     call push(0.0);
     call push(9639.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_538:
     call push(arg1);
     call popToTmp1();
@@ -10942,7 +11504,7 @@ label$8_end_544:
 label$7_end_543:
     call push(0.0);
     call push(9689.0);
-    call fimport$1();
+    call fimport_1();
     call push(-24.0);
     call loc8 := popArgs1();
     call push(loc4);
@@ -11153,7 +11715,7 @@ label$3_end_539:
     idx := (real_to_int($tmp1)) + (20);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    call fimport$33();
+    call fimport_33();
 }
 
 procedure {:inline 1} func_37();
@@ -11176,6 +11738,9 @@ implementation func_37()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -11209,14 +11774,14 @@ implementation func_37()
     }
     call push(0.0);
     call push(9037.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_564:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -11226,7 +11791,7 @@ label$1_end_564:
     }
     call push(0.0);
     call push(9083.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_565:
     call push(arg4);
     call popToTmp1();
@@ -11255,7 +11820,7 @@ label$2_end_565:
     }
     call push(0.0);
     call push(9332.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_566:
     call push(arg2);
     call push(arg2);
@@ -11289,7 +11854,7 @@ label$3_end_566:
     }
     call push(0.0);
     call push(9380.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -11310,7 +11875,7 @@ label$4_end_570:
     }
     call push(0.0);
     call push(9402.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_571:
     call push(loc3);
     // // unhandled raw instruction: i64.shr_u
@@ -11323,7 +11888,7 @@ label$5_end_571:
     }
     call push(0.0);
     call push(9134.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_572:
     call push(loc1);
     call loc5 := popArgs1();
@@ -11338,7 +11903,7 @@ label$6_end_572:
     call push(loc1);
     call push(arg2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(arg4);
@@ -11362,7 +11927,7 @@ label$6_end_572:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg2);
     call popToTmp1();
@@ -11372,7 +11937,7 @@ label$6_end_572:
     call push(arg3);
     call push(loc1);
     call push(16.0);
-    call fimport$27();
+    call fimport_27();
     call push(loc3);
     call push(arg1);
     call popToTmp1();
@@ -11433,6 +11998,9 @@ implementation func_38()
     var loc8: real;
     var loc9: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -11564,7 +12132,7 @@ label$2_end_579:
 label$1_end_578:
     call push(loc6);
     call push(8245.0);
-    call fimport$1();
+    call fimport_1();
     // // unhandled raw instruction: i32.and
     call popToTmp1();
     if (real_to_bool($tmp1)) {
@@ -11587,7 +12155,7 @@ label$6_end_587:
     call popToTmp2();
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call push(8341.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call loc6 := popArgs1();
     call push(loc1);
@@ -11641,7 +12209,7 @@ label$6_end_587:
     call push(loc3);
     call push(-2147483648.0);
     call push(loc3);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -11679,7 +12247,7 @@ label$6_end_587:
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_590:
     call push(arg3);
     call push(0.0);
@@ -11687,13 +12255,13 @@ label$8_end_590:
     call popToTmp2();
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call push(8673.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg3);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (32);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(arg2);
     call push(8.0);
     call popToTmp1();
@@ -11834,14 +12402,14 @@ label$10_end_596:
 label$9_end_594:
     call push(loc6);
     call push(8430.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(0.0);
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call push(8732.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc9);
     call push(arg3);
     call popToTmp1();
@@ -11852,7 +12420,7 @@ label$9_end_594:
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8476.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(arg3);
     call popToTmp1();
@@ -11863,7 +12431,7 @@ label$9_end_594:
     call popToTmp2();
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call push(8768.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc1);
     call push(arg2);
     call popToTmp2();
@@ -12082,6 +12650,9 @@ implementation func_39()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -12115,14 +12686,14 @@ implementation func_39()
     }
     call push(0.0);
     call push(9037.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_616:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -12132,7 +12703,7 @@ label$1_end_616:
     }
     call push(0.0);
     call push(9083.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_617:
     call push(arg3);
     call popToTmp1();
@@ -12161,7 +12732,7 @@ label$2_end_617:
     }
     call push(0.0);
     call push(9332.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_618:
     call push(arg2);
     call push(arg2);
@@ -12195,7 +12766,7 @@ label$3_end_618:
     }
     call push(0.0);
     call push(9380.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -12214,7 +12785,7 @@ label$4_end_622:
     }
     call push(0.0);
     call push(9402.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_623:
     call push(arg3);
     call popToTmp1();
@@ -12245,7 +12816,7 @@ label$5_end_623:
     }
     call push(0.0);
     call push(9332.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_624:
     call push(arg2);
     call push(arg2);
@@ -12279,7 +12850,7 @@ label$6_end_624:
     }
     call push(0.0);
     call push(9380.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg2);
     call push(16.0);
     call popToTmp1();
@@ -12304,7 +12875,7 @@ label$7_end_627:
     }
     call push(0.0);
     call push(9402.0);
-    call fimport$1();
+    call fimport_1();
 label$8_end_628:
     call push(loc4);
     // // unhandled raw instruction: i64.shr_u
@@ -12317,7 +12888,7 @@ label$8_end_628:
     }
     call push(0.0);
     call push(9134.0);
-    call fimport$1();
+    call fimport_1();
 label$9_end_629:
     call push(loc1);
     call loc1 := popArgs1();
@@ -12413,7 +12984,7 @@ label$9_end_629:
     call push(0.0);
     call push(arg3);
     call push(40.0);
-    call fimport$27();
+    call fimport_27();
     call push(loc4);
     call push(arg1);
     call popToTmp1();
@@ -12469,6 +13040,9 @@ implementation func_40()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -12491,7 +13065,7 @@ implementation func_40()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(loc1);
     call push(40.0);
     call popToTmp1();
@@ -12541,7 +13115,7 @@ implementation func_40()
     call push(loc2);
     call push(-2147483648.0);
     call push(1.0);
-    call fimport$2();
+    call fimport_2();
     call loc3 := popArgs1();
     call push(loc3);
     call push(0.0);
@@ -12579,7 +13153,7 @@ implementation func_40()
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$4_end_639:
     call push(loc1);
     call push(8.0);
@@ -12613,7 +13187,7 @@ label$3_end_637:
     call push(int_to_real(load_i));
     call loc5 := popArgs1();
     call push(loc2);
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -12623,7 +13197,7 @@ label$3_end_637:
     }
     call push(0.0);
     call push(8980.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_642:
     call push(32.0);
     call func_7();
@@ -12660,7 +13234,7 @@ label$5_end_642:
     call push(($tmp2) + ($tmp1));
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc1);
     call push(arg1);
@@ -12680,7 +13254,7 @@ label$5_end_642:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(loc1);
@@ -12711,7 +13285,7 @@ label$5_end_642:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(9.0);
-    call fimport$6();
+    call fimport_6();
     call loc4 := popArgs1();
     call push(loc4);
     call popToTmp2();
@@ -13053,6 +13627,9 @@ implementation func_41()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -13085,14 +13662,14 @@ implementation func_41()
     }
     call push(0.0);
     call push(9037.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_664:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -13102,7 +13679,7 @@ label$1_end_664:
     }
     call push(0.0);
     call push(9083.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_665:
     call push(arg2);
     call push(1.0);
@@ -13130,7 +13707,7 @@ label$2_end_665:
     call push(loc1);
     call push(arg2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(arg2);
@@ -13154,7 +13731,7 @@ label$2_end_665:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg2);
     call popToTmp1();
@@ -13164,7 +13741,7 @@ label$2_end_665:
     call push(arg3);
     call push(loc1);
     call push(9.0);
-    call fimport$27();
+    call fimport_27();
     call push(loc3);
     call push(arg1);
     call popToTmp1();
@@ -13235,6 +13812,9 @@ implementation func_42()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -13669,6 +14249,9 @@ implementation func_43()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -13690,7 +14273,7 @@ implementation func_43()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(loc1);
     call push(48.0);
     call popToTmp1();
@@ -13740,7 +14323,7 @@ implementation func_43()
     call push(loc2);
     call push(-2147483648.0);
     call push(0.0);
-    call fimport$31();
+    call fimport_31();
     call arg1 := popArgs1();
     call push(arg1);
     call push(0.0);
@@ -13801,10 +14384,10 @@ label$2_start_698:
     }
     call push(0.0);
     call push(9530.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call push(9564.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_700:
     call push(arg1);
     call popToTmp1();
@@ -13816,7 +14399,7 @@ label$3_end_700:
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
-    call fimport$32();
+    call fimport_32();
     call loc4 := popArgs1();
     call push(loc4);
     call push(0.0);
@@ -13852,7 +14435,7 @@ label$4_end_702:
     call push(int_to_real(load_i));
     call push(-2147483648.0);
     call push(0.0);
-    call fimport$31();
+    call fimport_31();
     call arg1 := popArgs1();
     call push(arg1);
     call push(-1.0);
@@ -13983,6 +14566,9 @@ implementation func_44()
     var loc1: real;
     var loc2: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -14019,7 +14605,7 @@ implementation func_44()
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
-    call fimport$39();
+    call fimport_39();
     call loc2 := popArgs1();
     call push(loc2);
     call push(-1.0);
@@ -14032,7 +14618,7 @@ implementation func_44()
     }
     call push(0.0);
     call push(9482.0);
-    call fimport$1();
+    call fimport_1();
     goto label$1_end_715;
 label$2_end_716:
     call push(arg1);
@@ -14052,7 +14638,7 @@ label$2_end_716:
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
     call push(-2147483648.0);
-    call fimport$40();
+    call fimport_40();
     call loc2 := popArgs1();
     call push(loc2);
     call push(-1.0);
@@ -14065,7 +14651,7 @@ label$2_end_716:
     }
     call push(0.0);
     call push(9428.0);
-    call fimport$1();
+    call fimport_1();
 label$3_end_719:
     call push(loc2);
     call push(loc1);
@@ -14073,7 +14659,7 @@ label$3_end_719:
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
-    call fimport$39();
+    call fimport_39();
     call loc2 := popArgs1();
     call push(loc2);
     call push(-1.0);
@@ -14086,7 +14672,7 @@ label$3_end_719:
     }
     call push(0.0);
     call push(9428.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_715:
     call push(arg1);
     call push(4.0);
@@ -14134,6 +14720,9 @@ implementation func_45()
     var loc7: real;
     var loc8: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -14160,14 +14749,14 @@ implementation func_45()
     }
     call push(0.0);
     call push(9594.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_723:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -14177,7 +14766,7 @@ label$1_end_723:
     }
     call push(0.0);
     call push(9639.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_724:
     call push(arg1);
     call popToTmp1();
@@ -14312,7 +14901,7 @@ label$8_end_730:
 label$7_end_729:
     call push(0.0);
     call push(9689.0);
-    call fimport$1();
+    call fimport_1();
     call push(-24.0);
     call loc8 := popArgs1();
     call push(loc4);
@@ -14523,7 +15112,7 @@ label$3_end_725:
     idx := (real_to_int($tmp1)) + (20);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    call fimport$33();
+    call fimport_33();
 }
 
 procedure {:inline 1} func_46();
@@ -14545,6 +15134,9 @@ implementation func_46()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -14566,7 +15158,7 @@ implementation func_46()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     // // unhandled raw instruction: i32.and
     call popToTmp1();
     if (real_to_bool($tmp1)) {
@@ -14589,7 +15181,7 @@ label$1_end_751:
     call popToTmp2();
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call push(8341.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call arg3 := popArgs1();
     call push(loc1);
@@ -14641,7 +15233,7 @@ label$1_end_751:
     call push(loc3);
     call push(2147483647.0);
     call push(arg2);
-    call fimport$2();
+    call fimport_2();
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -14679,7 +15271,7 @@ label$1_end_751:
     call arg3 := popArgs1();
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
     goto label$3_end_754;
 label$4_end_755:
     call push(1.0);
@@ -14687,7 +15279,7 @@ label$4_end_755:
 label$3_end_754:
     call push(arg3);
     call push(8802.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -14699,7 +15291,7 @@ label$3_end_754:
     idx := (real_to_int($tmp1)) + (8);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -14709,7 +15301,7 @@ label$3_end_754:
     }
     call push(0.0);
     call push(8980.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_757:
     call push(24.0);
     call func_7();
@@ -14739,7 +15331,7 @@ label$5_end_757:
     call push(($tmp2) + ($tmp1));
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(loc1);
@@ -14770,7 +15362,7 @@ label$5_end_757:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$6();
+    call fimport_6();
     call loc2 := popArgs1();
     call push(loc2);
     call popToTmp2();
@@ -15108,6 +15700,9 @@ implementation func_47()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
@@ -15543,6 +16138,9 @@ implementation func_48()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -15564,7 +16162,7 @@ implementation func_48()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$0();
+    call fimport_0();
     call push(loc1);
     call push(32.0);
     call popToTmp1();
@@ -15616,7 +16214,7 @@ implementation func_48()
     call push(loc2);
     call push(2147483647.0);
     call push(arg2);
-    call fimport$2();
+    call fimport_2();
     call loc3 := popArgs1();
     call push(loc3);
     call push(0.0);
@@ -15646,7 +16244,7 @@ implementation func_48()
     }
     call push(0.0);
     call push(8906.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_806:
     call push(arg1);
     call push(0.0);
@@ -15654,7 +16252,7 @@ label$1_end_806:
     call popToTmp2();
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call push(8835.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
@@ -15662,10 +16260,10 @@ label$1_end_806:
     }
     call push(0.0);
     call push(9530.0);
-    call fimport$1();
+    call fimport_1();
     call push(0.0);
     call push(9564.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_809:
     call push(arg1);
     call popToTmp1();
@@ -15677,7 +16275,7 @@ label$2_end_809:
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
-    call fimport$32();
+    call fimport_32();
     call loc3 := popArgs1();
     call push(loc3);
     call push(0.0);
@@ -15822,6 +16420,9 @@ implementation func_49()
     var loc7: real;
     var loc8: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -15848,14 +16449,14 @@ implementation func_49()
     }
     call push(0.0);
     call push(9594.0);
-    call fimport$1();
+    call fimport_1();
 label$1_end_822:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s64(idx);
     call push(int_to_real(load_i));
-    call fimport$3();
+    call fimport_3();
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) == ($tmp1)));
@@ -15865,7 +16466,7 @@ label$1_end_822:
     }
     call push(0.0);
     call push(9639.0);
-    call fimport$1();
+    call fimport_1();
 label$2_end_823:
     call push(arg1);
     call popToTmp1();
@@ -16000,7 +16601,7 @@ label$8_end_829:
 label$7_end_828:
     call push(0.0);
     call push(9689.0);
-    call fimport$1();
+    call fimport_1();
     call push(-24.0);
     call loc8 := popArgs1();
     call push(loc4);
@@ -16211,7 +16812,7 @@ label$3_end_824:
     idx := (real_to_int($tmp1)) + (12);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    call fimport$33();
+    call fimport_33();
 }
 
 procedure {:inline 1} func_50();
@@ -16229,6 +16830,9 @@ implementation func_50()
     var arg3: real;
     var loc1: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -16661,6 +17265,9 @@ implementation func_51()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -16691,7 +17298,7 @@ implementation func_51()
     call mem_write_u64(idx, store_i);
     call push(0.0);
     call arg3 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -16725,7 +17332,7 @@ label$3_end_863:
 label$2_end_862:
     call push(arg3);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_860:
     call push(loc2);
@@ -17084,6 +17691,9 @@ implementation func_52()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -17114,7 +17724,7 @@ implementation func_52()
     call mem_write_u64(idx, store_i);
     call push(0.0);
     call arg3 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -17148,7 +17758,7 @@ label$3_end_879:
 label$2_end_878:
     call push(arg3);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_876:
     call push(loc2);
@@ -17500,6 +18110,9 @@ implementation func_53()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -17530,7 +18143,7 @@ implementation func_53()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc4 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc5 := popArgs1();
     call push(loc5);
     call popToTmp1();
@@ -17568,7 +18181,7 @@ label$3_end_893:
 label$2_end_892:
     call push(arg3);
     call push(loc5);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_891:
     call push(loc2);
@@ -17701,6 +18314,9 @@ implementation func_54()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -17733,7 +18349,7 @@ implementation func_54()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc4 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc5 := popArgs1();
     call push(loc5);
     call popToTmp1();
@@ -17771,7 +18387,7 @@ label$3_end_902:
 label$2_end_901:
     call push(arg3);
     call push(loc5);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_900:
     call push(loc2);
@@ -18196,6 +18812,9 @@ implementation func_55()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -18230,7 +18849,7 @@ implementation func_55()
     call loc4 := popArgs1();
     call push(0.0);
     call arg3 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc5 := popArgs1();
     call push(loc5);
     call popToTmp1();
@@ -18264,7 +18883,7 @@ label$3_end_920:
 label$2_end_919:
     call push(arg3);
     call push(loc5);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_917:
     call push(loc2);
@@ -18330,7 +18949,7 @@ label$1_end_917:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (60);
@@ -18345,7 +18964,7 @@ label$4_end_922:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -18705,6 +19324,9 @@ implementation func_56()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -18735,7 +19357,7 @@ implementation func_56()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc4 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc5 := popArgs1();
     call push(loc5);
     call popToTmp1();
@@ -18773,7 +19395,7 @@ label$3_end_942:
 label$2_end_941:
     call push(arg3);
     call push(loc5);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_940:
     call push(loc2);
@@ -18800,7 +19422,7 @@ label$1_end_940:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_946:
     call push(loc2);
     call push(40.0);
@@ -18809,7 +19431,7 @@ label$5_end_946:
     call push(($tmp2) + ($tmp1));
     call push(arg3);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(28.0);
@@ -18940,6 +19562,9 @@ implementation func_57()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
@@ -18971,7 +19596,7 @@ implementation func_57()
     call mem_write_u64(idx, store_i);
     call push(0.0);
     call arg3 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -19005,7 +19630,7 @@ label$3_end_954:
 label$2_end_953:
     call push(arg3);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_951:
     call push(loc2);
@@ -19091,7 +19716,7 @@ label$1_end_951:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(56.0);
     call popToTmp1();
@@ -19116,7 +19741,7 @@ label$4_end_957:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -19156,7 +19781,7 @@ label$4_end_957:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(48.0);
     call popToTmp1();
@@ -19181,7 +19806,7 @@ label$5_end_959:
     call push(loc5);
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -19218,7 +19843,7 @@ label$5_end_959:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (52);
@@ -19233,7 +19858,7 @@ label$6_end_961:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(80.0);
@@ -19524,6 +20149,9 @@ implementation func_58()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -19576,7 +20204,7 @@ implementation func_58()
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -19591,7 +20219,7 @@ label$1_end_972:
     call push(loc2);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -19657,7 +20285,7 @@ label$1_end_972:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -19672,7 +20300,7 @@ label$2_end_977:
     call push(loc2);
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -19727,7 +20355,7 @@ label$2_end_977:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -19746,7 +20374,7 @@ label$3_end_982:
     call push(($tmp2) + ($tmp1));
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(16.0);
@@ -19811,6 +20439,9 @@ implementation func_59()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -20204,6 +20835,9 @@ implementation func_60()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -20488,6 +21122,9 @@ implementation func_61()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -20540,7 +21177,7 @@ implementation func_61()
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -20555,7 +21192,7 @@ label$1_end_1012:
     call push(loc2);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -20621,7 +21258,7 @@ label$1_end_1012:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -20636,7 +21273,7 @@ label$2_end_1017:
     call push(loc2);
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -20696,7 +21333,7 @@ label$2_end_1017:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -20711,7 +21348,7 @@ label$3_end_1021:
     call push(loc2);
     call push(arg1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -20766,7 +21403,7 @@ label$3_end_1021:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -20781,7 +21418,7 @@ label$4_end_1026:
     call push(($tmp2) + ($tmp1));
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc4);
     call push(24.0);
@@ -20862,6 +21499,9 @@ implementation func_62()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -21155,6 +21795,9 @@ implementation func_63()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -21208,7 +21851,7 @@ implementation func_63()
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -21223,7 +21866,7 @@ label$1_end_1036:
     call push(loc2);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -21278,7 +21921,7 @@ label$1_end_1036:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -21293,7 +21936,7 @@ label$2_end_1041:
     call push(($tmp2) + ($tmp1));
     call push(loc5);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -21362,6 +22005,9 @@ implementation func_64()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -21640,6 +22286,9 @@ implementation func_65()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -21659,7 +22308,7 @@ implementation func_65()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -21697,7 +22346,7 @@ label$3_end_1053:
 label$2_end_1052:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1051:
     call push(loc2);
@@ -21718,7 +22367,7 @@ label$1_end_1051:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_1057:
     call push(loc2);
     call push(88.0);
@@ -21727,7 +22376,7 @@ label$5_end_1057:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(0.0);
@@ -21762,7 +22411,7 @@ label$5_end_1057:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$6_end_1058:
     call push(loc1);
     call push(loc3);
@@ -21777,7 +22426,7 @@ label$6_end_1058:
     call push(($tmp2) + ($tmp1));
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(0.0);
@@ -21803,7 +22452,7 @@ label$6_end_1058:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$7_end_1060:
     call push(loc2);
     call push(40.0);
@@ -21812,7 +22461,7 @@ label$7_end_1060:
     call push(($tmp2) + ($tmp1));
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(72.0);
@@ -21983,6 +22632,9 @@ implementation func_66()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -22000,7 +22652,7 @@ implementation func_66()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -22038,7 +22690,7 @@ label$3_end_1067:
 label$2_end_1066:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1065:
     call push(loc2);
@@ -22086,7 +22738,7 @@ label$1_end_1065:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(152.0);
     call popToTmp1();
@@ -22111,7 +22763,7 @@ label$5_end_1072:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -22155,7 +22807,7 @@ label$5_end_1072:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(144.0);
     call popToTmp1();
@@ -22184,7 +22836,7 @@ label$6_end_1074:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -22221,7 +22873,7 @@ label$6_end_1074:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (148);
@@ -22236,7 +22888,7 @@ label$7_end_1076:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(120.0);
@@ -22599,6 +23251,9 @@ implementation func_67()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -22647,7 +23302,7 @@ label$1_start_1087:
     }
     call push(0.0);
     call push(9742.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -22810,7 +23465,7 @@ label$3_end_1091:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call push(4.0);
     call popToTmp1();
@@ -22825,7 +23480,7 @@ label$5_end_1098:
     call push(loc1);
     call push(loc7);
     call push(loc6);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(4.0);
@@ -22868,6 +23523,9 @@ implementation func_68()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -22885,7 +23543,7 @@ implementation func_68()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -22923,7 +23581,7 @@ label$3_end_1104:
 label$2_end_1103:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1102:
     call push(loc2);
@@ -22971,7 +23629,7 @@ label$1_end_1102:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(152.0);
     call popToTmp1();
@@ -22996,7 +23654,7 @@ label$5_end_1109:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -23033,7 +23691,7 @@ label$5_end_1109:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(144.0);
     call popToTmp1();
@@ -23062,7 +23720,7 @@ label$6_end_1111:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -23106,7 +23764,7 @@ label$6_end_1111:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(152.0);
     call popToTmp1();
@@ -23131,7 +23789,7 @@ label$7_end_1113:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -23168,7 +23826,7 @@ label$7_end_1113:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (148);
@@ -23183,7 +23841,7 @@ label$8_end_1115:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(112.0);
@@ -23543,6 +24201,9 @@ implementation func_69()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -23560,7 +24221,7 @@ implementation func_69()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -23598,7 +24259,7 @@ label$3_end_1129:
 label$2_end_1128:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1127:
     call push(loc2);
@@ -23653,7 +24314,7 @@ label$1_end_1127:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call push(136.0);
     call popToTmp1();
@@ -23678,7 +24339,7 @@ label$5_end_1134:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -23715,7 +24376,7 @@ label$5_end_1134:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (132);
@@ -23730,7 +24391,7 @@ label$6_end_1136:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(112.0);
@@ -24075,6 +24736,9 @@ implementation func_70()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -24091,7 +24755,7 @@ implementation func_70()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -24129,7 +24793,7 @@ label$3_end_1150:
 label$2_end_1149:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1148:
     call push(loc2);
@@ -24205,6 +24869,9 @@ implementation func_71()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -24221,7 +24888,7 @@ implementation func_71()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -24259,7 +24926,7 @@ label$3_end_1157:
 label$2_end_1156:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1155:
     call push(loc2);
@@ -24335,6 +25002,9 @@ implementation func_72()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -24351,7 +25021,7 @@ implementation func_72()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -24389,7 +25059,7 @@ label$3_end_1164:
 label$2_end_1163:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1162:
     call push(loc2);
@@ -24435,7 +25105,7 @@ label$1_end_1162:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (100);
@@ -24450,7 +25120,7 @@ label$5_end_1168:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -24721,6 +25391,9 @@ implementation func_73()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -24738,7 +25411,7 @@ implementation func_73()
     call loc2 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-    call fimport$34();
+    call fimport_34();
     call loc3 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -24776,7 +25449,7 @@ label$3_end_1181:
 label$2_end_1180:
     call push(loc1);
     call push(loc3);
-    call fimport$35();
+    call fimport_35();
     call pop();
 label$1_end_1179:
     call push(loc2);
@@ -24803,7 +25476,7 @@ label$1_end_1179:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
 label$5_end_1185:
     call push(loc2);
     call push(40.0);
@@ -24812,7 +25485,7 @@ label$5_end_1185:
     call push(($tmp2) + ($tmp1));
     call push(loc1);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(28.0);
@@ -24898,6 +25571,9 @@ implementation func_74()
     var loc4: real;
     var loc5: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -24951,7 +25627,7 @@ implementation func_74()
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -24966,7 +25642,7 @@ label$1_end_1187:
     call push(loc2);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25021,7 +25697,7 @@ label$1_end_1187:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -25036,7 +25712,7 @@ label$2_end_1192:
     call push(($tmp2) + ($tmp1));
     call push(loc5);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -25101,7 +25777,7 @@ label$2_end_1192:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -25116,7 +25792,7 @@ label$3_end_1193:
     call push(loc2);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25171,7 +25847,7 @@ label$3_end_1193:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -25186,7 +25862,7 @@ label$4_end_1198:
     call push(($tmp2) + ($tmp1));
     call push(loc5);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc2);
     call push(loc1);
@@ -25251,7 +25927,7 @@ label$4_end_1198:
     }
     call push(0.0);
     call push(9423.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -25266,7 +25942,7 @@ label$5_end_1199:
     call push(arg1);
     call push(loc4);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25315,6 +25991,9 @@ implementation func_75()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -25573,7 +26252,7 @@ label$8_start_1222:
     call push(loc1);
     call push(arg2);
     call push(loc2);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call popToTmp1();
@@ -25638,6 +26317,9 @@ implementation func_76()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -25690,7 +26372,7 @@ implementation func_76()
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -25705,7 +26387,7 @@ label$1_end_1231:
     call push(loc4);
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25771,7 +26453,7 @@ label$1_end_1231:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -25786,7 +26468,7 @@ label$2_end_1236:
     call push(arg1);
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25846,7 +26528,7 @@ label$2_end_1236:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc3);
     call push(4.0);
     call popToTmp1();
@@ -25861,7 +26543,7 @@ label$3_end_1240:
     call push(arg1);
     call push(loc2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc3);
     call push(4.0);
@@ -25924,7 +26606,7 @@ label$3_end_1240:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -25939,7 +26621,7 @@ label$4_end_1245:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(arg1);
@@ -25991,6 +26673,9 @@ implementation func_77()
     var loc2: real;
     var loc3: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -26022,7 +26707,7 @@ implementation func_77()
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call push(4.0);
     call popToTmp1();
@@ -26037,7 +26722,7 @@ label$1_end_1246:
     call push(loc1);
     call push(arg2);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(4.0);
@@ -26091,7 +26776,7 @@ label$1_end_1246:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -26102,7 +26787,7 @@ label$2_end_1250:
     call push(loc2);
     call push(loc3);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc1);
     call push(loc1);
@@ -26154,6 +26839,9 @@ implementation func_78()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -26222,7 +26910,7 @@ label$1_start_1252:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc5);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -26237,7 +26925,7 @@ label$2_end_1254:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc5);
     call push(loc5);
@@ -26333,7 +27021,7 @@ label$2_end_1254:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call push(4.0);
     call popToTmp1();
@@ -26348,7 +27036,7 @@ label$4_end_1259:
     call push(loc2);
     call push(loc6);
     call push(loc5);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(4.0);
@@ -26400,6 +27088,9 @@ implementation func_79()
     var loc5: real;
     var loc6: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -26461,7 +27152,7 @@ label$1_start_1262:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call push(4.0);
     call popToTmp1();
@@ -26480,7 +27171,7 @@ label$2_end_1264:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(4.0);
@@ -26567,7 +27258,7 @@ label$4_start_1270:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc5);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -26578,7 +27269,7 @@ label$5_end_1272:
     call push(loc3);
     call push(loc6);
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc5);
     call push(loc5);
@@ -26616,7 +27307,7 @@ label$5_end_1272:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc5);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -26631,7 +27322,7 @@ label$6_end_1274:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(8.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc5);
     call push(loc5);
@@ -26695,6 +27386,9 @@ implementation func_80()
     var loc6: real;
     var loc7: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
@@ -26763,7 +27457,7 @@ label$1_start_1278:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(loc5);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -26778,7 +27472,7 @@ label$2_end_1280:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call push(1.0);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(loc5);
     call push(loc5);
@@ -26845,7 +27539,7 @@ label$2_end_1280:
     }
     call push(0.0);
     call push(9031.0);
-    call fimport$1();
+    call fimport_1();
     call push(arg1);
     call push(4.0);
     call popToTmp1();
@@ -26860,7 +27554,7 @@ label$3_end_1282:
     call push(loc3);
     call push(loc6);
     call push(loc5);
-    call fimport$7();
+    call fimport_7();
     call pop();
     call push(arg1);
     call push(4.0);
