@@ -308,250 +308,60 @@ implementation initGlobals()
     global_0 := 66864.0;
 }
 
-procedure {:inline 1} popArgs2() returns (a1: real, a2: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (2));
-ensures(($sp) == ((old($sp)) - (2)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (2)]));
-ensures((a2) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs2() returns (a1: real, a2: real)
-{
-    $sp := ($sp) - (1);
-    a2 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
-}
-
 procedure {:inline 1} _g();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation _g()
 {
-    var arg1: real;
-    var arg2: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (2));
-    call arg1, arg2 := popArgs2();
-}
-
-procedure {:inline 1} popArgs3() returns (a1: real, a2: real, a3: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (3));
-ensures(($sp) == ((old($sp)) - (3)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (3)]));
-ensures((a2) == (old($stack)[(old($sp)) - (2)]));
-ensures((a3) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs3() returns (a1: real, a2: real, a3: real)
-{
-    $sp := ($sp) - (1);
-    a3 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a2 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
 }
 
 procedure {:inline 1} otxn_field();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation otxn_field()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (3));
-    call arg1, arg2, arg3 := popArgs3();
 }
 
 procedure {:inline 1} rollback();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation rollback()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (3));
-    call arg1, arg2, arg3 := popArgs3();
-}
-
-procedure {:inline 1} popArgs4() returns (a1: real, a2: real, a3: real, a4: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (4));
-ensures(($sp) == ((old($sp)) - (4)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (4)]));
-ensures((a2) == (old($stack)[(old($sp)) - (3)]));
-ensures((a3) == (old($stack)[(old($sp)) - (2)]));
-ensures((a4) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs4() returns (a1: real, a2: real, a3: real, a4: real)
-{
-    $sp := ($sp) - (1);
-    a4 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a3 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a2 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
 }
 
 procedure {:inline 1} util_accid();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation util_accid()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var arg4: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (4));
-    call arg1, arg2, arg3, arg4 := popArgs4();
-}
-
-procedure {:inline 1} popArgs6() returns (a1: real, a2: real, a3: real, a4: real, a5: real, a6: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (6));
-ensures(($sp) == ((old($sp)) - (6)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (6)]));
-ensures((a2) == (old($stack)[(old($sp)) - (5)]));
-ensures((a3) == (old($stack)[(old($sp)) - (4)]));
-ensures((a4) == (old($stack)[(old($sp)) - (3)]));
-ensures((a5) == (old($stack)[(old($sp)) - (2)]));
-ensures((a6) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs6() returns (a1: real, a2: real, a3: real, a4: real, a5: real, a6: real)
-{
-    $sp := ($sp) - (1);
-    a6 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a5 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a4 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a3 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a2 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
 }
 
 procedure {:inline 1} state_foreign();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation state_foreign()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var arg4: real;
-    var arg5: real;
-    var arg6: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (6));
-    call arg1, arg2, arg3, arg4, arg5, arg6 := popArgs6();
-}
-
-procedure {:inline 1} popArgs5() returns (a1: real, a2: real, a3: real, a4: real, a5: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (5));
-ensures(($sp) == ((old($sp)) - (5)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (5)]));
-ensures((a2) == (old($stack)[(old($sp)) - (4)]));
-ensures((a3) == (old($stack)[(old($sp)) - (3)]));
-ensures((a4) == (old($stack)[(old($sp)) - (2)]));
-ensures((a5) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs5() returns (a1: real, a2: real, a3: real, a4: real, a5: real)
-{
-    $sp := ($sp) - (1);
-    a5 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a4 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a3 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a2 := $stack[$sp];
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
 }
 
 procedure {:inline 1} trace();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation trace()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var arg4: real;
-    var arg5: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (5));
-    call arg1, arg2, arg3, arg4, arg5 := popArgs5();
 }
 
 procedure {:inline 1} accept();
 modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
 modifies $sp;
 modifies $stack;
-modifies $mem;
 implementation accept()
 {
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var entry_sp: int;
-    entry_sp := $sp;
-    assume (($sp) >= (3));
-    call arg1, arg2, arg3 := popArgs3();
 }
 
 procedure {:inline 1} __wasm_call_ctors();
@@ -564,6 +374,9 @@ modifies $mem;
 implementation __wasm_call_ctors()
 {
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
 }
 
@@ -596,6 +409,9 @@ implementation cbak()
     var loc3: real;
     var loc4: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -623,8 +439,8 @@ implementation cbak()
     store_i := real_to_int($tmp2);
     call mem_write_u64(idx, store_i);
     call push(loc4);
-    goto func_exit_2;
-func_exit_2:
+    goto func_exit_1;
+func_exit_1:
 }
 
 procedure {:inline 1} hook();
@@ -710,6 +526,9 @@ implementation hook()
     var loc70: real;
     var loc71: real;
     var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
@@ -851,7 +670,7 @@ implementation hook()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_3;
+        goto label$1_end_2;
     }
     call push(1024.0);
     call loc18 := popArgs1();
@@ -864,7 +683,7 @@ implementation hook()
     call push(loc20);
     call rollback();
     call pop();
-label$1_end_3:
+label$1_end_2:
     call push(20.0);
     call loc21 := popArgs1();
     call push(20.0);
@@ -908,7 +727,7 @@ label$1_end_3:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_4;
+        goto label$2_end_3;
     }
     call push(1127.0);
     call loc34 := popArgs1();
@@ -921,7 +740,7 @@ label$1_end_3:
     call push(loc36);
     call rollback();
     call pop();
-label$2_end_4:
+label$2_end_3:
     call push(-15.0);
     call loc37 := popArgs1();
     call push(1.0);
@@ -1007,7 +826,7 @@ label$2_end_4:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_5;
+        goto label$3_end_4;
     }
     call push(1176.0);
     call loc57 := popArgs1();
@@ -1022,7 +841,7 @@ label$2_end_4:
     call push(loc59);
     call trace();
     call pop();
-label$3_end_5:
+label$3_end_4:
     call push(loc3);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (15);
@@ -1036,7 +855,7 @@ label$3_end_5:
     call push(loc62);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_6;
+        goto label$4_end_5;
     }
     call push(1238.0);
     call loc63 := popArgs1();
@@ -1049,7 +868,7 @@ label$3_end_5:
     call push(loc65);
     call accept();
     call pop();
-label$4_end_6:
+label$4_end_5:
     call push(0.0);
     call loc66 := popArgs1();
     call push(1270.0);
@@ -1074,8 +893,8 @@ label$4_end_6:
     call push(loc71);
     call global_0 := popArgs1();
     call push(loc66);
-    goto func_exit_8;
-func_exit_8:
+    goto func_exit_6;
+func_exit_6:
 }
 
 procedure {:inline 1} popDiscard1();
@@ -1101,89 +920,16 @@ implementation CorralChoice_firewall()
     var c: int;
     var argTmp: real;
     havoc c;
-    assume (((0) <= (c)) && ((c) < (10)));
+    assume (((0) <= (c)) && ((c) < (3)));
     if ((c) == (0)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call _g();
-        call popDiscard1();
-    } else if ((c) == (1)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call otxn_field();
-        call popDiscard1();
-    } else if ((c) == (2)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call rollback();
-        call popDiscard1();
-    } else if ((c) == (3)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call util_accid();
-        call popDiscard1();
-    } else if ((c) == (4)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call state_foreign();
-        call popDiscard1();
-    } else if ((c) == (5)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call trace();
-        call popDiscard1();
-    } else if ((c) == (6)) {
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        havoc argTmp;
-        call push(argTmp);
-        call accept();
-        call popDiscard1();
-    } else if ((c) == (7)) {
         call __wasm_call_ctors();
-    } else if ((c) == (8)) {
+    } else if ((c) == (1)) {
         havoc argTmp;
         assume ((argTmp) == (real(int(argTmp))));
         call push(argTmp);
         call cbak();
         call popDiscard1();
-    } else if ((c) == (9)) {
+    } else if ((c) == (2)) {
         havoc argTmp;
         assume ((argTmp) == (real(int(argTmp))));
         call push(argTmp);
@@ -1210,89 +956,16 @@ implementation BoogieEntry_firewall()
     invariant (0) <= ($sp);
     {
         havoc c;
-        assume (((0) <= (c)) && ((c) < (10)));
+        assume (((0) <= (c)) && ((c) < (3)));
         if ((c) == (0)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call _g();
-            call popDiscard1();
-        } else if ((c) == (1)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call otxn_field();
-            call popDiscard1();
-        } else if ((c) == (2)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call rollback();
-            call popDiscard1();
-        } else if ((c) == (3)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call util_accid();
-            call popDiscard1();
-        } else if ((c) == (4)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call state_foreign();
-            call popDiscard1();
-        } else if ((c) == (5)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call trace();
-            call popDiscard1();
-        } else if ((c) == (6)) {
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            havoc argTmp;
-            call push(argTmp);
-            call accept();
-            call popDiscard1();
-        } else if ((c) == (7)) {
             call __wasm_call_ctors();
-        } else if ((c) == (8)) {
+        } else if ((c) == (1)) {
             havoc argTmp;
             assume ((argTmp) == (real(int(argTmp))));
             call push(argTmp);
             call cbak();
             call popDiscard1();
-        } else if ((c) == (9)) {
+        } else if ((c) == (2)) {
             havoc argTmp;
             assume ((argTmp) == (real(int(argTmp))));
             call push(argTmp);
