@@ -24,6 +24,9 @@ record ContractResult(
 
 class Program
 {
+    const long MaxWatSizeBytes = 5L * 1024 * 1024; // 5 MB
+    const int MaxInstructions = 200_000;
+
     static readonly HashSet<string> Supported = new()
     {
         "i32.const",
@@ -169,7 +172,6 @@ class Program
         Directory.CreateDirectory(Path.Combine(outDir, "smt"));
 
         var allResults = new List<ContractResult>();
-
         var globalWatch = Stopwatch.StartNew();
 
         foreach (var dataset in datasets)
@@ -196,175 +198,289 @@ class Program
             foreach (var watFile in files)
             {
                 string name = Path.GetFileNameWithoutExtension(watFile);
-                Console.WriteLine();
-                Console.WriteLine($"===== Benchmarking {datasetName}/{name} =====");
-
-                var stat = CountInstructions(watFile);
-
-                string unsupportedOpsText = string.Join(
-                    "; ",
-                    stat.UnsupportedOps.OrderByDescending(x => x.Value)
-                        .ThenBy(x => x.Key)
-                        .Select(x => $"{x.Key}:{x.Value}")
-                );
-
-                bool fullySupportedWat = stat.Unsupported == 0;
-
-                var sw = Stopwatch.StartNew();
-
-                var translation = await RunProcess(
-                    fileName: "dotnet",
-                    arguments: $"{Quote(toolDll)} --wasm {Quote(watFile)} --no-boogie",
-                    timeoutMs: 10000
-                );
-
-                sw.Stop();
-
-                double translationTimeMs = Math.Round(sw.Elapsed.TotalMilliseconds, 2);
-
-                string boogieFile = Path.Combine(boogieOutDir, $"{name}.bpl");
-
-                if (!File.Exists(boogieFile))
-                {
-                    var candidates = Directory.Exists(boogieOutDir)
-                        ? Directory
-                            .GetFiles(boogieOutDir, "*.bpl", SearchOption.TopDirectoryOnly)
-                            .Where(f => Path.GetFileNameWithoutExtension(f).Contains(name))
-                            .OrderByDescending(File.GetLastWriteTimeUtc)
-                            .ToList()
-                        : new List<string>();
-
-                    if (candidates.Count > 0)
-                        boogieFile = candidates[0];
-                }
-
                 string logBase = SafeFileName($"{datasetName}_{name}");
-                await File.WriteAllTextAsync(
-                    Path.Combine(outDir, "logs", $"{logBase}_translation.log"),
-                    translation.Output
-                );
 
-                string translationStatus;
-                string reason = "";
+                try
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"===== Benchmarking {datasetName}/{name} =====");
 
-                if (translation.TimedOut)
-                {
-                    translationStatus = "TIMEOUT";
-                    reason = "Translation timeout.";
-                }
-                else if (translation.ExitCode != 0)
-                {
-                    translationStatus = "FAIL";
-                    reason = ExtractReason(translation.Output);
-                }
-                else if (!File.Exists(boogieFile))
-                {
-                    translationStatus = "FAIL";
-                    reason = "Boogie file was not generated.";
-                }
-                else
-                {
-                    translationStatus = fullySupportedWat ? "PASS" : "PARTIAL";
-                    reason = fullySupportedWat
-                        ? "Translation successful and all WAT instructions are supported."
-                        : "Translation completed but unsupported WAT instructions were detected.";
-                }
+                    var info = new FileInfo(watFile);
 
-                string noVerifyStatus = "NOT_RUN";
-                string smtStatus = "NOT_RUN";
-                string verify5Status = "NOT_RUN";
-                string verify20Status = "NOT_RUN";
-                string verify60Status = "NOT_RUN";
+                    if (info.Length == 0)
+                    {
+                        var skipped = MakeSkippedResult(
+                            datasetName,
+                            watFile,
+                            "SKIP_EMPTY",
+                            "Empty WAT file."
+                        );
 
-                if (translationStatus is "PASS" or "PARTIAL")
-                {
-                    var noVerify = await RunBoogie(
-                        boogieExe,
-                        $"/noVerify /inline:none {Quote(boogieFile)}",
+                        datasetResults.Add(skipped);
+                        allResults.Add(skipped);
+                        PrintResultRow(skipped);
+                        SaveProgress(outDir, datasetName, datasetResults, allResults);
+                        continue;
+                    }
+
+                    if (info.Length > MaxWatSizeBytes)
+                    {
+                        var skipped = MakeSkippedResult(
+                            datasetName,
+                            watFile,
+                            "SKIP_TOO_LARGE",
+                            $"WAT file too large: {info.Length / 1024 / 1024} MB."
+                        );
+
+                        datasetResults.Add(skipped);
+                        allResults.Add(skipped);
+                        PrintResultRow(skipped);
+                        SaveProgress(outDir, datasetName, datasetResults, allResults);
+                        continue;
+                    }
+
+                    var stat = CountInstructions(watFile);
+
+                    if (stat.Total > MaxInstructions)
+                    {
+                        var skipped = new ContractResult(
+                            Dataset: datasetName,
+                            WatFile: watFile,
+                            BoogieFile: "",
+                            TotalInstructions: stat.Total,
+                            SupportedInstructions: stat.Supported,
+                            UnsupportedInstructions: stat.Unsupported,
+                            SupportedPercent: Percent(stat.Supported, stat.Total),
+                            FullySupportedWat: false,
+                            TranslationStatus: "SKIP_TOO_COMPLEX",
+                            BoogieNoVerifyStatus: "NOT_RUN",
+                            SmtGenerationStatus: "NOT_RUN",
+                            Verify5Status: "NOT_RUN",
+                            Verify20Status: "NOT_RUN",
+                            Verify60Status: "NOT_RUN",
+                            TranslationTimeMs: 0,
+                            UnsupportedOps: string.Join(
+                                "; ",
+                                stat.UnsupportedOps.Select(x => $"{x.Key}:{x.Value}")
+                            ),
+                            Reason: $"Too many instructions: {stat.Total}."
+                        );
+
+                        datasetResults.Add(skipped);
+                        allResults.Add(skipped);
+                        PrintResultRow(skipped);
+                        SaveProgress(outDir, datasetName, datasetResults, allResults);
+                        continue;
+                    }
+
+                    string unsupportedOpsText = string.Join(
+                        "; ",
+                        stat.UnsupportedOps.OrderByDescending(x => x.Value)
+                            .ThenBy(x => x.Key)
+                            .Select(x => $"{x.Key}:{x.Value}")
+                    );
+
+                    bool fullySupportedWat = stat.Unsupported == 0;
+
+                    var sw = Stopwatch.StartNew();
+
+                    var translation = await RunProcess(
+                        fileName: "dotnet",
+                        arguments: $"{Quote(toolDll)} --wasm {Quote(watFile)} --no-boogie",
                         timeoutMs: 10000
                     );
 
-                    noVerifyStatus = ClassifyBoogie(noVerify, expectVerification: false);
+                    sw.Stop();
+
+                    double translationTimeMs = Math.Round(sw.Elapsed.TotalMilliseconds, 2);
+
+                    string boogieFile = Path.Combine(boogieOutDir, $"{name}.bpl");
+
+                    if (!File.Exists(boogieFile))
+                    {
+                        var candidates = Directory.Exists(boogieOutDir)
+                            ? Directory
+                                .GetFiles(boogieOutDir, "*.bpl", SearchOption.TopDirectoryOnly)
+                                .Where(f => Path.GetFileNameWithoutExtension(f).Contains(name))
+                                .OrderByDescending(File.GetLastWriteTimeUtc)
+                                .ToList()
+                            : new List<string>();
+
+                        if (candidates.Count > 0)
+                            boogieFile = candidates[0];
+                    }
 
                     await File.WriteAllTextAsync(
-                        Path.Combine(outDir, "logs", $"{logBase}_boogie_noverify.log"),
-                        noVerify.Output
+                        Path.Combine(outDir, "logs", $"{logBase}_translation.log"),
+                        LimitText(translation.Output)
                     );
 
-                    string smtFile = Path.Combine(outDir, "smt", $"{logBase}.smt2");
+                    string translationStatus;
+                    string reason = "";
 
-                    var smt = await RunBoogie(
-                        boogieExe,
-                        $"/proc:BoogieEntry_* /proverLog:{Quote(smtFile)} {Quote(boogieFile)}",
-                        timeoutMs: 70000
+                    if (translation.TimedOut)
+                    {
+                        translationStatus = "TIMEOUT";
+                        reason = "Translation timeout.";
+                    }
+                    else if (translation.ExitCode != 0)
+                    {
+                        translationStatus = "FAIL";
+                        reason = ExtractReason(translation.Output);
+                    }
+                    else if (!File.Exists(boogieFile))
+                    {
+                        translationStatus = "FAIL";
+                        reason = "Boogie file was not generated.";
+                    }
+                    else
+                    {
+                        translationStatus = fullySupportedWat ? "PASS" : "PARTIAL";
+                        reason = fullySupportedWat
+                            ? "Translation successful and all WAT instructions are supported."
+                            : "Translation completed but unsupported WAT instructions were detected.";
+                    }
+
+                    string noVerifyStatus = "NOT_RUN";
+                    string smtStatus = "NOT_RUN";
+                    string verify5Status = "NOT_RUN";
+                    string verify20Status = "NOT_RUN";
+                    string verify60Status = "NOT_RUN";
+
+                    if (translationStatus is "PASS" or "PARTIAL")
+                    {
+                        var noVerify = await RunBoogie(
+                            boogieExe,
+                            $"/noVerify /inline:none {Quote(boogieFile)}",
+                            timeoutMs: 10000
+                        );
+
+                        noVerifyStatus = ClassifyBoogie(noVerify, expectVerification: false);
+
+                        await File.WriteAllTextAsync(
+                            Path.Combine(outDir, "logs", $"{logBase}_boogie_noverify.log"),
+                            LimitText(noVerify.Output)
+                        );
+
+                        string smtFile = Path.Combine(outDir, "smt", $"{logBase}.smt2");
+
+                        var smt = await RunBoogie(
+                            boogieExe,
+                            $"/proc:BoogieEntry_* /proverLog:{Quote(smtFile)} {Quote(boogieFile)}",
+                            timeoutMs: 70000
+                        );
+
+                        smtStatus = File.Exists(smtFile)
+                            ? "PASS"
+                            : ClassifyBoogie(smt, expectVerification: true);
+
+                        await File.WriteAllTextAsync(
+                            Path.Combine(outDir, "logs", $"{logBase}_smt.log"),
+                            LimitText(smt.Output)
+                        );
+
+                        verify5Status = await RunVerification(
+                            boogieExe,
+                            boogieFile,
+                            datasetName,
+                            name,
+                            outDir,
+                            5
+                        );
+
+                        verify20Status = await RunVerification(
+                            boogieExe,
+                            boogieFile,
+                            datasetName,
+                            name,
+                            outDir,
+                            20
+                        );
+
+                        verify60Status = await RunVerification(
+                            boogieExe,
+                            boogieFile,
+                            datasetName,
+                            name,
+                            outDir,
+                            60
+                        );
+                    }
+
+                    var result = new ContractResult(
+                        Dataset: datasetName,
+                        WatFile: watFile,
+                        BoogieFile: File.Exists(boogieFile) ? boogieFile : "",
+                        TotalInstructions: stat.Total,
+                        SupportedInstructions: stat.Supported,
+                        UnsupportedInstructions: stat.Unsupported,
+                        SupportedPercent: Percent(stat.Supported, stat.Total),
+                        FullySupportedWat: fullySupportedWat,
+                        TranslationStatus: translationStatus,
+                        BoogieNoVerifyStatus: noVerifyStatus,
+                        SmtGenerationStatus: smtStatus,
+                        Verify5Status: verify5Status,
+                        Verify20Status: verify20Status,
+                        Verify60Status: verify60Status,
+                        TranslationTimeMs: translationTimeMs,
+                        UnsupportedOps: unsupportedOpsText,
+                        Reason: reason
                     );
 
-                    smtStatus = File.Exists(smtFile)
-                        ? "PASS"
-                        : ClassifyBoogie(smt, expectVerification: true);
+                    datasetResults.Add(result);
+                    allResults.Add(result);
 
-                    await File.WriteAllTextAsync(
-                        Path.Combine(outDir, "logs", $"{logBase}_smt.log"),
-                        smt.Output
-                    );
+                    PrintResultRow(result);
+                    SaveProgress(outDir, datasetName, datasetResults, allResults);
 
-                    verify5Status = await RunVerification(
-                        boogieExe,
-                        boogieFile,
-                        datasetName,
-                        name,
-                        outDir,
-                        5
-                    );
-
-                    verify20Status = await RunVerification(
-                        boogieExe,
-                        boogieFile,
-                        datasetName,
-                        name,
-                        outDir,
-                        20
-                    );
-
-                    verify60Status = await RunVerification(
-                        boogieExe,
-                        boogieFile,
-                        datasetName,
-                        name,
-                        outDir,
-                        60
-                    );
+                    GC.Collect();
                 }
+                catch (OutOfMemoryException ex)
+                {
+                    Console.WriteLine($"OOM_SKIP: {datasetName}/{name}");
 
-                var result = new ContractResult(
-                    Dataset: datasetName,
-                    WatFile: watFile,
-                    BoogieFile: File.Exists(boogieFile) ? boogieFile : "",
-                    TotalInstructions: stat.Total,
-                    SupportedInstructions: stat.Supported,
-                    UnsupportedInstructions: stat.Unsupported,
-                    SupportedPercent: Percent(stat.Supported, stat.Total),
-                    FullySupportedWat: fullySupportedWat,
-                    TranslationStatus: translationStatus,
-                    BoogieNoVerifyStatus: noVerifyStatus,
-                    SmtGenerationStatus: smtStatus,
-                    Verify5Status: verify5Status,
-                    Verify20Status: verify20Status,
-                    Verify60Status: verify60Status,
-                    TranslationTimeMs: translationTimeMs,
-                    UnsupportedOps: unsupportedOpsText,
-                    Reason: reason
-                );
+                    var result = MakeSkippedResult(
+                        datasetName,
+                        watFile,
+                        "OUT_OF_MEMORY",
+                        ex.Message
+                    );
 
-                datasetResults.Add(result);
-                allResults.Add(result);
+                    datasetResults.Add(result);
+                    allResults.Add(result);
 
-                PrintResultRow(result);
-                SaveProgress(outDir, datasetName, datasetResults, allResults);
+                    await File.WriteAllTextAsync(
+                        Path.Combine(outDir, "logs", $"{logBase}_oom.log"),
+                        ex.ToString()
+                    );
+
+                    PrintResultRow(result);
+                    SaveProgress(outDir, datasetName, datasetResults, allResults);
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR_SKIP: {datasetName}/{name}");
+                    Console.WriteLine(ex.Message);
+
+                    var result = MakeSkippedResult(datasetName, watFile, "ERROR", ex.Message);
+
+                    datasetResults.Add(result);
+                    allResults.Add(result);
+
+                    await File.WriteAllTextAsync(
+                        Path.Combine(outDir, "logs", $"{logBase}_error.log"),
+                        ex.ToString()
+                    );
+
+                    PrintResultRow(result);
+                    SaveProgress(outDir, datasetName, datasetResults, allResults);
+                }
             }
 
             WriteCsv(Path.Combine(outDir, $"{datasetName}_benchmark_results.csv"), datasetResults);
-
             WriteSummary(Path.Combine(outDir, $"{datasetName}_summary.txt"), datasetResults);
 
             Console.WriteLine();
@@ -372,7 +488,6 @@ class Program
         }
 
         WriteCsv(Path.Combine(outDir, "all_benchmark_results.csv"), allResults);
-
         WriteSummary(Path.Combine(outDir, "all_summary.txt"), allResults);
 
         globalWatch.Stop();
@@ -385,6 +500,34 @@ class Program
         return 0;
     }
 
+    static ContractResult MakeSkippedResult(
+        string datasetName,
+        string watFile,
+        string status,
+        string reason
+    )
+    {
+        return new ContractResult(
+            Dataset: datasetName,
+            WatFile: watFile,
+            BoogieFile: "",
+            TotalInstructions: 0,
+            SupportedInstructions: 0,
+            UnsupportedInstructions: 0,
+            SupportedPercent: 0,
+            FullySupportedWat: false,
+            TranslationStatus: status,
+            BoogieNoVerifyStatus: "NOT_RUN",
+            SmtGenerationStatus: "NOT_RUN",
+            Verify5Status: "NOT_RUN",
+            Verify20Status: "NOT_RUN",
+            Verify60Status: "NOT_RUN",
+            TranslationTimeMs: 0,
+            UnsupportedOps: "",
+            Reason: reason
+        );
+    }
+
     static void SaveProgress(
         string outDir,
         string datasetName,
@@ -393,11 +536,8 @@ class Program
     )
     {
         WriteCsv(Path.Combine(outDir, $"{datasetName}_benchmark_results.csv"), datasetResults);
-
         WriteSummary(Path.Combine(outDir, $"{datasetName}_summary.txt"), datasetResults);
-
         WriteCsv(Path.Combine(outDir, "all_benchmark_results.csv"), allResults);
-
         WriteSummary(Path.Combine(outDir, "all_summary.txt"), allResults);
     }
 
@@ -419,9 +559,10 @@ class Program
         );
 
         string logBase = SafeFileName($"{dataset}_{name}");
+
         await File.WriteAllTextAsync(
             Path.Combine(outDir, "logs", $"{logBase}_verify_{timeLimitSec}s.log"),
-            run.Output
+            LimitText(run.Output)
         );
 
         return ClassifyBoogie(run, expectVerification: true);
@@ -451,11 +592,10 @@ class Program
             UseShellExecute = false,
         };
 
-        var p = Process.Start(psi)!;
+        using var p = Process.Start(psi)!;
 
         var stdoutTask = p.StandardOutput.ReadToEndAsync();
         var stderrTask = p.StandardError.ReadToEndAsync();
-
         var waitTask = p.WaitForExitAsync();
 
         var completed = await Task.WhenAny(waitTask, Task.Delay(timeoutMs));
@@ -471,13 +611,13 @@ class Program
             string stdout = await SafeRead(stdoutTask);
             string stderr = await SafeRead(stderrTask);
 
-            return (-1, stdout + "\n" + stderr + "\nTIMEOUT", true);
+            return (-1, LimitText(stdout + "\n" + stderr + "\nTIMEOUT"), true);
         }
 
         string outText = await stdoutTask;
         string errText = await stderrTask;
 
-        return (p.ExitCode, outText + "\n" + errText, false);
+        return (p.ExitCode, LimitText(outText + "\n" + errText), false);
     }
 
     static async Task<string> SafeRead(Task<string> task)
@@ -521,6 +661,9 @@ class Program
         if (!expectVerification && run.ExitCode == 0)
             return "PASS";
 
+        if (output.Contains("out of memory", StringComparison.OrdinalIgnoreCase))
+            return "OUT_OF_MEMORY";
+
         if (output.Contains("error", StringComparison.OrdinalIgnoreCase))
             return "FAIL";
 
@@ -539,7 +682,6 @@ class Program
             if (args[i] == "--dataset" && i + 1 < args.Length)
             {
                 var value = args[i + 1];
-
                 var parts = value.Split('=', 2);
 
                 if (parts.Length == 2)
@@ -555,7 +697,6 @@ class Program
     static string? GetArg(string[] args, string key)
     {
         int i = Array.IndexOf(args, key);
-
         return i >= 0 && i + 1 < args.Length ? args[i + 1] : null;
     }
 
@@ -579,38 +720,43 @@ class Program
         Dictionary<string, int> UnsupportedOps
     ) CountInstructions(string watFile)
     {
-        string text = File.ReadAllText(watFile);
-
-        var matches = Regex
-            .Matches(text, @"\(([a-zA-Z0-9_\.$]+)")
-            .Select(m => m.Groups[1].Value)
-            .ToList();
-
         int total = 0;
         int supported = 0;
         int unsupported = 0;
 
         var unsupportedOps = new Dictionary<string, int>();
+        var regex = new Regex(@"\(([a-zA-Z0-9_\.$]+)", RegexOptions.Compiled);
 
-        foreach (var op in matches)
+        foreach (var line in File.ReadLines(watFile))
         {
-            if (Ignored.Contains(op))
-                continue;
-
-            total++;
-
-            if (Supported.Contains(op))
+            foreach (Match match in regex.Matches(line))
             {
-                supported++;
-            }
-            else
-            {
-                unsupported++;
+                string op = match.Groups[1].Value;
 
-                if (!unsupportedOps.ContainsKey(op))
-                    unsupportedOps[op] = 0;
+                if (Ignored.Contains(op))
+                    continue;
 
-                unsupportedOps[op]++;
+                total++;
+
+                if (total > MaxInstructions)
+                {
+                    unsupportedOps["__TOO_MANY_INSTRUCTIONS__"] = total;
+                    return (total, supported, unsupported, unsupportedOps);
+                }
+
+                if (Supported.Contains(op))
+                {
+                    supported++;
+                }
+                else
+                {
+                    unsupported++;
+
+                    if (!unsupportedOps.ContainsKey(op))
+                        unsupportedOps[op] = 0;
+
+                    unsupportedOps[op]++;
+                }
             }
         }
 
@@ -627,7 +773,8 @@ class Program
         var lines = output.Split('\n');
 
         var important = lines.FirstOrDefault(l =>
-            l.Contains("exception", StringComparison.OrdinalIgnoreCase)
+            l.Contains("out of memory", StringComparison.OrdinalIgnoreCase)
+            || l.Contains("exception", StringComparison.OrdinalIgnoreCase)
             || l.Contains("error", StringComparison.OrdinalIgnoreCase)
             || l.Contains("failed", StringComparison.OrdinalIgnoreCase)
             || l.Contains("unsupported", StringComparison.OrdinalIgnoreCase)
@@ -642,7 +789,8 @@ class Program
             $"Dataset={r.Dataset} | File={Path.GetFileName(r.WatFile)} | "
                 + $"Supported={r.SupportedPercent}% | Translate={r.TranslationStatus} | "
                 + $"NoVerify={r.BoogieNoVerifyStatus} | SMT={r.SmtGenerationStatus} | "
-                + $"T5={r.Verify5Status} | T20={r.Verify20Status} | T60={r.Verify60Status}"
+                + $"T5={r.Verify5Status} | T20={r.Verify20Status} | T60={r.Verify60Status} | "
+                + $"Reason={r.Reason}"
         );
     }
 
@@ -688,6 +836,12 @@ class Program
         int translated = results.Count(r => r.TranslationStatus == "PASS");
         int partial = results.Count(r => r.TranslationStatus == "PARTIAL");
 
+        int skippedLarge = results.Count(r => r.TranslationStatus == "SKIP_TOO_LARGE");
+        int skippedComplex = results.Count(r => r.TranslationStatus == "SKIP_TOO_COMPLEX");
+        int empty = results.Count(r => r.TranslationStatus == "SKIP_EMPTY");
+        int oom = results.Count(r => r.TranslationStatus == "OUT_OF_MEMORY");
+        int errors = results.Count(r => r.TranslationStatus == "ERROR");
+
         int noVerifyPass = results.Count(r => r.BoogieNoVerifyStatus == "PASS");
         int smtPass = results.Count(r => r.SmtGenerationStatus == "PASS");
 
@@ -716,6 +870,13 @@ class Program
         sb.AppendLine($"Partially translated: {partial} ({Percent(partial, total)}%)");
         sb.AppendLine();
 
+        sb.AppendLine($"Skipped empty: {empty} ({Percent(empty, total)}%)");
+        sb.AppendLine($"Skipped too large: {skippedLarge} ({Percent(skippedLarge, total)}%)");
+        sb.AppendLine($"Skipped too complex: {skippedComplex} ({Percent(skippedComplex, total)}%)");
+        sb.AppendLine($"Out of memory skipped: {oom} ({Percent(oom, total)}%)");
+        sb.AppendLine($"Unexpected errors skipped: {errors} ({Percent(errors, total)}%)");
+        sb.AppendLine();
+
         sb.AppendLine($"Boogie /noVerify PASS: {noVerifyPass} ({Percent(noVerifyPass, total)}%)");
         sb.AppendLine($"SMT generated with inlining: {smtPass} ({Percent(smtPass, total)}%)");
         sb.AppendLine();
@@ -736,5 +897,13 @@ class Program
     static string Csv(string s)
     {
         return "\"" + s.Replace("\"", "\"\"") + "\"";
+    }
+
+    static string LimitText(string text, int maxChars = 2_000_000)
+    {
+        if (text.Length <= maxChars)
+            return text;
+
+        return text[..maxChars] + "\n\n--- LOG TRUNCATED ---\n";
     }
 }
