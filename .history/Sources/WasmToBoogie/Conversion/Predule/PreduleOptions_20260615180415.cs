@@ -18,18 +18,7 @@ namespace WasmToBoogie.Conversion
         IntUnaryOps = 1 << 9,
         Table = 1 << 10,
 
-        All =
-            CoreGlobals
-            | Memory
-            | Nondet
-            | BoolCasts
-            | NumericCasts
-            | Math
-            | StackOps
-            | Bitwise
-            | IntOps
-            | IntUnaryOps
-            | Table,
+        All = CoreGlobals | Memory | Nondet | BoolCasts | NumericCasts | Math | StackOps | Bitwise |IntOps |IntUnaryOps |Table
     }
 
     public sealed class PreludeOptions

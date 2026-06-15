@@ -209,14 +209,13 @@ namespace WasmToBoogie.Parser.Ast
         public WasmNode? Length { get; set; } // folded store form: (i32.store (addr) (val))
         public int MemoryIndex { get; set; } = 0;
     }
-
     public class TableOpNode : WasmNode
-    {
-        public string Op { get; set; } = "";
-        public WasmNode? Index { get; set; }
-        public WasmNode? Value { get; set; }
-        public WasmNode? Delta { get; set; }
-    }
+{
+    public string Op { get; set; } = "";
+    public WasmNode? Index { get; set; }
+    public WasmNode? Value { get; set; }
+    public WasmNode? Delta { get; set; }
+}
 
     public enum LinkingMode
     {

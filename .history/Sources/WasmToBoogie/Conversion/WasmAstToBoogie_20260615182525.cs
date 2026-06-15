@@ -56,23 +56,26 @@ namespace WasmToBoogie.Conversion
                     )
                 ),
             };
-            bool tableEnabled = PreludeOptions.Sections.HasFlag(PreludeSection.Table);
+bool tableEnabled =
+    PreludeOptions.Sections.HasFlag(PreludeSection.Table);
 
-            if (tableEnabled)
-            {
-                mods.Add(
-                    new BoogieGlobalVariable(
-                        new BoogieTypedIdent(
-                            "$table",
-                            new BoogieMapType(BoogieType.Int, BoogieType.Real)
-                        )
-                    )
-                );
+if (tableEnabled)
+{
+    mods.Add(
+        new BoogieGlobalVariable(
+            new BoogieTypedIdent(
+                "$table",
+                new BoogieMapType(BoogieType.Int, BoogieType.Real)
+            )
+        )
+    );
 
-                mods.Add(
-                    new BoogieGlobalVariable(new BoogieTypedIdent("$table_size", BoogieType.Int))
-                );
-            }
+    mods.Add(
+        new BoogieGlobalVariable(
+            new BoogieTypedIdent("$table_size", BoogieType.Int)
+        )
+    );
+}
             bool memEnabled =
                 PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
                 && PreludeOptions.EnableMemory;

@@ -1,0 +1,14 @@
+=== Counterexample Summary ===
+File: BoogieOutputs/table.bpl
+Line: 423
+Failing procedure: table_size
+Failing call: popToTmp1();
+Reason: assertion failure
+Failure kind: assertion failure
+Violated property: unknown
+Transaction sequence: func_0 -> table_size
+
+Explanation:
+The execution reaches table_size after the transaction sequence func_0 -> table_size. The failing call is `popToTmp1();`. The violated property appears to be `unknown`. This indicates that the generated Boogie execution reaches a state that does not satisfy the expected safety condition.
+
+        See raw Corral output inside corral.txt
