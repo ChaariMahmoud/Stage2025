@@ -188,6 +188,34 @@ implementation mem_write_u64(a: int, v: int)
     call mem_write_u8((a) + (7), byte7_64(v));
 }
 
+procedure {:inline 1} memory_size() returns (result: int);
+implementation memory_size() returns (result: int)
+{
+    result := $mem_pages;
+}
+
+procedure {:inline 1} memory_grow(delta: int) returns (oldSize: int);
+modifies $mem_pages;
+implementation memory_grow(delta: int) returns (oldSize: int)
+{
+    oldSize := $mem_pages;
+    $mem_pages := ($mem_pages) + (delta);
+}
+
+procedure {:inline 1} memory_fill(dst: int, value: int, len: int);
+modifies $mem;
+implementation memory_fill(dst: int, value: int, len: int)
+{
+    havoc $mem;
+}
+
+procedure {:inline 1} memory_copy(dst: int, src: int, len: int);
+modifies $mem;
+implementation memory_copy(dst: int, src: int, len: int)
+{
+    havoc $mem;
+}
+
 function bool_to_real(b: bool) : real
 {
     if b then (1.0) else (0.0)
@@ -435,6 +463,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 implementation __wasm_call_ctors()
 {
     var entry_sp: int;
@@ -465,6 +494,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 implementation cbak()
 {
     var arg1: real;
@@ -514,6 +544,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation hook()
 {
@@ -1900,7 +1931,11 @@ implementation hook()
     call loc12 := popArgs1();
     call push(1.0);
     call loc13 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc12);
+    call push(loc13);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc14 := popArgs1();
     call push(loc14);
     call popToTmp1();
@@ -2004,7 +2039,11 @@ label$3_start_4:
     call loc33 := popArgs1();
     call push(1.0);
     call loc34 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc33);
+    call push(loc34);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc35 := popArgs1();
     call push(loc35);
     call popToTmp1();
@@ -2053,7 +2092,11 @@ label$3_start_4:
     call loc44 := popArgs1();
     call push(255.0);
     call loc45 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc44);
+    call push(loc45);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc46 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -2075,7 +2118,11 @@ label$3_start_4:
     call loc49 := popArgs1();
     call push(255.0);
     call loc50 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc49);
+    call push(loc50);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc51 := popArgs1();
     call push(loc46);
     call loc52 := popArgs1();
@@ -2089,7 +2136,11 @@ label$3_start_4:
     call loc54 := popArgs1();
     call push(1.0);
     call loc55 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc54);
+    call push(loc55);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc56 := popArgs1();
     call push(loc56);
     call popToTmp1();
@@ -2197,7 +2248,11 @@ label$6_end_8:
     call loc74 := popArgs1();
     call push(1.0);
     call loc75 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc74);
+    call push(loc75);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc76 := popArgs1();
     call push(loc76);
     call popToTmp1();
@@ -2298,7 +2353,11 @@ label$7_end_9:
     call loc99 := popArgs1();
     call push(1.0);
     call loc100 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc99);
+    call push(loc100);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc101 := popArgs1();
     call push(loc101);
     call popToTmp1();
@@ -2361,7 +2420,11 @@ label$8_end_10:
     call loc116 := popArgs1();
     call push(1.0);
     call loc117 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc116);
+    call push(loc117);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc118 := popArgs1();
     call push(loc118);
     call popToTmp1();
@@ -2392,11 +2455,19 @@ label$9_end_11:
     call loc123 := popArgs1();
     call push(255.0);
     call loc124 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc123);
+    call push(loc124);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc125 := popArgs1();
     call push(10.0);
     call loc126 := popArgs1();
-    // // unhandled raw instruction: i32.rem_s
+    call push(loc125);
+    call push(loc126);
+    call popToTmp1();
+    call popToTmp2();
+    call push(int_rem_s($tmp2, $tmp1));
     call loc127 := popArgs1();
     call push(loc127);
     call loc128 := popArgs1();
@@ -2410,7 +2481,11 @@ label$9_end_11:
     call loc130 := popArgs1();
     call push(1.0);
     call loc131 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc130);
+    call push(loc131);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc132 := popArgs1();
     call push(loc132);
     call popToTmp1();
@@ -2470,11 +2545,19 @@ label$10_end_12:
     call loc143 := popArgs1();
     call push(255.0);
     call loc144 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc143);
+    call push(loc144);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc145 := popArgs1();
     call push(7.0);
     call loc146 := popArgs1();
-    // // unhandled raw instruction: i32.shr_s
+    call push(loc145);
+    call push(loc146);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_s($tmp2, $tmp1));
     call loc147 := popArgs1();
     call push(loc147);
     call popToTmp1();
@@ -2497,17 +2580,30 @@ label$12_end_14:
     call loc150 := popArgs1();
     call push(255.0);
     call loc151 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc150);
+    call push(loc151);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc152 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc152);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc153 := popArgs1();
     call push(2147483647.0);
     call loc154 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc153);
+    call push(loc154);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc155 := popArgs1();
     call push(56.0);
     call loc156 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc155);
+    call push(loc156);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc157 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -2517,13 +2613,22 @@ label$12_end_14:
     call loc158 := popArgs1();
     call push(255.0);
     call loc159 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc158);
+    call push(loc159);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc160 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc160);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc161 := popArgs1();
     call push(48.0);
     call loc162 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc161);
+    call push(loc162);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc163 := popArgs1();
     call push(loc157);
     call push(loc163);
@@ -2539,13 +2644,22 @@ label$12_end_14:
     call loc165 := popArgs1();
     call push(255.0);
     call loc166 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc165);
+    call push(loc166);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc167 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc167);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc168 := popArgs1();
     call push(40.0);
     call loc169 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc168);
+    call push(loc169);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc170 := popArgs1();
     call push(loc164);
     call push(loc170);
@@ -2561,13 +2675,22 @@ label$12_end_14:
     call loc172 := popArgs1();
     call push(255.0);
     call loc173 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc172);
+    call push(loc173);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc174 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc174);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc175 := popArgs1();
     call push(32.0);
     call loc176 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc175);
+    call push(loc176);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc177 := popArgs1();
     call push(loc171);
     call push(loc177);
@@ -2583,13 +2706,22 @@ label$12_end_14:
     call loc179 := popArgs1();
     call push(255.0);
     call loc180 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc179);
+    call push(loc180);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc181 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc181);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc182 := popArgs1();
     call push(24.0);
     call loc183 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc182);
+    call push(loc183);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc184 := popArgs1();
     call push(loc178);
     call push(loc184);
@@ -2605,13 +2737,22 @@ label$12_end_14:
     call loc186 := popArgs1();
     call push(255.0);
     call loc187 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc186);
+    call push(loc187);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc188 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc188);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc189 := popArgs1();
     call push(16.0);
     call loc190 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc189);
+    call push(loc190);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc191 := popArgs1();
     call push(loc185);
     call push(loc191);
@@ -2627,13 +2768,22 @@ label$12_end_14:
     call loc193 := popArgs1();
     call push(255.0);
     call loc194 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc193);
+    call push(loc194);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc195 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc195);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc196 := popArgs1();
     call push(8.0);
     call loc197 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc196);
+    call push(loc197);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc198 := popArgs1();
     call push(loc192);
     call push(loc198);
@@ -2649,9 +2799,14 @@ label$12_end_14:
     call loc200 := popArgs1();
     call push(255.0);
     call loc201 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc200);
+    call push(loc201);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc202 := popArgs1();
-    // // unhandled raw instruction: i64.extend_i32_u
+    call push(loc202);
+    // // numeric cast i64.extend_i32_u: no-op under real semantics
     call loc203 := popArgs1();
     call push(loc199);
     call push(loc203);
@@ -2668,7 +2823,11 @@ label$11_end_13:
     call loc206 := popArgs1();
     call push(1.0);
     call loc207 := popArgs1();
-    // // unhandled raw instruction: i64.shl
+    call push(loc205);
+    call push(loc207);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
     call loc208 := popArgs1();
     call push(loc3);
     call push(loc208);
@@ -2695,7 +2854,11 @@ label$11_end_13:
     call loc212 := popArgs1();
     call push(1.0);
     call loc213 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc212);
+    call push(loc213);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc214 := popArgs1();
     call push(loc214);
     call popToTmp1();
@@ -2881,15 +3044,27 @@ label$13_end_15:
     call loc252 := popArgs1();
     call push(255.0);
     call loc253 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc252);
+    call push(loc253);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc254 := popArgs1();
     call push(8.0);
     call loc255 := popArgs1();
-    // // unhandled raw instruction: i32.shr_s
+    call push(loc254);
+    call push(loc255);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_s($tmp2, $tmp1));
     call loc256 := popArgs1();
     call push(255.0);
     call loc257 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc256);
+    call push(loc257);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc258 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -2912,15 +3087,27 @@ label$13_end_15:
     call loc260 := popArgs1();
     call push(255.0);
     call loc261 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc260);
+    call push(loc261);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc262 := popArgs1();
     call push(0.0);
     call loc263 := popArgs1();
-    // // unhandled raw instruction: i32.shr_s
+    call push(loc262);
+    call push(loc263);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_s($tmp2, $tmp1));
     call loc264 := popArgs1();
     call push(255.0);
     call loc265 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc264);
+    call push(loc265);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc266 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -2978,11 +3165,19 @@ label$13_end_15:
     call loc271 := popArgs1();
     call push(255.0);
     call loc272 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc271);
+    call push(loc272);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc273 := popArgs1();
     call push(15.0);
     call loc274 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc273);
+    call push(loc274);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc275 := popArgs1();
     call push(32.0);
     call loc276 := popArgs1();
@@ -3013,11 +3208,19 @@ label$13_end_15:
     call loc279 := popArgs1();
     call push(24.0);
     call loc280 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc279);
+    call push(loc280);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc281 := popArgs1();
     call push(255.0);
     call loc282 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc281);
+    call push(loc282);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc283 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3040,11 +3243,19 @@ label$13_end_15:
     call loc285 := popArgs1();
     call push(16.0);
     call loc286 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc285);
+    call push(loc286);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc287 := popArgs1();
     call push(255.0);
     call loc288 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc287);
+    call push(loc288);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc289 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3067,11 +3278,19 @@ label$13_end_15:
     call loc291 := popArgs1();
     call push(8.0);
     call loc292 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc291);
+    call push(loc292);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc293 := popArgs1();
     call push(255.0);
     call loc294 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc293);
+    call push(loc294);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc295 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3094,11 +3313,19 @@ label$13_end_15:
     call loc297 := popArgs1();
     call push(0.0);
     call loc298 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc297);
+    call push(loc298);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc299 := popArgs1();
     call push(255.0);
     call loc300 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc299);
+    call push(loc300);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc301 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3162,11 +3389,19 @@ label$13_end_15:
     call loc307 := popArgs1();
     call push(255.0);
     call loc308 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc307);
+    call push(loc308);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc309 := popArgs1();
     call push(15.0);
     call loc310 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc309);
+    call push(loc310);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc311 := popArgs1();
     call push(32.0);
     call loc312 := popArgs1();
@@ -3197,11 +3432,19 @@ label$13_end_15:
     call loc315 := popArgs1();
     call push(24.0);
     call loc316 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc315);
+    call push(loc316);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc317 := popArgs1();
     call push(255.0);
     call loc318 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc317);
+    call push(loc318);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc319 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3224,11 +3467,19 @@ label$13_end_15:
     call loc321 := popArgs1();
     call push(16.0);
     call loc322 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc321);
+    call push(loc322);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc323 := popArgs1();
     call push(255.0);
     call loc324 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc323);
+    call push(loc324);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc325 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3251,11 +3502,19 @@ label$13_end_15:
     call loc327 := popArgs1();
     call push(8.0);
     call loc328 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc327);
+    call push(loc328);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc329 := popArgs1();
     call push(255.0);
     call loc330 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc329);
+    call push(loc330);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc331 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3278,11 +3537,19 @@ label$13_end_15:
     call loc333 := popArgs1();
     call push(0.0);
     call loc334 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc333);
+    call push(loc334);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc335 := popArgs1();
     call push(255.0);
     call loc336 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc335);
+    call push(loc336);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc337 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3340,11 +3607,19 @@ label$13_end_15:
     call loc342 := popArgs1();
     call push(255.0);
     call loc343 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc342);
+    call push(loc343);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc344 := popArgs1();
     call push(15.0);
     call loc345 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc344);
+    call push(loc345);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc346 := popArgs1();
     call push(32.0);
     call loc347 := popArgs1();
@@ -3375,11 +3650,19 @@ label$13_end_15:
     call loc350 := popArgs1();
     call push(24.0);
     call loc351 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc350);
+    call push(loc351);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc352 := popArgs1();
     call push(255.0);
     call loc353 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc352);
+    call push(loc353);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc354 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3402,11 +3685,19 @@ label$13_end_15:
     call loc356 := popArgs1();
     call push(16.0);
     call loc357 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc356);
+    call push(loc357);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc358 := popArgs1();
     call push(255.0);
     call loc359 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc358);
+    call push(loc359);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc360 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3429,11 +3720,19 @@ label$13_end_15:
     call loc362 := popArgs1();
     call push(8.0);
     call loc363 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc362);
+    call push(loc363);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc364 := popArgs1();
     call push(255.0);
     call loc365 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc364);
+    call push(loc365);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc366 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3456,11 +3755,19 @@ label$13_end_15:
     call loc368 := popArgs1();
     call push(0.0);
     call loc369 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc368);
+    call push(loc369);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc370 := popArgs1();
     call push(255.0);
     call loc371 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc370);
+    call push(loc371);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc372 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3524,11 +3831,19 @@ label$13_end_15:
     call loc378 := popArgs1();
     call push(255.0);
     call loc379 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc378);
+    call push(loc379);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc380 := popArgs1();
     call push(15.0);
     call loc381 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc380);
+    call push(loc381);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc382 := popArgs1();
     call push(32.0);
     call loc383 := popArgs1();
@@ -3559,11 +3874,19 @@ label$13_end_15:
     call loc386 := popArgs1();
     call push(24.0);
     call loc387 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc386);
+    call push(loc387);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc388 := popArgs1();
     call push(255.0);
     call loc389 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc388);
+    call push(loc389);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc390 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3586,11 +3909,19 @@ label$13_end_15:
     call loc392 := popArgs1();
     call push(16.0);
     call loc393 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc392);
+    call push(loc393);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc394 := popArgs1();
     call push(255.0);
     call loc395 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc394);
+    call push(loc395);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc396 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3613,11 +3944,19 @@ label$13_end_15:
     call loc398 := popArgs1();
     call push(8.0);
     call loc399 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc398);
+    call push(loc399);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc400 := popArgs1();
     call push(255.0);
     call loc401 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc400);
+    call push(loc401);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc402 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3640,11 +3979,19 @@ label$13_end_15:
     call loc404 := popArgs1();
     call push(0.0);
     call loc405 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc404);
+    call push(loc405);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc406 := popArgs1();
     call push(255.0);
     call loc407 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc406);
+    call push(loc407);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc408 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3748,11 +4095,19 @@ label$13_end_15:
     call loc419 := popArgs1();
     call push(24.0);
     call loc420 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc419);
+    call push(loc420);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc421 := popArgs1();
     call push(255.0);
     call loc422 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc421);
+    call push(loc422);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc423 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3775,11 +4130,19 @@ label$13_end_15:
     call loc425 := popArgs1();
     call push(16.0);
     call loc426 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc425);
+    call push(loc426);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc427 := popArgs1();
     call push(255.0);
     call loc428 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc427);
+    call push(loc428);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc429 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3802,11 +4165,19 @@ label$13_end_15:
     call loc431 := popArgs1();
     call push(8.0);
     call loc432 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc431);
+    call push(loc432);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc433 := popArgs1();
     call push(255.0);
     call loc434 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc433);
+    call push(loc434);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc435 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3829,11 +4200,19 @@ label$13_end_15:
     call loc437 := popArgs1();
     call push(0.0);
     call loc438 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc437);
+    call push(loc438);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc439 := popArgs1();
     call push(255.0);
     call loc440 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc439);
+    call push(loc440);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc441 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3937,11 +4316,19 @@ label$13_end_15:
     call loc452 := popArgs1();
     call push(24.0);
     call loc453 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc452);
+    call push(loc453);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc454 := popArgs1();
     call push(255.0);
     call loc455 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc454);
+    call push(loc455);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc456 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3964,11 +4351,19 @@ label$13_end_15:
     call loc458 := popArgs1();
     call push(16.0);
     call loc459 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc458);
+    call push(loc459);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc460 := popArgs1();
     call push(255.0);
     call loc461 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc460);
+    call push(loc461);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc462 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -3991,11 +4386,19 @@ label$13_end_15:
     call loc464 := popArgs1();
     call push(8.0);
     call loc465 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc464);
+    call push(loc465);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc466 := popArgs1();
     call push(255.0);
     call loc467 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc466);
+    call push(loc467);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc468 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -4018,11 +4421,19 @@ label$13_end_15:
     call loc470 := popArgs1();
     call push(0.0);
     call loc471 := popArgs1();
-    // // unhandled raw instruction: i32.shr_u
+    call push(loc470);
+    call push(loc471);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc472 := popArgs1();
     call push(255.0);
     call loc473 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc472);
+    call push(loc473);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc474 := popArgs1();
     call push(loc3);
     call popToTmp1();
@@ -4086,11 +4497,19 @@ label$13_end_15:
     call loc480 := popArgs1();
     call push(255.0);
     call loc481 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc480);
+    call push(loc481);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc482 := popArgs1();
     call push(15.0);
     call loc483 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc482);
+    call push(loc483);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc484 := popArgs1();
     call push(96.0);
     call loc485 := popArgs1();
@@ -4121,11 +4540,19 @@ label$13_end_15:
     call loc488 := popArgs1();
     call push(56.0);
     call loc489 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc488);
+    call push(loc489);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc490 := popArgs1();
     call push(63.0);
     call loc491 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc490);
+    call push(loc491);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc492 := popArgs1();
     call push(64.0);
     call loc493 := popArgs1();
@@ -4159,11 +4586,19 @@ label$13_end_15:
     call loc497 := popArgs1();
     call push(48.0);
     call loc498 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc497);
+    call push(loc498);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc499 := popArgs1();
     call push(255.0);
     call loc500 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc499);
+    call push(loc500);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc501 := popArgs1();
     call push(loc501);
     // // wrap: no-op under real semantics
@@ -4189,11 +4624,19 @@ label$13_end_15:
     call loc504 := popArgs1();
     call push(40.0);
     call loc505 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc504);
+    call push(loc505);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc506 := popArgs1();
     call push(255.0);
     call loc507 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc506);
+    call push(loc507);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc508 := popArgs1();
     call push(loc508);
     // // wrap: no-op under real semantics
@@ -4219,11 +4662,19 @@ label$13_end_15:
     call loc511 := popArgs1();
     call push(32.0);
     call loc512 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc511);
+    call push(loc512);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc513 := popArgs1();
     call push(255.0);
     call loc514 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc513);
+    call push(loc514);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc515 := popArgs1();
     call push(loc515);
     // // wrap: no-op under real semantics
@@ -4249,11 +4700,19 @@ label$13_end_15:
     call loc518 := popArgs1();
     call push(24.0);
     call loc519 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc518);
+    call push(loc519);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc520 := popArgs1();
     call push(255.0);
     call loc521 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc520);
+    call push(loc521);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc522 := popArgs1();
     call push(loc522);
     // // wrap: no-op under real semantics
@@ -4279,11 +4738,19 @@ label$13_end_15:
     call loc525 := popArgs1();
     call push(16.0);
     call loc526 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc525);
+    call push(loc526);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc527 := popArgs1();
     call push(255.0);
     call loc528 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc527);
+    call push(loc528);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc529 := popArgs1();
     call push(loc529);
     // // wrap: no-op under real semantics
@@ -4309,11 +4776,19 @@ label$13_end_15:
     call loc532 := popArgs1();
     call push(8.0);
     call loc533 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc532);
+    call push(loc533);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc534 := popArgs1();
     call push(255.0);
     call loc535 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc534);
+    call push(loc535);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc536 := popArgs1();
     call push(loc536);
     // // wrap: no-op under real semantics
@@ -4339,11 +4814,19 @@ label$13_end_15:
     call loc539 := popArgs1();
     call push(0.0);
     call loc540 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc539);
+    call push(loc540);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc541 := popArgs1();
     call push(255.0);
     call loc542 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc541);
+    call push(loc542);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc543 := popArgs1();
     call push(loc543);
     // // wrap: no-op under real semantics
@@ -4410,11 +4893,19 @@ label$13_end_15:
     call loc550 := popArgs1();
     call push(255.0);
     call loc551 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc550);
+    call push(loc551);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc552 := popArgs1();
     call push(15.0);
     call loc553 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc552);
+    call push(loc553);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc554 := popArgs1();
     call push(96.0);
     call loc555 := popArgs1();
@@ -4445,11 +4936,19 @@ label$13_end_15:
     call loc558 := popArgs1();
     call push(56.0);
     call loc559 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc558);
+    call push(loc559);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc560 := popArgs1();
     call push(63.0);
     call loc561 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc560);
+    call push(loc561);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc562 := popArgs1();
     call push(64.0);
     call loc563 := popArgs1();
@@ -4483,11 +4982,19 @@ label$13_end_15:
     call loc567 := popArgs1();
     call push(48.0);
     call loc568 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc567);
+    call push(loc568);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc569 := popArgs1();
     call push(255.0);
     call loc570 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc569);
+    call push(loc570);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc571 := popArgs1();
     call push(loc571);
     // // wrap: no-op under real semantics
@@ -4513,11 +5020,19 @@ label$13_end_15:
     call loc574 := popArgs1();
     call push(40.0);
     call loc575 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc574);
+    call push(loc575);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc576 := popArgs1();
     call push(255.0);
     call loc577 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc576);
+    call push(loc577);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc578 := popArgs1();
     call push(loc578);
     // // wrap: no-op under real semantics
@@ -4543,11 +5058,19 @@ label$13_end_15:
     call loc581 := popArgs1();
     call push(32.0);
     call loc582 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc581);
+    call push(loc582);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc583 := popArgs1();
     call push(255.0);
     call loc584 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc583);
+    call push(loc584);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc585 := popArgs1();
     call push(loc585);
     // // wrap: no-op under real semantics
@@ -4573,11 +5096,19 @@ label$13_end_15:
     call loc588 := popArgs1();
     call push(24.0);
     call loc589 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc588);
+    call push(loc589);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc590 := popArgs1();
     call push(255.0);
     call loc591 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc590);
+    call push(loc591);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc592 := popArgs1();
     call push(loc592);
     // // wrap: no-op under real semantics
@@ -4603,11 +5134,19 @@ label$13_end_15:
     call loc595 := popArgs1();
     call push(16.0);
     call loc596 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc595);
+    call push(loc596);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc597 := popArgs1();
     call push(255.0);
     call loc598 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc597);
+    call push(loc598);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc599 := popArgs1();
     call push(loc599);
     // // wrap: no-op under real semantics
@@ -4633,11 +5172,19 @@ label$13_end_15:
     call loc602 := popArgs1();
     call push(8.0);
     call loc603 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc602);
+    call push(loc603);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc604 := popArgs1();
     call push(255.0);
     call loc605 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc604);
+    call push(loc605);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc606 := popArgs1();
     call push(loc606);
     // // wrap: no-op under real semantics
@@ -4663,11 +5210,19 @@ label$13_end_15:
     call loc609 := popArgs1();
     call push(0.0);
     call loc610 := popArgs1();
-    // // unhandled raw instruction: i64.shr_u
+    call push(loc609);
+    call push(loc610);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_u($tmp2, $tmp1));
     call loc611 := popArgs1();
     call push(255.0);
     call loc612 := popArgs1();
-    // // unhandled raw instruction: i64.and
+    call push(loc611);
+    call push(loc612);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc613 := popArgs1();
     call push(loc613);
     // // wrap: no-op under real semantics
@@ -4820,7 +5375,11 @@ label$13_end_15:
     call loc628 := popArgs1();
     call push(255.0);
     call loc629 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc628);
+    call push(loc629);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc630 := popArgs1();
     call push(128.0);
     call loc631 := popArgs1();
@@ -4949,7 +5508,11 @@ label$13_end_15:
     call loc644 := popArgs1();
     call push(255.0);
     call loc645 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc644);
+    call push(loc645);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc646 := popArgs1();
     call push(128.0);
     call loc647 := popArgs1();
@@ -5128,6 +5691,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation CorralChoice_doubler()
 {
@@ -5159,6 +5723,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation BoogieEntry_doubler()
 {
@@ -5196,6 +5761,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation CorralEntry_doubler()
 {
