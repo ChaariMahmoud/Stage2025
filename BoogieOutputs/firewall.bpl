@@ -188,6 +188,34 @@ implementation mem_write_u64(a: int, v: int)
     call mem_write_u8((a) + (7), byte7_64(v));
 }
 
+procedure {:inline 1} memory_size() returns (result: int);
+implementation memory_size() returns (result: int)
+{
+    result := $mem_pages;
+}
+
+procedure {:inline 1} memory_grow(delta: int) returns (oldSize: int);
+modifies $mem_pages;
+implementation memory_grow(delta: int) returns (oldSize: int)
+{
+    oldSize := $mem_pages;
+    $mem_pages := ($mem_pages) + (delta);
+}
+
+procedure {:inline 1} memory_fill(dst: int, value: int, len: int);
+modifies $mem;
+implementation memory_fill(dst: int, value: int, len: int)
+{
+    havoc $mem;
+}
+
+procedure {:inline 1} memory_copy(dst: int, src: int, len: int);
+modifies $mem;
+implementation memory_copy(dst: int, src: int, len: int)
+{
+    havoc $mem;
+}
+
 function bool_to_real(b: bool) : real
 {
     if b then (1.0) else (0.0)
@@ -371,6 +399,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 implementation __wasm_call_ctors()
 {
     var entry_sp: int;
@@ -401,6 +430,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 implementation cbak()
 {
     var arg1: real;
@@ -450,6 +480,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation hook()
 {
@@ -663,7 +694,11 @@ implementation hook()
     call loc15 := popArgs1();
     call push(1.0);
     call loc16 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc15);
+    call push(loc16);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc17 := popArgs1();
     call push(loc17);
     call popToTmp1();
@@ -720,7 +755,11 @@ label$1_end_2:
     call loc31 := popArgs1();
     call push(1.0);
     call loc32 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc31);
+    call push(loc32);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc33 := popArgs1();
     call push(loc33);
     call popToTmp1();
@@ -819,7 +858,11 @@ label$2_end_3:
     call loc54 := popArgs1();
     call push(1.0);
     call loc55 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc54);
+    call push(loc55);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc56 := popArgs1();
     call push(loc56);
     call popToTmp1();
@@ -850,7 +893,11 @@ label$3_end_4:
     call loc60 := popArgs1();
     call push(255.0);
     call loc61 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(loc60);
+    call push(loc61);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call loc62 := popArgs1();
     call push(loc62);
     call popToTmp1();
@@ -914,6 +961,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation CorralChoice_firewall()
 {
@@ -945,6 +993,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation BoogieEntry_firewall()
 {
@@ -982,6 +1031,7 @@ modifies $tmp3;
 modifies $sp;
 modifies $stack;
 modifies $mem;
+modifies $mem_pages;
 modifies global_0;
 implementation CorralEntry_firewall()
 {
