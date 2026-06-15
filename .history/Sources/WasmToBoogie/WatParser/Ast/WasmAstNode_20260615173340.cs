@@ -172,7 +172,7 @@ namespace WasmToBoogie.Parser.Ast
     public class WasmModule
     {
         public List<WasmFuncType> Types { get; set; } = new();
-        public int InitialMemoryPages { get; set; } = 0;
+
         public List<WasmGlobal> Globals { get; } = new();
         public Dictionary<string, int> GlobalIndexByName { get; } = new();
 

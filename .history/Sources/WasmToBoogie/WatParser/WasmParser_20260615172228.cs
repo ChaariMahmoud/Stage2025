@@ -172,18 +172,18 @@ namespace WasmToBoogie.Parser
             string wasmPath = ConvertWatToWasm(filePath);
 
             IntPtr modulePtr = LoadWasmTextFile(wasmPath);
-            if (modulePtr == IntPtr.Zero)
-                throw new Exception("❌ Error reading Binaryen module");
+if (modulePtr == IntPtr.Zero)
+    throw new Exception("❌ Error reading Binaryen module");
 
-            try
-            {
-                if (!ValidateModule(modulePtr))
-                    Console.WriteLine("⚠️ Binaryen validation failed, continuing anyway.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"⚠️ Binaryen validation ignored: {ex.Message}");
-            }
+try
+{
+    if (!ValidateModule(modulePtr))
+        Console.WriteLine("⚠️ Binaryen validation failed, continuing anyway.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"⚠️ Binaryen validation ignored: {ex.Message}");
+}
 
             PrintModuleAST(modulePtr);
 
@@ -537,22 +537,6 @@ namespace WasmToBoogie.Parser
                 {
                     ParseExportDecl(tokens, ref index, module);
                 }
-                else if (head == "memory")
-{
-    if (index < tokens.Count && tokens[index].StartsWith("$"))
-        index++;
-
-    if (index < tokens.Count && int.TryParse(tokens[index], out var pages))
-    {
-        module.InitialMemoryPages = pages;
-        index++;
-    }
-
-    while (index < tokens.Count && tokens[index] != ")")
-        index++;
-
-    ExpectToken(tokens, ref index, ")");
-}
                 else
                 {
                     index = start;
@@ -2153,12 +2137,14 @@ namespace WasmToBoogie.Parser
                                 break; // atome inattendu -> on laisse au generic/Raw si besoin
                         }
 
-                        if (exprs.Count >= 1)
-                            addr = exprs[0];
-                        if (exprs.Count >= 2)
-                            val = exprs[1];
-                        if (exprs.Count >= 3)
-                            len = exprs[2];
+
+
+if (exprs.Count >= 1)
+    addr = exprs[0];
+if (exprs.Count >= 2)
+    val = exprs[1];
+if (exprs.Count >= 3)
+    len = exprs[2];
                     }
 
                     ExpectToken(tokens, ref index, ")");

@@ -537,22 +537,6 @@ namespace WasmToBoogie.Parser
                 {
                     ParseExportDecl(tokens, ref index, module);
                 }
-                else if (head == "memory")
-{
-    if (index < tokens.Count && tokens[index].StartsWith("$"))
-        index++;
-
-    if (index < tokens.Count && int.TryParse(tokens[index], out var pages))
-    {
-        module.InitialMemoryPages = pages;
-        index++;
-    }
-
-    while (index < tokens.Count && tokens[index] != ")")
-        index++;
-
-    ExpectToken(tokens, ref index, ")");
-}
                 else
                 {
                     index = start;

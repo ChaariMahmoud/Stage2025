@@ -824,34 +824,6 @@ namespace WasmToBoogie.Conversion
             var mods = new List<BoogieGlobalVariable>();
             var post = new List<BoogieExpr>();
 
-            bool memEnabled =
-    PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
-    && PreludeOptions.EnableMemory;
-
-if (memEnabled)
-{
-    mods.Add(
-        new BoogieGlobalVariable(
-            new BoogieTypedIdent("$mem_pages", BoogieType.Int)
-        )
-    );
-
-    body.AddStatement(
-        new BoogieAssignCmd(
-            new BoogieIdentifierExpr("$mem_pages"),
-            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-        )
-    );
-
-    post.Add(
-        new BoogieBinaryOperation(
-            BoogieBinaryOperation.Opcode.EQ,
-            new BoogieIdentifierExpr("$mem_pages"),
-            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-        )
-    );
-}
-
             foreach (var g in wasmModule.Globals)
             {
                 var key = ResolveGlobalKey(g.Index, g.Name);
@@ -1821,86 +1793,68 @@ if (memEnabled)
 
                     if (mem.Op == "memory.size" || mem.Op == "memory.grow")
                         break;
-                    if (mem.Op == "memory.fill")
-                    {
-                        // WAT stack order: dst, value, len
-                        if (mem.Address != null)
-                            TranslateNode(mem.Address, body);
+if (mem.Op == "memory.fill")
+{
+    // WAT stack order: dst, value, len
+    if (mem.Address != null)
+        TranslateNode(mem.Address, body);
 
-                        if (mem.Value != null)
-                            TranslateNode(mem.Value, body);
+    if (mem.Value != null)
+        TranslateNode(mem.Value, body);
 
-                        if (mem.Length != null)
-                            TranslateNode(mem.Length, body);
+    if (mem.Length != null)
+        TranslateNode(mem.Length, body);
 
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // len
-                        body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // value
-                        body.AddStatement(new BoogieCallCmd("popToTmp3", new(), new())); // dst
+    body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // len
+    body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // value
+    body.AddStatement(new BoogieCallCmd("popToTmp3", new(), new())); // dst
 
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "memory_fill",
-                                new()
-                                {
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp3") }
-                                    ),
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp2") }
-                                    ),
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp1") }
-                                    ),
-                                },
-                                new()
-                            )
-                        );
+    body.AddStatement(
+        new BoogieCallCmd(
+            "memory_fill",
+            new()
+            {
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp3") }),
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp2") }),
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp1") }),
+            },
+            new()
+        )
+    );
 
-                        break;
-                    }
-                    if (mem.Op == "memory.copy")
-                    {
-                        // WAT stack order: dst, src, len
-                        if (mem.Address != null)
-                            TranslateNode(mem.Address, body);
+    break;
+}
+if (mem.Op == "memory.copy")
+{
+    // WAT stack order: dst, src, len
+    if (mem.Address != null)
+        TranslateNode(mem.Address, body);
 
-                        if (mem.Value != null)
-                            TranslateNode(mem.Value, body);
+    if (mem.Value != null)
+        TranslateNode(mem.Value, body);
 
-                        if (mem.Length != null)
-                            TranslateNode(mem.Length, body);
+    if (mem.Length != null)
+        TranslateNode(mem.Length, body);
 
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // len
-                        body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // src
-                        body.AddStatement(new BoogieCallCmd("popToTmp3", new(), new())); // dst
+    body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // len
+    body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // src
+    body.AddStatement(new BoogieCallCmd("popToTmp3", new(), new())); // dst
 
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "memory_copy",
-                                new()
-                                {
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp3") }
-                                    ),
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp2") }
-                                    ),
-                                    new BoogieFunctionCall(
-                                        "real_to_int",
-                                        new() { new BoogieIdentifierExpr("$tmp1") }
-                                    ),
-                                },
-                                new()
-                            )
-                        );
+    body.AddStatement(
+        new BoogieCallCmd(
+            "memory_copy",
+            new()
+            {
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp3") }),
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp2") }),
+                new BoogieFunctionCall("real_to_int", new() { new BoogieIdentifierExpr("$tmp1") }),
+            },
+            new()
+        )
+    );
 
-                        break;
-                    }
+    break;
+}
                     // --- STORE path ---
                     bool isStore =
                         mem.Op
