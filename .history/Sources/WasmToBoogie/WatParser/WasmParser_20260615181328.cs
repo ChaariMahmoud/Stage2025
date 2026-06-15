@@ -132,13 +132,13 @@ namespace WasmToBoogie.Parser
                             Walk(mem.Value);
                         break;
                     case TableOpNode t:
-                        if (t.Index != null)
-                            Walk(t.Index);
-                        if (t.Value != null)
-                            Walk(t.Value);
-                        if (t.Delta != null)
-                            Walk(t.Delta);
-                        break;
+    if (t.Index != null)
+        Walk(t.Index);
+    if (t.Value != null)
+        Walk(t.Value);
+    if (t.Delta != null)
+        Walk(t.Delta);
+    break;
                     // benign nodes
                     case UnreachableNode:
                     case ReturnNode:
@@ -545,21 +545,21 @@ namespace WasmToBoogie.Parser
                     ParseExportDecl(tokens, ref index, module);
                 }
                 else if (head == "memory")
-                {
-                    if (index < tokens.Count && tokens[index].StartsWith("$"))
-                        index++;
+{
+    if (index < tokens.Count && tokens[index].StartsWith("$"))
+        index++;
 
-                    if (index < tokens.Count && int.TryParse(tokens[index], out var pages))
-                    {
-                        module.InitialMemoryPages = pages;
-                        index++;
-                    }
+    if (index < tokens.Count && int.TryParse(tokens[index], out var pages))
+    {
+        module.InitialMemoryPages = pages;
+        index++;
+    }
 
-                    while (index < tokens.Count && tokens[index] != ")")
-                        index++;
+    while (index < tokens.Count && tokens[index] != ")")
+        index++;
 
-                    ExpectToken(tokens, ref index, ")");
-                }
+    ExpectToken(tokens, ref index, ")");
+}
                 else
                 {
                     index = start;
@@ -2181,55 +2181,58 @@ namespace WasmToBoogie.Parser
                     };
                 }
                 else if (IsTableOp(op))
-                {
-                    var exprs = new List<WasmNode>();
+{
+    var exprs = new List<WasmNode>();
 
-                    while (index < tokens.Count && tokens[index] != ")")
-                    {
-                        if (tokens[index] == "(")
-                            exprs.Add(ParseNode(tokens, ref index));
-                        else
-                            index++; // ignore table index like 0 or $t for now
-                    }
+    while (index < tokens.Count && tokens[index] != ")")
+    {
+        if (tokens[index] == "(")
+            exprs.Add(ParseNode(tokens, ref index));
+        else
+            index++; // ignore table index like 0 or $t for now
+    }
 
-                    ExpectToken(tokens, ref index, ")");
+    ExpectToken(tokens, ref index, ")");
 
-                    if (op == "table.get")
-                    {
-                        return new TableOpNode
-                        {
-                            Op = op,
-                            Index = exprs.Count >= 1 ? exprs[0] : null,
-                        };
-                    }
+    if (op == "table.get")
+    {
+        return new TableOpNode
+        {
+            Op = op,
+            Index = exprs.Count >= 1 ? exprs[0] : null
+        };
+    }
 
-                    if (op == "table.set")
-                    {
-                        return new TableOpNode
-                        {
-                            Op = op,
-                            Index = exprs.Count >= 1 ? exprs[0] : null,
-                            Value = exprs.Count >= 2 ? exprs[1] : null,
-                        };
-                    }
+    if (op == "table.set")
+    {
+        return new TableOpNode
+        {
+            Op = op,
+            Index = exprs.Count >= 1 ? exprs[0] : null,
+            Value = exprs.Count >= 2 ? exprs[1] : null
+        };
+    }
 
-                    if (op == "table.size")
-                    {
-                        return new TableOpNode { Op = op };
-                    }
+    if (op == "table.size")
+    {
+        return new TableOpNode
+        {
+            Op = op
+        };
+    }
 
-                    if (op == "table.grow")
-                    {
-                        return new TableOpNode
-                        {
-                            Op = op,
-                            Value = exprs.Count >= 1 ? exprs[0] : null,
-                            Delta = exprs.Count >= 2 ? exprs[1] : null,
-                        };
-                    }
+    if (op == "table.grow")
+    {
+        return new TableOpNode
+        {
+            Op = op,
+            Value = exprs.Count >= 1 ? exprs[0] : null,
+            Delta = exprs.Count >= 2 ? exprs[1] : null
+        };
+    }
 
-                    return new RawInstructionNode { Instruction = op };
-                }
+    return new RawInstructionNode { Instruction = op };
+}
                 else
                 {
                     // Generic: skip atoms until ')', recurse only on nested lists
@@ -2297,7 +2300,10 @@ namespace WasmToBoogie.Parser
         }
 
         private static bool IsTableOp(string op) =>
-            op is "table.get" or "table.set" or "table.size" or "table.grow";
+    op is "table.get"
+        or "table.set"
+        or "table.size"
+        or "table.grow";
 
         private static void ParseOffsetAlign(
             List<string> tokens,

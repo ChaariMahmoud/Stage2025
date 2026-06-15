@@ -128,17 +128,7 @@ namespace WasmToBoogie.Conversion
                     if (un.Operand != null)
                         Walk(un.Operand, u);
                     break;
-case TableOpNode t:
-    u.UsesTable = true;
 
-    if (t.Index != null)
-        Walk(t.Index, u);
-    if (t.Value != null)
-        Walk(t.Value, u);
-    if (t.Delta != null)
-        Walk(t.Delta, u);
-
-    break;
                 case BinaryOpNode bn:
                     // comparaisons -> bool_to_real
                     if (IsComparison(bn.Op))

@@ -42,6 +42,6 @@ namespace WasmToBoogie.Conversion
         public bool EnableNearestAxioms { get; init; } = true;
         public bool EnableFloorAxioms { get; init; } = true;
         public bool DefineAbsWithITE { get; init; } = true;
-        public bool AutoDetect { get; set; } = false; //temporary
+        public bool AutoDetect { get; set; } = true; //temporary
     }
 }

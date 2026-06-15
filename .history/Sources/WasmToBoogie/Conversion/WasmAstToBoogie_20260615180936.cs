@@ -56,23 +56,7 @@ namespace WasmToBoogie.Conversion
                     )
                 ),
             };
-            bool tableEnabled = PreludeOptions.Sections.HasFlag(PreludeSection.Table);
 
-            if (tableEnabled)
-            {
-                mods.Add(
-                    new BoogieGlobalVariable(
-                        new BoogieTypedIdent(
-                            "$table",
-                            new BoogieMapType(BoogieType.Int, BoogieType.Real)
-                        )
-                    )
-                );
-
-                mods.Add(
-                    new BoogieGlobalVariable(new BoogieTypedIdent("$table_size", BoogieType.Int))
-                );
-            }
             bool memEnabled =
                 PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
                 && PreludeOptions.EnableMemory;
@@ -841,30 +825,32 @@ namespace WasmToBoogie.Conversion
             var post = new List<BoogieExpr>();
 
             bool memEnabled =
-                PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
-                && PreludeOptions.EnableMemory;
+    PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
+    && PreludeOptions.EnableMemory;
 
-            if (memEnabled)
-            {
-                mods.Add(
-                    new BoogieGlobalVariable(new BoogieTypedIdent("$mem_pages", BoogieType.Int))
-                );
+if (memEnabled)
+{
+    mods.Add(
+        new BoogieGlobalVariable(
+            new BoogieTypedIdent("$mem_pages", BoogieType.Int)
+        )
+    );
 
-                body.AddStatement(
-                    new BoogieAssignCmd(
-                        new BoogieIdentifierExpr("$mem_pages"),
-                        new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-                    )
-                );
+    body.AddStatement(
+        new BoogieAssignCmd(
+            new BoogieIdentifierExpr("$mem_pages"),
+            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
+        )
+    );
 
-                post.Add(
-                    new BoogieBinaryOperation(
-                        BoogieBinaryOperation.Opcode.EQ,
-                        new BoogieIdentifierExpr("$mem_pages"),
-                        new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-                    )
-                );
-            }
+    post.Add(
+        new BoogieBinaryOperation(
+            BoogieBinaryOperation.Opcode.EQ,
+            new BoogieIdentifierExpr("$mem_pages"),
+            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
+        )
+    );
+}
 
             foreach (var g in wasmModule.Globals)
             {
@@ -1278,21 +1264,23 @@ namespace WasmToBoogie.Conversion
 
             bool tableEnabled = PreludeOptions.Sections.HasFlag(PreludeSection.Table);
 
-            if (tableEnabled)
-            {
-                mods.Add(
-                    new BoogieGlobalVariable(
-                        new BoogieTypedIdent(
-                            "$table",
-                            new BoogieMapType(BoogieType.Int, BoogieType.Real)
-                        )
-                    )
-                );
+if (tableEnabled)
+{
+    mods.Add(
+        new BoogieGlobalVariable(
+            new BoogieTypedIdent(
+                "$table",
+                new BoogieMapType(BoogieType.Int, BoogieType.Real)
+            )
+        )
+    );
 
-                mods.Add(
-                    new BoogieGlobalVariable(new BoogieTypedIdent("$table_size", BoogieType.Int))
-                );
-            }
+    mods.Add(
+        new BoogieGlobalVariable(
+            new BoogieTypedIdent("$table_size", BoogieType.Int)
+        )
+    );
+}
 
             bool memEnabled =
                 PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
@@ -2178,160 +2166,7 @@ namespace WasmToBoogie.Conversion
 
                     break;
                 }
-                case TableOpNode t:
-                {
-                    if (t.Op == "table.get")
-                    {
-                        if (t.Index != null)
-                            TranslateNode(t.Index, body);
 
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new()));
-
-                        body.AddStatement(
-                            new BoogieAssignCmd(
-                                new BoogieIdentifierExpr("idx"),
-                                new BoogieFunctionCall(
-                                    "real_to_int",
-                                    new() { new BoogieIdentifierExpr("$tmp1") }
-                                )
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "table_get",
-                                new() { new BoogieIdentifierExpr("idx") },
-                                new() { new BoogieIdentifierExpr("$tmp1") }
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "push",
-                                new() { new BoogieIdentifierExpr("$tmp1") },
-                                new()
-                            )
-                        );
-
-                        break;
-                    }
-
-                    if (t.Op == "table.set")
-                    {
-                        if (t.Index != null)
-                            TranslateNode(t.Index, body);
-
-                        if (t.Value != null)
-                            TranslateNode(t.Value, body);
-
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // value
-                        body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // index
-
-                        body.AddStatement(
-                            new BoogieAssignCmd(
-                                new BoogieIdentifierExpr("idx"),
-                                new BoogieFunctionCall(
-                                    "real_to_int",
-                                    new() { new BoogieIdentifierExpr("$tmp2") }
-                                )
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "table_set",
-                                new()
-                                {
-                                    new BoogieIdentifierExpr("idx"),
-                                    new BoogieIdentifierExpr("$tmp1"),
-                                },
-                                new()
-                            )
-                        );
-
-                        break;
-                    }
-
-                    if (t.Op == "table.size")
-                    {
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "table_size",
-                                new(),
-                                new() { new BoogieIdentifierExpr("idx") }
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "push",
-                                new()
-                                {
-                                    new BoogieFunctionCall(
-                                        "int_to_real",
-                                        new() { new BoogieIdentifierExpr("idx") }
-                                    ),
-                                },
-                                new()
-                            )
-                        );
-
-                        break;
-                    }
-
-                    if (t.Op == "table.grow")
-                    {
-                        if (t.Value != null)
-                            TranslateNode(t.Value, body);
-
-                        if (t.Delta != null)
-                            TranslateNode(t.Delta, body);
-
-                        body.AddStatement(new BoogieCallCmd("popToTmp1", new(), new())); // delta
-                        body.AddStatement(new BoogieCallCmd("popToTmp2", new(), new())); // value
-
-                        body.AddStatement(
-                            new BoogieAssignCmd(
-                                new BoogieIdentifierExpr("idx"),
-                                new BoogieFunctionCall(
-                                    "real_to_int",
-                                    new() { new BoogieIdentifierExpr("$tmp1") }
-                                )
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "table_grow",
-                                new()
-                                {
-                                    new BoogieIdentifierExpr("$tmp2"),
-                                    new BoogieIdentifierExpr("idx"),
-                                },
-                                new() { new BoogieIdentifierExpr("load_i") }
-                            )
-                        );
-
-                        body.AddStatement(
-                            new BoogieCallCmd(
-                                "push",
-                                new()
-                                {
-                                    new BoogieFunctionCall(
-                                        "int_to_real",
-                                        new() { new BoogieIdentifierExpr("load_i") }
-                                    ),
-                                },
-                                new()
-                            )
-                        );
-
-                        break;
-                    }
-
-                    body.AddStatement(new BoogieCommentCmd($"// unsupported table op: {t.Op}"));
-                    break;
-                }
                 case UnaryOpNode un:
                 {
                     if (un.Operand != null)
