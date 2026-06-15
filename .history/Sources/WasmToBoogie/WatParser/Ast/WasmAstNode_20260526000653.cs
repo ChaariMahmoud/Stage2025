@@ -172,7 +172,7 @@ namespace WasmToBoogie.Parser.Ast
     public class WasmModule
     {
         public List<WasmFuncType> Types { get; set; } = new();
-        public int InitialMemoryPages { get; set; } = 0;
+
         public List<WasmGlobal> Globals { get; } = new();
         public Dictionary<string, int> GlobalIndexByName { get; } = new();
 
@@ -205,8 +205,7 @@ namespace WasmToBoogie.Parser.Ast
         public int Offset { get; set; } = 0; // from "offset=..."
         public int Align { get; set; } = 0; // from "align=..."
         public WasmNode? Address { get; set; } // folded form: (i32.load (i32.const ...))
-        public WasmNode? Value { get; set; }
-        public WasmNode? Length { get; set; } // folded store form: (i32.store (addr) (val))
+        public WasmNode? Value { get; set; } // folded store form: (i32.store (addr) (val))
         public int MemoryIndex { get; set; } = 0;
     }
 

@@ -824,34 +824,6 @@ namespace WasmToBoogie.Conversion
             var mods = new List<BoogieGlobalVariable>();
             var post = new List<BoogieExpr>();
 
-            bool memEnabled =
-    PreludeOptions.Sections.HasFlag(PreludeSection.Memory)
-    && PreludeOptions.EnableMemory;
-
-if (memEnabled)
-{
-    mods.Add(
-        new BoogieGlobalVariable(
-            new BoogieTypedIdent("$mem_pages", BoogieType.Int)
-        )
-    );
-
-    body.AddStatement(
-        new BoogieAssignCmd(
-            new BoogieIdentifierExpr("$mem_pages"),
-            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-        )
-    );
-
-    post.Add(
-        new BoogieBinaryOperation(
-            BoogieBinaryOperation.Opcode.EQ,
-            new BoogieIdentifierExpr("$mem_pages"),
-            new BoogieLiteralExpr(wasmModule.InitialMemoryPages)
-        )
-    );
-}
-
             foreach (var g in wasmModule.Globals)
             {
                 var key = ResolveGlobalKey(g.Index, g.Name);

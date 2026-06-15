@@ -172,18 +172,8 @@ namespace WasmToBoogie.Parser
             string wasmPath = ConvertWatToWasm(filePath);
 
             IntPtr modulePtr = LoadWasmTextFile(wasmPath);
-            if (modulePtr == IntPtr.Zero)
-                throw new Exception("❌ Error reading Binaryen module");
-
-            try
-            {
-                if (!ValidateModule(modulePtr))
-                    Console.WriteLine("⚠️ Binaryen validation failed, continuing anyway.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"⚠️ Binaryen validation ignored: {ex.Message}");
-            }
+            if (modulePtr == IntPtr.Zero || !ValidateModule(modulePtr))
+                throw new Exception("❌ Error reading or validating Binaryen module");
 
             PrintModuleAST(modulePtr);
 
@@ -537,22 +527,6 @@ namespace WasmToBoogie.Parser
                 {
                     ParseExportDecl(tokens, ref index, module);
                 }
-                else if (head == "memory")
-{
-    if (index < tokens.Count && tokens[index].StartsWith("$"))
-        index++;
-
-    if (index < tokens.Count && int.TryParse(tokens[index], out var pages))
-    {
-        module.InitialMemoryPages = pages;
-        index++;
-    }
-
-    while (index < tokens.Count && tokens[index] != ")")
-        index++;
-
-    ExpectToken(tokens, ref index, ")");
-}
                 else
                 {
                     index = start;
@@ -2138,7 +2112,6 @@ namespace WasmToBoogie.Parser
 
                     WasmNode? addr = null;
                     WasmNode? val = null;
-                    WasmNode? len = null;
 
                     if (index < tokens.Count && tokens[index] != ")")
                     {
@@ -2157,8 +2130,6 @@ namespace WasmToBoogie.Parser
                             addr = exprs[0];
                         if (exprs.Count >= 2)
                             val = exprs[1];
-                        if (exprs.Count >= 3)
-                            len = exprs[2];
                     }
 
                     ExpectToken(tokens, ref index, ")");
@@ -2170,7 +2141,6 @@ namespace WasmToBoogie.Parser
                         Align = align,
                         Address = addr,
                         Value = val,
-                        Length = len,
                     };
                 }
                 else
@@ -2350,7 +2320,7 @@ namespace WasmToBoogie.Parser
             var psi = new ProcessStartInfo
             {
                 FileName = "wat2wasm",
-                Arguments = $"--debug-names --enable-annotations {watPath} -o {wasmPath}",
+                Arguments = $"--debug-names --enable-annotations --enable-bulk-memory {watPath} -o {wasmPath}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
