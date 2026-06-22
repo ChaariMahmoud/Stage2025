@@ -32,19 +32,19 @@ namespace WasmToBoogie.Conversion
         }
 
         private void AddPreludeIntUnaryOps(BoogieProgram program)
-        {
-            AddUnaryRealFunction(program, "int_clz");
-            AddUnaryRealFunction(program, "int_ctz");
-            AddUnaryRealFunction(program, "int_popcnt");
-        }
+{
+    AddUnaryRealFunction(program, "int_clz");
+    AddUnaryRealFunction(program, "int_ctz");
+    AddUnaryRealFunction(program, "int_popcnt");
+}
 
-        private static void AddUnaryRealFunction(BoogieProgram program, string name)
-        {
-            var x = new BoogieFormalParam(new BoogieTypedIdent("x", BoogieType.Real));
-            var r = new BoogieFormalParam(new BoogieTypedIdent("result", BoogieType.Real));
+private static void AddUnaryRealFunction(BoogieProgram program, string name)
+{
+    var x = new BoogieFormalParam(new BoogieTypedIdent("x", BoogieType.Real));
+    var r = new BoogieFormalParam(new BoogieTypedIdent("result", BoogieType.Real));
 
-            program.Declarations.Add(new BoogieFunction(name, new() { x }, new() { r }));
-        }
+    program.Declarations.Add(new BoogieFunction(name, new() { x }, new() { r }));
+}
 
         private static void AddBitwiseFunction(BoogieProgram program, string name)
         {
