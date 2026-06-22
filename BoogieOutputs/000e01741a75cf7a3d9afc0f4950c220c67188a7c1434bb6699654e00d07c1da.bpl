@@ -359,6 +359,37 @@ implementation pop()
     $sp := ($sp) - (1);
 }
 
+var $table: [int]real;
+var $table_size: int;
+procedure {:inline 1} table_get(idx: int) returns (result: real);
+implementation table_get(idx: int) returns (result: real)
+{
+    result := $table[idx];
+}
+
+procedure {:inline 1} table_set(idx: int, value: real);
+modifies $table;
+modifies $table_size;
+implementation table_set(idx: int, value: real)
+{
+    $table[idx] := value;
+}
+
+procedure {:inline 1} table_size() returns (result: int);
+implementation table_size() returns (result: int)
+{
+    result := $table_size;
+}
+
+procedure {:inline 1} table_grow(value: real, delta: int) returns (oldSize: int);
+modifies $table;
+modifies $table_size;
+implementation table_grow(value: real, delta: int) returns (oldSize: int)
+{
+    oldSize := $table_size;
+    $table_size := ($table_size) + (delta);
+}
+
 var global_0: real;
 const global_1: real;
 
@@ -439,10 +470,13 @@ const global_26: real;
 
 axiom((global_26) == (1.0));
 procedure {:inline 1} initGlobals();
+modifies $mem_pages;
 modifies global_0;
+ensures(($mem_pages) == (0));
 ensures((global_0) == (71296.0));
 implementation initGlobals()
 {
+    $mem_pages := 0;
     global_0 := 71296.0;
 }
 
@@ -492,6 +526,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __wasm_call_ctors()
@@ -523,6 +559,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -852,6 +890,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation polybench_prepare_instruments()
@@ -872,6 +912,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation polybench_timer_start()
@@ -907,6 +949,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation rtclock()
@@ -936,6 +980,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation polybench_timer_stop()
@@ -970,6 +1016,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -1069,6 +1117,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -1158,6 +1208,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -1308,6 +1360,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -1594,6 +1648,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation _start()
@@ -1628,6 +1684,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation malloc()
@@ -1650,6 +1708,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -8086,6 +8146,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation free()
@@ -8108,6 +8170,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation dlfree()
@@ -9993,6 +10057,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation calloc()
@@ -10109,6 +10175,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation realloc()
@@ -11330,6 +11398,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation dispose_chunk()
@@ -13122,6 +13192,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation posix_memalign()
@@ -13240,6 +13312,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation internal_memalign()
@@ -13716,6 +13790,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation aligned_alloc()
@@ -13754,6 +13830,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation malloc_usable_size()
@@ -13831,6 +13909,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation sbrk()
@@ -13921,6 +14001,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation main()
@@ -13945,6 +14027,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation _Exit()
@@ -13968,6 +14052,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation abort()
@@ -13986,6 +14072,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation dummy()
@@ -14003,6 +14091,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __wasm_call_dtors()
@@ -14022,6 +14112,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation exit()
@@ -14070,6 +14162,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -14142,6 +14236,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -14203,6 +14299,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fflush()
@@ -14515,6 +14613,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __ofl_lock()
@@ -14533,6 +14633,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __ofl_unlock()
@@ -14550,6 +14652,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __strerror_l()
@@ -14670,6 +14774,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation strerror()
@@ -14812,6 +14918,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -15205,6 +15313,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -24229,6 +24339,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation pop_arg()
@@ -24881,6 +24993,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation long_double_not_supported()
@@ -24904,6 +25018,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __towrite()
@@ -25022,6 +25138,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __towrite_needs_stdio_exit()
@@ -25040,6 +25158,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fputs()
@@ -25085,6 +25205,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -25178,6 +25300,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __stdio_seek()
@@ -25208,6 +25332,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation close()
@@ -25248,6 +25374,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __stdio_close()
@@ -25274,6 +25402,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __stdio_exit()
@@ -25627,6 +25757,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -25679,6 +25811,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -25774,6 +25908,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __stdout_write()
@@ -25838,6 +25974,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __fwritex()
@@ -26077,6 +26215,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fwrite()
@@ -26358,6 +26498,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -26455,6 +26597,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -26784,6 +26928,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation strnlen()
@@ -26827,6 +26973,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation memcpy()
@@ -28404,6 +28552,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation memset()
@@ -28840,6 +28990,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation strlen()
@@ -29029,6 +29181,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation memchr()
@@ -29328,6 +29482,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation dummy_1()
@@ -29350,6 +29506,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __lctrans()
@@ -29374,6 +29532,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __lctrans_cur()
@@ -29424,6 +29584,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation wctomb()
@@ -29458,6 +29620,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation wcrtomb()
@@ -29765,6 +29929,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation frexp()
@@ -29878,6 +30044,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -30038,6 +30206,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation putchar()
@@ -30125,6 +30295,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -30309,6 +30481,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -30574,6 +30748,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation __isspace()
@@ -30627,6 +30803,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation main_1()
@@ -30659,6 +30837,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -31211,6 +31391,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;
@@ -31769,6 +31951,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 modifies global_0;

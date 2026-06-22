@@ -235,6 +235,36 @@ function real_to_int(r: real) returns (result: int);
 function int_to_real(i: int) returns (result: real);
 function bits32_to_real(i: int) returns (result: real);
 function bits64_to_real(i: int) returns (result: real);
+function min_real(x: real, y: real) : real
+{
+    if (x) <= (y) then (x) else (y)
+}
+function max_real(x: real, y: real) : real
+{
+    if (x) >= (y) then (x) else (y)
+}
+function abs_real(x: real) : real
+{
+    if (x) >= (0.0) then (x) else (-(x))
+}
+function sqrt_real(r: real) returns (result: real);
+
+axiom(forall  r:real :: {sqrt_real(r)} (((r) >= (0.0)) ==> ((sqrt_real(r)) >= (0.0))));
+
+axiom(forall  r:real :: {sqrt_real(r)} (((r) >= (0.0)) ==> (((sqrt_real(r)) * (sqrt_real(r))) == (r))));
+function nearest_real(r: real) returns (result: real);
+
+axiom(forall  r:real :: {nearest_real(r)} ((((nearest_real(r)) - (0.5)) <= (r)) && ((r) <= ((nearest_real(r)) + (0.5)))));
+
+axiom(forall  r:real :: {nearest_real(r)} ((nearest_real(nearest_real(r))) == (nearest_real(r))));
+function floor_real(r: real) returns (result: real);
+
+axiom(forall  r:real ::  ((floor_real(r)) <= (r)));
+
+axiom(forall  r:real ::  ((r) < ((floor_real(r)) + (1.0))));
+function ceil_real(x: real) returns (result: real);
+function trunc_real(x: real) returns (result: real);
+function copysign_real(x: real, y: real) returns (result: real);
 function bv_and(x: real, y: real) returns (result: real);
 function bv_or(x: real, y: real) returns (result: real);
 function bv_xor(x: real, y: real) returns (result: real);
@@ -243,6 +273,11 @@ function bv_shr_s(x: real, y: real) returns (result: real);
 function bv_shr_u(x: real, y: real) returns (result: real);
 function bv_rotl(x: real, y: real) returns (result: real);
 function bv_rotr(x: real, y: real) returns (result: real);
+function int_rem_s(x: real, y: real) returns (result: real);
+function int_rem_u(x: real, y: real) returns (result: real);
+function int_clz(x: real) returns (result: real);
+function int_ctz(x: real) returns (result: real);
+function int_popcnt(x: real) returns (result: real);
 procedure {:inline 1} InitRuntime();
 modifies $sp;
 modifies $tmp1;
@@ -324,9 +359,43 @@ implementation pop()
     $sp := ($sp) - (1);
 }
 
+var $table: [int]real;
+var $table_size: int;
+procedure {:inline 1} table_get(idx: int) returns (result: real);
+implementation table_get(idx: int) returns (result: real)
+{
+    result := $table[idx];
+}
+
+procedure {:inline 1} table_set(idx: int, value: real);
+modifies $table;
+modifies $table_size;
+implementation table_set(idx: int, value: real)
+{
+    $table[idx] := value;
+}
+
+procedure {:inline 1} table_size() returns (result: int);
+implementation table_size() returns (result: int)
+{
+    result := $table_size;
+}
+
+procedure {:inline 1} table_grow(value: real, delta: int) returns (oldSize: int);
+modifies $table;
+modifies $table_size;
+implementation table_grow(value: real, delta: int) returns (oldSize: int)
+{
+    oldSize := $table_size;
+    $table_size := ($table_size) + (delta);
+}
+
 procedure {:inline 1} initGlobals();
+modifies $mem_pages;
+ensures(($mem_pages) == (0));
 implementation initGlobals()
 {
+    $mem_pages := 0;
 }
 
 procedure {:inline 1} abort();
@@ -463,6 +532,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_0()
@@ -480,6 +551,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_1()
@@ -497,6 +570,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_2()
@@ -514,6 +589,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_3()
@@ -554,6 +631,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_4()
@@ -597,6 +676,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_5()
@@ -636,6 +717,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_6()
@@ -671,6 +754,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_7()
@@ -720,6 +805,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_8()
@@ -745,6 +832,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_9()
@@ -768,6 +857,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_10()
@@ -789,6 +880,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_11()
@@ -811,6 +904,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_12()
@@ -833,6 +928,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_13()
@@ -854,6 +951,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_14()
@@ -874,6 +973,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation fimport_15()
@@ -895,6 +996,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_0()
@@ -922,6 +1025,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_1()
@@ -949,6 +1054,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_2()
@@ -978,6 +1085,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_3()
@@ -1001,6 +1110,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_4()
@@ -1067,6 +1178,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_5()
@@ -1996,6 +2109,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_6()
@@ -2634,6 +2749,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_7()
@@ -3111,6 +3228,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_8()
@@ -3586,6 +3705,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_9()
@@ -4036,6 +4157,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_10()
@@ -4213,6 +4336,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_11()
@@ -5049,6 +5174,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_12()
@@ -5360,6 +5487,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_13()
@@ -5810,6 +5939,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_14()
@@ -6086,6 +6217,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_15()
@@ -6400,6 +6533,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_16()
@@ -6681,6 +6816,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_17()
@@ -7040,6 +7177,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_18()
@@ -7695,6 +7834,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_19()
@@ -8293,6 +8434,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_20()
@@ -8502,6 +8645,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_21()
@@ -8800,6 +8945,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_22()
@@ -9129,6 +9276,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_23()
@@ -9152,6 +9301,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_24()
@@ -9778,6 +9929,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_25()
@@ -10459,6 +10612,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_26()
@@ -10618,6 +10773,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_27()
@@ -10692,6 +10849,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_28()
@@ -10722,6 +10881,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_29()
@@ -10744,6 +10905,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_30()
@@ -11017,6 +11180,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_31()
@@ -11285,6 +11450,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_32()
@@ -11643,6 +11810,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_33()
@@ -11665,6 +11834,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_34()
@@ -11870,6 +12041,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_35()
@@ -11962,6 +12135,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation func_36()
@@ -11980,6 +12155,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation CorralChoice__00189ff4eeb814ffa662649ba6859c004036580fccc2b83862cda60f5737d5d1()
@@ -12449,6 +12626,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation BoogieEntry__00189ff4eeb814ffa662649ba6859c004036580fccc2b83862cda60f5737d5d1()
@@ -12924,6 +13103,8 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
 implementation CorralEntry__00189ff4eeb814ffa662649ba6859c004036580fccc2b83862cda60f5737d5d1()
