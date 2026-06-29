@@ -1702,7 +1702,7 @@ implementation func_1()
     call func_0();
     call push(7.0);
     call loc2 := popArgs1();
-label$1_start_2:
+label$1_start_1:
     call push(loc2);
     call push(1.0);
     call popToTmp1();
@@ -1716,7 +1716,7 @@ label$1_start_2:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_start_2;
+        goto label$1_start_1;
     }
     call push(-2147483648.0);
     call push(arg3);
@@ -1725,11 +1725,11 @@ label$1_start_2:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_5;
+        goto label$2_end_3;
     }
     call push(5.0);
     call loc2 := popArgs1();
-label$3_start_6:
+label$3_start_4:
     call push(loc2);
     call push(1.0);
     call popToTmp1();
@@ -1743,7 +1743,7 @@ label$3_start_6:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_6;
+        goto label$3_start_4;
     }
     call push(2147483647.0);
     call push(arg2);
@@ -1752,7 +1752,7 @@ label$3_start_6:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8192.0);
     call fimport_0();
-label$2_end_5:
+label$2_end_3:
     call push(arg2);
     call push(arg1);
     call popToTmp1();
@@ -1760,11 +1760,11 @@ label$2_end_5:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_10;
+        goto label$5_end_7;
     }
     call push(7.0);
     call loc2 := popArgs1();
-label$6_start_11:
+label$6_start_8:
     call push(loc2);
     call push(1.0);
     call popToTmp1();
@@ -1778,7 +1778,7 @@ label$6_start_11:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_start_11;
+        goto label$6_start_8;
     }
     call push(-2147483648.0);
     call push(arg3);
@@ -1787,9 +1787,9 @@ label$6_start_11:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_9;
+        goto label$4_end_6;
     }
-label$5_end_10:
+label$5_end_7:
     call push(loc1);
     call push(136.0);
     call popToTmp1();
@@ -1906,7 +1906,7 @@ label$5_end_10:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$15_end_22;
+        goto label$15_end_18;
     }
     call push(arg3);
     call push(2147483647.0);
@@ -1915,7 +1915,7 @@ label$5_end_10:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$14_end_21;
+        goto label$14_end_17;
     }
     call push(arg3);
     call push(2147483647.0);
@@ -1924,7 +1924,7 @@ label$5_end_10:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_19;
+        goto label$12_end_15;
     }
     call push(arg3);
     call push(2147483647.0);
@@ -1933,7 +1933,7 @@ label$5_end_10:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_end_20;
+        goto label$13_end_16;
     }
     call push(loc1);
     call push(0.0);
@@ -1985,10 +1985,10 @@ label$5_end_10:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_15;
+        goto label$8_end_11;
     }
-    goto label$7_end_14;
-label$15_end_22:
+    goto label$7_end_10;
+label$15_end_18:
     call push(arg3);
     call push(-2147483648.0);
     call popToTmp1();
@@ -1996,7 +1996,7 @@ label$15_end_22:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_18;
+        goto label$11_end_14;
     }
     call push(arg3);
     call push(-2147483648.0);
@@ -2005,7 +2005,7 @@ label$15_end_22:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_17;
+        goto label$10_end_13;
     }
     call push(arg3);
     call push(-2147483648.0);
@@ -2014,7 +2014,7 @@ label$15_end_22:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_end_20;
+        goto label$13_end_16;
     }
     call push(loc1);
     call push(0.0);
@@ -2066,10 +2066,10 @@ label$15_end_22:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_15;
+        goto label$8_end_11;
     }
-    goto label$7_end_14;
-label$14_end_21:
+    goto label$7_end_10;
+label$14_end_17:
     call push(arg3);
     call push(2147483647.0);
     call popToTmp1();
@@ -2077,7 +2077,7 @@ label$14_end_21:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_16;
+        goto label$9_end_12;
     }
     call push(arg3);
     call push(2147483647.0);
@@ -2086,7 +2086,7 @@ label$14_end_21:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_end_20;
+        goto label$13_end_16;
     }
     call push(loc1);
     call push(0.0);
@@ -2125,7 +2125,7 @@ label$14_end_21:
     call push(($tmp2) + ($tmp1));
     call func_6();
     call pop();
-label$13_end_20:
+label$13_end_16:
     call push(loc1);
     call push(192.0);
     call popToTmp1();
@@ -2141,10 +2141,10 @@ label$13_end_20:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_14;
+        goto label$7_end_10;
     }
-    goto label$8_end_15;
-label$12_end_19:
+    goto label$8_end_11;
+label$12_end_15:
     call push(loc1);
     call push(0.0);
     call popToTmp2();
@@ -2195,10 +2195,10 @@ label$12_end_19:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_15;
+        goto label$8_end_11;
     }
-    goto label$7_end_14;
-label$11_end_18:
+    goto label$7_end_10;
+label$11_end_14:
     call push(loc1);
     call push(0.0);
     call popToTmp2();
@@ -2249,10 +2249,10 @@ label$11_end_18:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_15;
+        goto label$8_end_11;
     }
-    goto label$7_end_14;
-label$10_end_17:
+    goto label$7_end_10;
+label$10_end_13:
     call push(loc1);
     call push(0.0);
     call popToTmp2();
@@ -2303,10 +2303,10 @@ label$10_end_17:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_15;
+        goto label$8_end_11;
     }
-    goto label$7_end_14;
-label$9_end_16:
+    goto label$7_end_10;
+label$9_end_12:
     call push(loc1);
     call push(0.0);
     call popToTmp2();
@@ -2359,9 +2359,9 @@ label$9_end_16:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_14;
+        goto label$7_end_10;
     }
-label$8_end_15:
+label$8_end_11:
     call push(loc1);
     call push(196.0);
     call popToTmp1();
@@ -2381,9 +2381,9 @@ label$8_end_15:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$17_end_31;
+        goto label$17_end_20;
     }
-label$18_start_34:
+label$18_start_21:
     call push(loc5);
     call push(-24.0);
     call popToTmp1();
@@ -2408,11 +2408,11 @@ label$18_start_34:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$19_end_37;
+        goto label$19_end_23;
     }
     call push(loc6);
     call func_38();
-label$19_end_37:
+label$19_end_23:
     call push(loc3);
     call push(loc5);
     call popToTmp1();
@@ -2420,7 +2420,7 @@ label$19_end_37:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$18_start_34;
+        goto label$18_start_21;
     }
     call push(loc1);
     call push(192.0);
@@ -2432,11 +2432,11 @@ label$19_end_37:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc5 := popArgs1();
-    goto label$16_end_30;
-label$17_end_31:
+    goto label$16_end_19;
+label$17_end_20:
     call push(loc3);
     call loc5 := popArgs1();
-label$16_end_30:
+label$16_end_19:
     call push(loc4);
     call push(loc3);
     call popToTmp2();
@@ -2446,7 +2446,7 @@ label$16_end_30:
     call mem_write_u32(idx, store_i);
     call push(loc5);
     call func_38();
-label$7_end_14:
+label$7_end_10:
     call push(loc1);
     call push(152.0);
     call popToTmp1();
@@ -2462,7 +2462,7 @@ label$7_end_14:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_9;
+        goto label$4_end_6;
     }
     call push(loc1);
     call push(156.0);
@@ -2483,9 +2483,9 @@ label$7_end_14:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$21_end_40;
+        goto label$21_end_25;
     }
-label$22_start_43:
+label$22_start_26:
     call push(loc5);
     call push(-24.0);
     call popToTmp1();
@@ -2510,7 +2510,7 @@ label$22_start_43:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$23_end_46;
+        goto label$23_end_28;
     }
     call push(loc6);
     call popToTmp1();
@@ -2525,7 +2525,7 @@ label$22_start_43:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$24_end_47;
+        goto label$24_end_29;
     }
     call push(loc6);
     call push(24.0);
@@ -2537,10 +2537,10 @@ label$22_start_43:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$24_end_47:
+label$24_end_29:
     call push(loc6);
     call func_38();
-label$23_end_46:
+label$23_end_28:
     call push(loc3);
     call push(loc5);
     call popToTmp1();
@@ -2548,7 +2548,7 @@ label$23_end_46:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$22_start_43;
+        goto label$22_start_26;
     }
     call push(loc1);
     call push(152.0);
@@ -2560,11 +2560,11 @@ label$23_end_46:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc5 := popArgs1();
-    goto label$20_end_39;
-label$21_end_40:
+    goto label$20_end_24;
+label$21_end_25:
     call push(loc3);
     call loc5 := popArgs1();
-label$20_end_39:
+label$20_end_24:
     call push(loc4);
     call push(loc3);
     call popToTmp2();
@@ -2574,7 +2574,7 @@ label$20_end_39:
     call mem_write_u32(idx, store_i);
     call push(loc5);
     call func_38();
-label$4_end_9:
+label$4_end_6:
     call push(0.0);
     call func_46();
     call push(loc1);
@@ -2662,9 +2662,9 @@ implementation func_2()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_50;
+        goto label$2_end_31;
     }
-label$4_start_54:
+label$4_start_33:
     call push(loc4);
     call push(-24.0);
     call popToTmp1();
@@ -2688,7 +2688,7 @@ label$4_start_54:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_53;
+        goto label$3_end_32;
     }
     call push(loc5);
     call loc4 := popArgs1();
@@ -2699,10 +2699,1181 @@ label$4_start_54:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_start_54;
+        goto label$4_start_33;
+    }
+    goto label$2_end_31;
+label$3_end_32:
+    call push(loc3);
+    call push(loc4);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$2_end_31;
+    }
+    call push(loc6);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (76);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(loc2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call push(8269.0);
+    call fimport_0();
+    goto label$1_end_30;
+label$2_end_31:
+    call push(0.0);
+    call loc6 := popArgs1();
+    call push(loc2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call push(arg1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call push(-2147483648.0);
+    call push(arg2);
+    call fimport_7();
+    call loc5 := popArgs1();
+    call push(loc5);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$1_end_30;
+    }
+    call push(loc2);
+    call push(loc5);
+    call func_16();
+    call loc6 := popArgs1();
+    call push(loc6);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (76);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(loc2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call push(8269.0);
+    call fimport_0();
+label$1_end_30:
+    call push(loc6);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call loc4 := popArgs1();
+    call push(loc4);
+    call push(8708.0);
+    call fimport_0();
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call loc5 := popArgs1();
+    call push(loc5);
+    call push(loc6);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(loc6);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (16);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc6);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_41();
+    call loc3 := popArgs1();
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(68.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc6);
+    call push(68.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(60.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc6);
+    call push(60.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(52.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc6);
+    call push(52.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(loc6);
+    call push(44.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (60);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(loc6);
+    call push(36.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (52);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc1);
+    call push(loc6);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (28);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (44);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc5);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call fimport_4();
+    call push(loc1);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (56);
+    call load_i := mem_read_u8(idx);
+    call push(int_to_real(load_i));
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call push(loc1);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (52);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call push(8729.0);
+    call fimport_0();
+    call push(loc1);
+    call push(100.0);
+    call fimport_8();
+    call push(1000000.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) / ($tmp1));
+    // // wrap: no-op under real semantics
+    call loc7 := popArgs1();
+    call push(loc7);
+    call push(loc1);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (60);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call push(100.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) * ($tmp1));
+    call push(36000.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) / ($tmp1));
+    call loc5 := popArgs1();
+    call push(loc5);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call push(0.0);
+    call push(loc5);
+    call push(252.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call push(100.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call arg1 := popArgs1();
+    call push(arg1);
+    call popToTmp1();
+    call popToTmp2();
+    call popToTmp3();
+    if (real_to_bool($tmp1)) {
+        call push($tmp3);
+    } else {
+        call push($tmp2);
+    }
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (57);
+    store_i := real_to_int($tmp2);
+    call mem_write_u8(idx, store_i);
+    call push(100.0);
+    call push(-56.0);
+    call push(loc5);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call push(arg1);
+    call popToTmp1();
+    call popToTmp2();
+    call popToTmp3();
+    if (real_to_bool($tmp1)) {
+        call push($tmp3);
+    } else {
+        call push($tmp2);
+    }
+    call push(24.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shl($tmp2, $tmp1));
+    call push(24.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_s($tmp2, $tmp1));
+    call loc5 := popArgs1();
+    call push(loc5);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) <= ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$6_end_36;
+    }
+    call push(loc1);
+    call push(56.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc5);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u8(idx, store_i);
+    goto label$5_end_35;
+label$6_end_36:
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(36.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc7);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc1);
+    call push(56.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(0.0);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u8(idx, store_i);
+label$5_end_35:
+    call push(loc1);
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (8);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc4);
+    call push(8442.0);
+    call fimport_0();
+    call push(loc2);
+    call push(loc6);
+    call push(0.0);
+    call push(loc1);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_19();
+    call push(loc3);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_u8(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$7_end_37;
+    }
+    call push(loc1);
+    call push(40.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call func_38();
+label$7_end_37:
+    call push(loc1);
+    call push(96.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call global_0 := popArgs1();
+}
+
+procedure {:inline 1} popDiscard3();
+modifies $sp;
+requires(($sp) >= (3));
+ensures(($sp) == ((old($sp)) - (3)));
+ensures((0) <= ($sp));
+implementation popDiscard3()
+{
+    $sp := ($sp) - (3);
+}
+
+procedure {:inline 1} func_3();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+modifies global_0;
+implementation func_3()
+{
+    var arg1: real;
+    var arg2: real;
+    var loc1: real;
+    var loc2: real;
+    var loc3: real;
+    var loc4: real;
+    var loc5: real;
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    assume (($sp) >= (2));
+    call arg1, arg2 := popArgs2();
+    loc1 := 0.0;
+    loc2 := 0.0;
+    loc3 := 0.0;
+    loc4 := 0.0;
+    loc5 := 0.0;
+    call push(global_0);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call loc1 := popArgs1();
+    call push(loc1);
+    call loc2 := popArgs1();
+    call push(loc1);
+    call global_0 := popArgs1();
+    call push(arg2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (4);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc3 := popArgs1();
+    call push(arg2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc4 := popArgs1();
+    call fimport_1();
+    call arg2 := popArgs1();
+    call push(arg2);
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$4_end_41;
+    }
+    call push(arg2);
+    call push(513.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$3_end_40;
+    }
+    call push(arg2);
+    call func_47();
+    call loc1 := popArgs1();
+    goto label$2_end_39;
+label$4_end_41:
+    call push(0.0);
+    call loc1 := popArgs1();
+    goto label$1_end_38;
+label$3_end_40:
+    call push(loc1);
+    call push(arg2);
+    call push(15.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(-16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call loc1 := popArgs1();
+    call push(loc1);
+    call global_0 := popArgs1();
+label$2_end_39:
+    call push(loc1);
+    call push(arg2);
+    call fimport_2();
+    call pop();
+label$1_end_38:
+    call push(loc2);
+    call push(0.0);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (8);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(arg2);
+    call push(7.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(8343.0);
+    call fimport_0();
+    call push(loc2);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc1);
+    call push(8.0);
+    call fimport_3();
+    call pop();
+    call push(loc2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (8);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call loc5 := popArgs1();
+    call push(arg2);
+    call push(513.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$5_end_42;
+    }
+    call push(loc1);
+    call func_50();
+label$5_end_42:
+    call push(arg1);
+    call push(loc3);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_shr_s($tmp2, $tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call arg2 := popArgs1();
+    call push(loc3);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$6_end_43;
+    }
+    call push(arg2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(loc4);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc4 := popArgs1();
+label$6_end_43:
+    call push(arg2);
+    call push(loc5);
+    call push(loc4);
+    call popDiscard3();
+    call push(loc2);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call global_0 := popArgs1();
+    call push(1.0);
+}
+
+procedure {:inline 1} func_4();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+implementation func_4()
+{
+    var arg1: real;
+    var arg2: real;
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    assume (($sp) >= (2));
+    call arg1, arg2 := popArgs2();
+    call push(8895.0);
+    call fimport_5();
+}
+
+procedure {:inline 1} func_5();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+modifies global_0;
+implementation func_5()
+{
+    var arg1: real;
+    var arg2: real;
+    var arg3: real;
+    var loc1: real;
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    assume (($sp) >= (3));
+    call arg1, arg2, arg3 := popArgs3();
+    loc1 := 0.0;
+    call push(global_0);
+    call push(64.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call loc1 := popArgs1();
+    call push(loc1);
+    call global_0 := popArgs1();
+    call push(loc1);
+    call push(arg2);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (56);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(arg2);
+    call fimport_4();
+    call push(loc1);
+    call push(32.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(arg1);
+    call func_14();
+    call push(8256.0);
+    call fimport_5();
+    call push(arg1);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call arg2 := popArgs1();
+    call push(loc1);
+    call push(arg3);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (20);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc1);
+    call push(arg1);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (16);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc1);
+    call push(loc1);
+    call push(56.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (24);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc1);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(arg1);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(arg2);
+    call push(loc1);
+    call push(16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_15();
+    call push(loc1);
+    call push(64.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call global_0 := popArgs1();
+}
+
+procedure {:inline 1} func_6();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+modifies global_0;
+implementation func_6()
+{
+    var arg1: real;
+    var arg2: real;
+    var loc1: real;
+    var loc2: real;
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    assume (($sp) >= (2));
+    call arg1, arg2 := popArgs2();
+    loc1 := 0.0;
+    loc2 := 0.0;
+    call push(global_0);
+    call push(64.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call loc1 := popArgs1();
+    call push(loc1);
+    call global_0 := popArgs1();
+    call push(loc1);
+    call loc2 := popArgs1();
+    call push(loc2);
+    call push(arg1);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (44);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(arg2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (32);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(0.0);
+    call arg2 := popArgs1();
+    call fimport_1();
+    call arg1 := popArgs1();
+    call push(arg1);
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$1_end_44;
+    }
+    call push(arg1);
+    call push(513.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$3_end_46;
+    }
+    call push(arg1);
+    call func_47();
+    call arg2 := popArgs1();
+    goto label$2_end_45;
+label$3_end_46:
+    call push(loc1);
+    call push(arg1);
+    call push(15.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(-16.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call arg2 := popArgs1();
+    call push(arg2);
+    call global_0 := popArgs1();
+label$2_end_45:
+    call push(arg2);
+    call push(arg1);
+    call fimport_2();
+    call pop();
+label$1_end_44:
+    call push(loc2);
+    call push(24.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(0.0);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(0.0);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (8);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc2);
+    call push(0.0);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (16);
+    store_i := real_to_int($tmp2);
+    call mem_write_u64(idx, store_i);
+    call push(loc2);
+    call push(arg2);
+    call push(arg1);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (56);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(arg2);
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (48);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(arg1);
+    call push(7.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(8343.0);
+    call fimport_0();
+    call push(loc2);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(arg2);
+    call push(8.0);
+    call fimport_3();
+    call pop();
+    call push(loc2);
+    call push(arg2);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (52);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(48.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc2);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_12();
+    call pop();
+    call push(arg1);
+    call push(513.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$4_end_47;
+    }
+    call push(arg2);
+    call func_50();
+label$4_end_47:
+    call push(loc2);
+    call push(loc2);
+    call push(32.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (52);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(loc2);
+    call push(44.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp2();
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (48);
+    store_i := real_to_int($tmp2);
+    call mem_write_u32(idx, store_i);
+    call push(loc2);
+    call push(48.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(loc2);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_13();
+    call push(loc2);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (16);
+    call load_i := mem_read_u8(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$5_end_48;
+    }
+    call push(loc2);
+    call push(24.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call func_38();
+label$5_end_48:
+    call push(loc2);
+    call push(64.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call global_0 := popArgs1();
+    call push(1.0);
+}
+
+procedure {:inline 1} func_7();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+modifies global_0;
+implementation func_7()
+{
+    var arg1: real;
+    var arg2: real;
+    var loc1: real;
+    var loc2: real;
+    var loc3: real;
+    var loc4: real;
+    var loc5: real;
+    var loc6: real;
+    var loc7: real;
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    assume (($sp) >= (2));
+    call arg1, arg2 := popArgs2();
+    loc1 := 0.0;
+    loc2 := 0.0;
+    loc3 := 0.0;
+    loc4 := 0.0;
+    loc5 := 0.0;
+    loc6 := 0.0;
+    loc7 := 0.0;
+    call push(global_0);
+    call push(96.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call loc1 := popArgs1();
+    call push(loc1);
+    call global_0 := popArgs1();
+    call push(arg1);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call loc2 := popArgs1();
+    call push(arg1);
+    call push(32.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc3 := popArgs1();
+    call push(loc3);
+    call push(arg1);
+    call push(36.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc4 := popArgs1();
+    call push(loc4);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$2_end_50;
+    }
+label$4_start_52:
+    call push(loc4);
+    call push(-24.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call loc5 := popArgs1();
+    call push(loc5);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call loc6 := popArgs1();
+    call push(loc6);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s64(idx);
+    call push(int_to_real(load_i));
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$3_end_51;
+    }
+    call push(loc5);
+    call loc4 := popArgs1();
+    call push(loc3);
+    call push(loc5);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        goto label$4_start_52;
     }
     goto label$2_end_50;
-label$3_end_53:
+label$3_end_51:
     call push(loc3);
     call push(loc4);
     call popToTmp1();
@@ -3055,7 +4226,7 @@ label$1_end_49:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_66;
+        goto label$6_end_55;
     }
     call push(loc1);
     call push(56.0);
@@ -3068,8 +4239,8 @@ label$1_end_49:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-    goto label$5_end_65;
-label$6_end_66:
+    goto label$5_end_54;
+label$6_end_55:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -3096,1178 +4267,7 @@ label$6_end_66:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-label$5_end_65:
-    call push(loc1);
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (8);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc4);
-    call push(8442.0);
-    call fimport_0();
-    call push(loc2);
-    call push(loc6);
-    call push(0.0);
-    call push(loc1);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call func_19();
-    call push(loc3);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_u8(idx);
-    call push(int_to_real(load_i));
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$7_end_68;
-    }
-    call push(loc1);
-    call push(40.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call func_38();
-label$7_end_68:
-    call push(loc1);
-    call push(96.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call global_0 := popArgs1();
-}
-
-procedure {:inline 1} popDiscard3();
-modifies $sp;
-requires(($sp) >= (3));
-ensures(($sp) == ((old($sp)) - (3)));
-ensures((0) <= ($sp));
-implementation popDiscard3()
-{
-    $sp := ($sp) - (3);
-}
-
-procedure {:inline 1} func_3();
-modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
-modifies $sp;
-modifies $stack;
-modifies $table;
-modifies $table_size;
-modifies $mem;
-modifies $mem_pages;
-modifies global_0;
-implementation func_3()
-{
-    var arg1: real;
-    var arg2: real;
-    var loc1: real;
-    var loc2: real;
-    var loc3: real;
-    var loc4: real;
-    var loc5: real;
-    var entry_sp: int;
-    var idx: int;
-    var load_i: int;
-    var store_i: int;
-    entry_sp := $sp;
-    assume (($sp) >= (2));
-    call arg1, arg2 := popArgs2();
-    loc1 := 0.0;
-    loc2 := 0.0;
-    loc3 := 0.0;
-    loc4 := 0.0;
-    loc5 := 0.0;
-    call push(global_0);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call loc1 := popArgs1();
-    call push(loc1);
-    call loc2 := popArgs1();
-    call push(loc1);
-    call global_0 := popArgs1();
-    call push(arg2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (4);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc3 := popArgs1();
-    call push(arg2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc4 := popArgs1();
-    call fimport_1();
-    call arg2 := popArgs1();
-    call push(arg2);
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$4_end_73;
-    }
-    call push(arg2);
-    call push(513.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$3_end_72;
-    }
-    call push(arg2);
-    call func_47();
-    call loc1 := popArgs1();
-    goto label$2_end_71;
-label$4_end_73:
-    call push(0.0);
-    call loc1 := popArgs1();
-    goto label$1_end_70;
-label$3_end_72:
-    call push(loc1);
-    call push(arg2);
-    call push(15.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(-16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call loc1 := popArgs1();
-    call push(loc1);
-    call global_0 := popArgs1();
-label$2_end_71:
-    call push(loc1);
-    call push(arg2);
-    call fimport_2();
-    call pop();
-label$1_end_70:
-    call push(loc2);
-    call push(0.0);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (8);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(arg2);
-    call push(7.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) > ($tmp1)));
-    call push(8343.0);
-    call fimport_0();
-    call push(loc2);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc1);
-    call push(8.0);
-    call fimport_3();
-    call pop();
-    call push(loc2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (8);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call loc5 := popArgs1();
-    call push(arg2);
-    call push(513.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$5_end_76;
-    }
-    call push(loc1);
-    call func_50();
-label$5_end_76:
-    call push(arg1);
-    call push(loc3);
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_shr_s($tmp2, $tmp1));
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call arg2 := popArgs1();
-    call push(loc3);
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$6_end_77;
-    }
-    call push(arg2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call push(loc4);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc4 := popArgs1();
-label$6_end_77:
-    call push(arg2);
-    call push(loc5);
-    call push(loc4);
-    call popDiscard3();
-    call push(loc2);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call global_0 := popArgs1();
-    call push(1.0);
-}
-
-procedure {:inline 1} func_4();
-modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
-modifies $sp;
-modifies $stack;
-modifies $table;
-modifies $table_size;
-modifies $mem;
-modifies $mem_pages;
-implementation func_4()
-{
-    var arg1: real;
-    var arg2: real;
-    var entry_sp: int;
-    var idx: int;
-    var load_i: int;
-    var store_i: int;
-    entry_sp := $sp;
-    assume (($sp) >= (2));
-    call arg1, arg2 := popArgs2();
-    call push(8895.0);
-    call fimport_5();
-}
-
-procedure {:inline 1} func_5();
-modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
-modifies $sp;
-modifies $stack;
-modifies $table;
-modifies $table_size;
-modifies $mem;
-modifies $mem_pages;
-modifies global_0;
-implementation func_5()
-{
-    var arg1: real;
-    var arg2: real;
-    var arg3: real;
-    var loc1: real;
-    var entry_sp: int;
-    var idx: int;
-    var load_i: int;
-    var store_i: int;
-    entry_sp := $sp;
-    assume (($sp) >= (3));
-    call arg1, arg2, arg3 := popArgs3();
-    loc1 := 0.0;
-    call push(global_0);
-    call push(64.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call loc1 := popArgs1();
-    call push(loc1);
-    call global_0 := popArgs1();
-    call push(loc1);
-    call push(arg2);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (56);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(arg2);
-    call fimport_4();
-    call push(loc1);
-    call push(32.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(arg1);
-    call func_14();
-    call push(8256.0);
-    call fimport_5();
-    call push(arg1);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call arg2 := popArgs1();
-    call push(loc1);
-    call push(arg3);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (20);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc1);
-    call push(arg1);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (16);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc1);
-    call push(loc1);
-    call push(56.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (24);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc1);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(arg1);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(arg2);
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call func_15();
-    call push(loc1);
-    call push(64.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call global_0 := popArgs1();
-}
-
-procedure {:inline 1} func_6();
-modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
-modifies $sp;
-modifies $stack;
-modifies $table;
-modifies $table_size;
-modifies $mem;
-modifies $mem_pages;
-modifies global_0;
-implementation func_6()
-{
-    var arg1: real;
-    var arg2: real;
-    var loc1: real;
-    var loc2: real;
-    var entry_sp: int;
-    var idx: int;
-    var load_i: int;
-    var store_i: int;
-    entry_sp := $sp;
-    assume (($sp) >= (2));
-    call arg1, arg2 := popArgs2();
-    loc1 := 0.0;
-    loc2 := 0.0;
-    call push(global_0);
-    call push(64.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call loc1 := popArgs1();
-    call push(loc1);
-    call global_0 := popArgs1();
-    call push(loc1);
-    call loc2 := popArgs1();
-    call push(loc2);
-    call push(arg1);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (44);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(arg2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (32);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(0.0);
-    call arg2 := popArgs1();
-    call fimport_1();
-    call arg1 := popArgs1();
-    call push(arg1);
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$1_end_81;
-    }
-    call push(arg1);
-    call push(513.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$3_end_84;
-    }
-    call push(arg1);
-    call func_47();
-    call arg2 := popArgs1();
-    goto label$2_end_83;
-label$3_end_84:
-    call push(loc1);
-    call push(arg1);
-    call push(15.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(-16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call arg2 := popArgs1();
-    call push(arg2);
-    call global_0 := popArgs1();
-label$2_end_83:
-    call push(arg2);
-    call push(arg1);
-    call fimport_2();
-    call pop();
-label$1_end_81:
-    call push(loc2);
-    call push(24.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(0.0);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(0.0);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (8);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc2);
-    call push(0.0);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (16);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc2);
-    call push(arg2);
-    call push(arg1);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (56);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(arg2);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (48);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(arg1);
-    call push(7.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) > ($tmp1)));
-    call push(8343.0);
-    call fimport_0();
-    call push(loc2);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(arg2);
-    call push(8.0);
-    call fimport_3();
-    call pop();
-    call push(loc2);
-    call push(arg2);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (52);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(48.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc2);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call func_12();
-    call pop();
-    call push(arg1);
-    call push(513.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$4_end_86;
-    }
-    call push(arg2);
-    call func_50();
-label$4_end_86:
-    call push(loc2);
-    call push(loc2);
-    call push(32.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (52);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(loc2);
-    call push(44.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (48);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc2);
-    call push(48.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc2);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call func_13();
-    call push(loc2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (16);
-    call load_i := mem_read_u8(idx);
-    call push(int_to_real(load_i));
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$5_end_87;
-    }
-    call push(loc2);
-    call push(24.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call func_38();
-label$5_end_87:
-    call push(loc2);
-    call push(64.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call global_0 := popArgs1();
-    call push(1.0);
-}
-
-procedure {:inline 1} func_7();
-modifies $tmp1;
-modifies $tmp2;
-modifies $tmp3;
-modifies $sp;
-modifies $stack;
-modifies $table;
-modifies $table_size;
-modifies $mem;
-modifies $mem_pages;
-modifies global_0;
-implementation func_7()
-{
-    var arg1: real;
-    var arg2: real;
-    var loc1: real;
-    var loc2: real;
-    var loc3: real;
-    var loc4: real;
-    var loc5: real;
-    var loc6: real;
-    var loc7: real;
-    var entry_sp: int;
-    var idx: int;
-    var load_i: int;
-    var store_i: int;
-    entry_sp := $sp;
-    assume (($sp) >= (2));
-    call arg1, arg2 := popArgs2();
-    loc1 := 0.0;
-    loc2 := 0.0;
-    loc3 := 0.0;
-    loc4 := 0.0;
-    loc5 := 0.0;
-    loc6 := 0.0;
-    loc7 := 0.0;
-    call push(global_0);
-    call push(96.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call loc1 := popArgs1();
-    call push(loc1);
-    call global_0 := popArgs1();
-    call push(arg1);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call loc2 := popArgs1();
-    call push(arg1);
-    call push(32.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc3 := popArgs1();
-    call push(loc3);
-    call push(arg1);
-    call push(36.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc4 := popArgs1();
-    call push(loc4);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) == ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$2_end_90;
-    }
-label$4_start_94:
-    call push(loc4);
-    call push(-24.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call loc5 := popArgs1();
-    call push(loc5);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call loc6 := popArgs1();
-    call push(loc6);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call push(arg2);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) == ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$3_end_93;
-    }
-    call push(loc5);
-    call loc4 := popArgs1();
-    call push(loc3);
-    call push(loc5);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) != ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$4_start_94;
-    }
-    goto label$2_end_90;
-label$3_end_93:
-    call push(loc3);
-    call push(loc4);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) == ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$2_end_90;
-    }
-    call push(loc6);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (76);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call push(loc2);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) == ($tmp1)));
-    call push(8269.0);
-    call fimport_0();
-    goto label$1_end_89;
-label$2_end_90:
-    call push(0.0);
-    call loc6 := popArgs1();
-    call push(loc2);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call push(arg1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call push(-2147483648.0);
-    call push(arg2);
-    call fimport_7();
-    call loc5 := popArgs1();
-    call push(loc5);
-    call push(0.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$1_end_89;
-    }
-    call push(loc2);
-    call push(loc5);
-    call func_16();
-    call loc6 := popArgs1();
-    call push(loc6);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (76);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call push(loc2);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) == ($tmp1)));
-    call push(8269.0);
-    call fimport_0();
-label$1_end_89:
-    call push(loc6);
-    call push(0.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) != ($tmp1)));
-    call loc4 := popArgs1();
-    call push(loc4);
-    call push(8708.0);
-    call fimport_0();
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call loc5 := popArgs1();
-    call push(loc5);
-    call push(loc6);
-    call push(8.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(loc6);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (16);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc6);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call func_41();
-    call loc3 := popArgs1();
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(68.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc6);
-    call push(68.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(60.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc6);
-    call push(60.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(52.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc6);
-    call push(52.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(loc6);
-    call push(44.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (60);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(loc6);
-    call push(36.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (52);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc1);
-    call push(loc6);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (28);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (44);
-    store_i := real_to_int($tmp2);
-    call mem_write_u64(idx, store_i);
-    call push(loc5);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    call load_i := mem_read_s64(idx);
-    call push(int_to_real(load_i));
-    call fimport_4();
-    call push(loc1);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (56);
-    call load_i := mem_read_u8(idx);
-    call push(int_to_real(load_i));
-    call push(0.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) != ($tmp1)));
-    call push(loc1);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (52);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call popToTmp1();
-    call push(bool_to_real(($tmp1) == (0.0)));
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call push(8729.0);
-    call fimport_0();
-    call push(loc1);
-    call push(100.0);
-    call fimport_8();
-    call push(1000000.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) / ($tmp1));
-    // // wrap: no-op under real semantics
-    call loc7 := popArgs1();
-    call push(loc7);
-    call push(loc1);
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (60);
-    call load_i := mem_read_s32(idx);
-    call push(int_to_real(load_i));
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call push(100.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) * ($tmp1));
-    call push(36000.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) / ($tmp1));
-    call loc5 := popArgs1();
-    call push(loc5);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call push(0.0);
-    call push(loc5);
-    call push(252.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_and($tmp2, $tmp1));
-    call push(100.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
-    call arg1 := popArgs1();
-    call push(arg1);
-    call popToTmp1();
-    call popToTmp2();
-    call popToTmp3();
-    if (real_to_bool($tmp1)) {
-        call push($tmp3);
-    } else {
-        call push($tmp2);
-    }
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (57);
-    store_i := real_to_int($tmp2);
-    call mem_write_u8(idx, store_i);
-    call push(100.0);
-    call push(-56.0);
-    call push(loc5);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) - ($tmp1));
-    call push(arg1);
-    call popToTmp1();
-    call popToTmp2();
-    call popToTmp3();
-    if (real_to_bool($tmp1)) {
-        call push($tmp3);
-    } else {
-        call push($tmp2);
-    }
-    call push(24.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_shl($tmp2, $tmp1));
-    call push(24.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bv_shr_s($tmp2, $tmp1));
-    call loc5 := popArgs1();
-    call push(loc5);
-    call push(0.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) <= ($tmp1)));
-    call popToTmp1();
-    if (real_to_bool($tmp1)) {
-        goto label$6_end_106;
-    }
-    call push(loc1);
-    call push(56.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc5);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u8(idx, store_i);
-    goto label$5_end_105;
-label$6_end_106:
-    call push(loc1);
-    call push(16.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(36.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(loc7);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u32(idx, store_i);
-    call push(loc1);
-    call push(56.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call push(0.0);
-    call popToTmp2();
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    store_i := real_to_int($tmp2);
-    call mem_write_u8(idx, store_i);
-label$5_end_105:
+label$5_end_54:
     call push(loc1);
     call push(loc1);
     call push(16.0);
@@ -4304,7 +4304,7 @@ label$5_end_105:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_108;
+        goto label$7_end_56;
     }
     call push(loc1);
     call push(40.0);
@@ -4316,7 +4316,7 @@ label$5_end_105:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$7_end_108:
+label$7_end_56:
     call push(loc1);
     call push(96.0);
     call popToTmp1();
@@ -4441,9 +4441,9 @@ implementation func_9()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_111;
+        goto label$2_end_58;
     }
-label$4_start_115:
+label$4_start_60:
     call push(loc4);
     call push(-24.0);
     call popToTmp1();
@@ -4467,7 +4467,7 @@ label$4_start_115:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_114;
+        goto label$3_end_59;
     }
     call push(arg3);
     call loc4 := popArgs1();
@@ -4478,10 +4478,10 @@ label$4_start_115:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_start_115;
+        goto label$4_start_60;
     }
-    goto label$2_end_111;
-label$3_end_114:
+    goto label$2_end_58;
+label$3_end_59:
     call push(loc3);
     call push(loc4);
     call popToTmp1();
@@ -4489,7 +4489,7 @@ label$3_end_114:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_111;
+        goto label$2_end_58;
     }
     call push(loc5);
     call popToTmp1();
@@ -4502,8 +4502,8 @@ label$3_end_114:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-    goto label$1_end_110;
-label$2_end_111:
+    goto label$1_end_57;
+label$2_end_58:
     call push(0.0);
     call loc5 := popArgs1();
     call push(loc2);
@@ -4531,7 +4531,7 @@ label$2_end_111:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_110;
+        goto label$1_end_57;
     }
     call push(loc2);
     call push(arg3);
@@ -4548,7 +4548,7 @@ label$2_end_111:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-label$1_end_110:
+label$1_end_57:
     call push(loc5);
     call push(0.0);
     call popToTmp1();
@@ -4826,7 +4826,7 @@ label$1_end_110:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_126;
+        goto label$6_end_63;
     }
     call push(loc1);
     call push(56.0);
@@ -4839,8 +4839,8 @@ label$1_end_110:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-    goto label$5_end_125;
-label$6_end_126:
+    goto label$5_end_62;
+label$6_end_63:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -4867,7 +4867,7 @@ label$6_end_126:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-label$5_end_125:
+label$5_end_62:
     call push(loc1);
     call push(loc1);
     call push(16.0);
@@ -4904,7 +4904,7 @@ label$5_end_125:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_128;
+        goto label$7_end_64;
     }
     call push(loc1);
     call push(40.0);
@@ -4916,7 +4916,7 @@ label$5_end_125:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$7_end_128:
+label$7_end_64:
     call push(loc1);
     call push(96.0);
     call popToTmp1();
@@ -5000,7 +5000,7 @@ implementation func_10()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_130;
+        goto label$1_end_65;
     }
     call push(arg2);
     call push(513.0);
@@ -5009,13 +5009,13 @@ implementation func_10()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_133;
+        goto label$3_end_67;
     }
     call push(arg2);
     call func_47();
     call loc5 := popArgs1();
-    goto label$2_end_132;
-label$3_end_133:
+    goto label$2_end_66;
+label$3_end_67:
     call push(loc1);
     call push(arg2);
     call push(15.0);
@@ -5032,12 +5032,12 @@ label$3_end_133:
     call loc5 := popArgs1();
     call push(loc5);
     call global_0 := popArgs1();
-label$2_end_132:
+label$2_end_66:
     call push(loc5);
     call push(arg2);
     call fimport_2();
     call pop();
-label$1_end_130:
+label$1_end_65:
     call push(loc2);
     call push(0.0);
     call popToTmp2();
@@ -5097,11 +5097,11 @@ label$1_end_130:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_136;
+        goto label$4_end_68;
     }
     call push(loc5);
     call func_50();
-label$4_end_136:
+label$4_end_68:
     call push(arg1);
     call push(loc3);
     call push(1.0);
@@ -5133,7 +5133,7 @@ label$4_end_136:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_137;
+        goto label$5_end_69;
     }
     call push(arg2);
     call popToTmp1();
@@ -5149,7 +5149,7 @@ label$4_end_136:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc4 := popArgs1();
-label$5_end_137:
+label$5_end_69:
     call push(arg2);
     call push(loc6);
     call push(loc5);
@@ -5241,9 +5241,9 @@ implementation func_11()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_140;
+        goto label$2_end_71;
     }
-label$4_start_144:
+label$4_start_73:
     call push(loc4);
     call push(-24.0);
     call popToTmp1();
@@ -5267,7 +5267,7 @@ label$4_start_144:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_143;
+        goto label$3_end_72;
     }
     call push(loc5);
     call loc4 := popArgs1();
@@ -5278,10 +5278,10 @@ label$4_start_144:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_start_144;
+        goto label$4_start_73;
     }
-    goto label$2_end_140;
-label$3_end_143:
+    goto label$2_end_71;
+label$3_end_72:
     call push(loc3);
     call push(loc4);
     call popToTmp1();
@@ -5289,7 +5289,7 @@ label$3_end_143:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_140;
+        goto label$2_end_71;
     }
     call push(loc6);
     call popToTmp1();
@@ -5302,8 +5302,8 @@ label$3_end_143:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-    goto label$1_end_139;
-label$2_end_140:
+    goto label$1_end_70;
+label$2_end_71:
     call push(0.0);
     call loc6 := popArgs1();
     call push(loc2);
@@ -5331,7 +5331,7 @@ label$2_end_140:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_139;
+        goto label$1_end_70;
     }
     call push(loc2);
     call push(loc5);
@@ -5348,7 +5348,7 @@ label$2_end_140:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-label$1_end_139:
+label$1_end_70:
     call push(loc6);
     call push(0.0);
     call popToTmp1();
@@ -5626,7 +5626,7 @@ label$1_end_139:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_155;
+        goto label$6_end_76;
     }
     call push(loc1);
     call push(56.0);
@@ -5639,8 +5639,8 @@ label$1_end_139:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-    goto label$5_end_154;
-label$6_end_155:
+    goto label$5_end_75;
+label$6_end_76:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -5667,7 +5667,7 @@ label$6_end_155:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-label$5_end_154:
+label$5_end_75:
     call push(loc1);
     call push(loc1);
     call push(16.0);
@@ -5704,7 +5704,7 @@ label$5_end_154:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_157;
+        goto label$7_end_77;
     }
     call push(loc1);
     call push(40.0);
@@ -5716,7 +5716,7 @@ label$5_end_154:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$7_end_157:
+label$7_end_77:
     call push(loc1);
     call push(96.0);
     call popToTmp1();
@@ -5810,7 +5810,7 @@ implementation func_12()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_166;
+        goto label$8_end_85;
     }
     call push(loc1);
     call push(8.0);
@@ -5837,7 +5837,7 @@ implementation func_12()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_161;
+        goto label$3_end_80;
     }
     call push(loc3);
     call push(10.0);
@@ -5846,7 +5846,7 @@ implementation func_12()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_165;
+        goto label$7_end_84;
     }
     call push(loc1);
     call push(loc3);
@@ -5865,8 +5865,8 @@ implementation func_12()
     call popToTmp2();
     call push(bv_or($tmp2, $tmp1));
     call loc4 := popArgs1();
-    goto label$6_end_164;
-label$8_end_166:
+    goto label$6_end_83;
+label$8_end_85:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -5878,7 +5878,7 @@ label$8_end_166:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_163;
+        goto label$5_end_82;
     }
     call push(arg2);
     call push(0.0);
@@ -5893,8 +5893,8 @@ label$8_end_166:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$4_end_162;
-label$7_end_165:
+    goto label$4_end_81;
+label$7_end_84:
     call push(loc3);
     call push(16.0);
     call popToTmp1();
@@ -5933,12 +5933,12 @@ label$7_end_165:
     idx := (real_to_int($tmp1)) + (4);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$6_end_164:
+label$6_end_83:
     call push(loc3);
     call loc6 := popArgs1();
     call push(loc4);
     call loc5 := popArgs1();
-label$9_start_170:
+label$9_start_86:
     call push(loc5);
     call push(loc2);
     call popToTmp1();
@@ -5971,7 +5971,7 @@ label$9_start_170:
     call push(loc6);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_start_170;
+        goto label$9_start_86;
     }
     call push(loc4);
     call push(loc3);
@@ -5995,7 +5995,7 @@ label$9_start_170:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_174;
+        goto label$11_end_89;
     }
     call push(arg2);
     call push(0.0);
@@ -6004,8 +6004,8 @@ label$9_start_170:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u16(idx, store_i);
-    goto label$10_end_173;
-label$11_end_174:
+    goto label$10_end_88;
+label$11_end_89:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -6024,7 +6024,7 @@ label$11_end_174:
     idx := (real_to_int($tmp1)) + (4);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$10_end_173:
+label$10_end_88:
     call push(arg2);
     call push(0.0);
     call func_44();
@@ -6069,10 +6069,10 @@ label$10_end_173:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_159;
+        goto label$1_end_78;
     }
-    goto label$2_end_160;
-label$5_end_163:
+    goto label$2_end_79;
+label$5_end_82:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -6097,7 +6097,7 @@ label$5_end_163:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-label$4_end_162:
+label$4_end_81:
     call push(arg2);
     call push(0.0);
     call func_44();
@@ -6124,14 +6124,14 @@ label$4_end_162:
     call push(loc2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_160;
+        goto label$2_end_79;
     }
-    goto label$1_end_159;
-label$3_end_161:
+    goto label$1_end_78;
+label$3_end_80:
     call push(loc1);
     call func_40();
     assume (false);
-label$2_end_160:
+label$2_end_79:
     call push(loc1);
     call push(loc2);
     call popToTmp2();
@@ -6141,7 +6141,7 @@ label$2_end_160:
     call mem_write_u32(idx, store_i);
     call push(loc2);
     call func_38();
-label$1_end_159:
+label$1_end_78:
     call push(loc1);
     call push(32.0);
     call popToTmp1();
@@ -6248,7 +6248,7 @@ implementation func_13()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_180;
+        goto label$1_end_90;
     }
     call push(loc4);
     call popToTmp1();
@@ -6264,7 +6264,7 @@ implementation func_13()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call arg1 := popArgs1();
-label$1_end_180:
+label$1_end_90:
     call push(loc4);
     call push(loc2);
     call push(loc1);
@@ -6289,7 +6289,7 @@ label$1_end_180:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_184;
+        goto label$4_end_93;
     }
     call push(arg2);
     call popToTmp1();
@@ -6302,10 +6302,10 @@ label$1_end_180:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_183;
+        goto label$3_end_92;
     }
-    goto label$2_end_182;
-label$4_end_184:
+    goto label$2_end_91;
+label$4_end_93:
     call push(loc3);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -6325,9 +6325,9 @@ label$4_end_184:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_182;
+        goto label$2_end_91;
     }
-label$3_end_183:
+label$3_end_92:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -6340,15 +6340,15 @@ label$3_end_183:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_185;
-label$2_end_182:
+    goto func_exit_94;
+label$2_end_91:
     call push(loc1);
     call push(32.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_185:
+func_exit_94:
 }
 
 procedure {:inline 1} func_14();
@@ -6429,7 +6429,7 @@ implementation func_14()
     call loc2 := popArgs1();
     call push(0.0);
     call loc3 := popArgs1();
-label$3_start_189:
+label$3_start_97:
     call push(loc2);
     // // wrap: no-op under real semantics
     call push(24.0);
@@ -6446,7 +6446,7 @@ label$3_start_189:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_188;
+        goto label$2_end_96;
     }
     call push(loc2);
     call push(8.0);
@@ -6465,7 +6465,7 @@ label$3_start_189:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_191;
+        goto label$4_end_99;
     }
     call push(loc4);
     call loc2 := popArgs1();
@@ -6486,13 +6486,13 @@ label$3_start_189:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_189;
+        goto label$3_start_97;
     }
-    goto label$1_end_187;
-label$4_end_191:
+    goto label$1_end_95;
+label$4_end_99:
     call push(loc4);
     call loc2 := popArgs1();
-label$5_start_193:
+label$5_start_100:
     call push(loc2);
     call push(65280.0);
     call popToTmp1();
@@ -6504,7 +6504,7 @@ label$5_start_193:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_188;
+        goto label$2_end_96;
     }
     call push(loc2);
     call push(8.0);
@@ -6529,7 +6529,7 @@ label$5_start_193:
     call push(loc5);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_start_193;
+        goto label$5_start_100;
     }
     call push(1.0);
     call loc5 := popArgs1();
@@ -6546,13 +6546,13 @@ label$5_start_193:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_189;
+        goto label$3_start_97;
     }
-    goto label$1_end_187;
-label$2_end_188:
+    goto label$1_end_95;
+label$2_end_96:
     call push(0.0);
     call loc5 := popArgs1();
-label$1_end_187:
+label$1_end_95:
     call push(loc5);
     call push(8422.0);
     call fimport_0();
@@ -6587,7 +6587,7 @@ label$1_end_187:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_200;
+        goto label$10_end_106;
     }
     call push(loc3);
     call push(-24.0);
@@ -6613,10 +6613,10 @@ label$1_end_187:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_199;
+        goto label$9_end_105;
     }
-    goto label$8_end_198;
-label$10_end_200:
+    goto label$8_end_104;
+label$10_end_106:
     call push(loc7);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -6642,7 +6642,7 @@ label$10_end_200:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_198;
+        goto label$8_end_104;
     }
     call push(loc7);
     call push(loc3);
@@ -6657,7 +6657,7 @@ label$10_end_200:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-label$9_end_199:
+label$9_end_105:
     call push(arg2);
     call push(76.0);
     call popToTmp1();
@@ -6683,7 +6683,7 @@ label$9_end_199:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_197;
+        goto label$7_end_103;
     }
     call push(loc3);
     call push(-24.0);
@@ -6706,8 +6706,8 @@ label$9_end_199:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-    goto label$6_end_196;
-label$8_end_198:
+    goto label$6_end_102;
+label$8_end_104:
     call push(1.0);
     call push(8373.0);
     call fimport_0();
@@ -6715,7 +6715,7 @@ label$8_end_198:
     call loc2 := popArgs1();
     call push(0.0);
     call loc3 := popArgs1();
-label$13_start_208:
+label$13_start_109:
     call push(loc2);
     // // wrap: no-op under real semantics
     call push(24.0);
@@ -6732,7 +6732,7 @@ label$13_start_208:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_207;
+        goto label$12_end_108;
     }
     call push(loc2);
     call push(8.0);
@@ -6751,7 +6751,7 @@ label$13_start_208:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$14_end_210;
+        goto label$14_end_111;
     }
     call push(loc4);
     call loc2 := popArgs1();
@@ -6772,13 +6772,13 @@ label$13_start_208:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_start_208;
+        goto label$13_start_109;
     }
-    goto label$11_end_206;
-label$14_end_210:
+    goto label$11_end_107;
+label$14_end_111:
     call push(loc4);
     call loc2 := popArgs1();
-label$15_start_212:
+label$15_start_112:
     call push(loc2);
     call push(65280.0);
     call popToTmp1();
@@ -6790,7 +6790,7 @@ label$15_start_212:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_207;
+        goto label$12_end_108;
     }
     call push(loc2);
     call push(8.0);
@@ -6815,7 +6815,7 @@ label$15_start_212:
     call push(loc5);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$15_start_212;
+        goto label$15_start_112;
     }
     call push(1.0);
     call loc5 := popArgs1();
@@ -6832,13 +6832,13 @@ label$15_start_212:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_start_208;
+        goto label$13_start_109;
     }
-    goto label$11_end_206;
-label$12_end_207:
+    goto label$11_end_107;
+label$12_end_108:
     call push(0.0);
     call loc5 := popArgs1();
-label$11_end_206:
+label$11_end_107:
     call push(loc5);
     call push(8422.0);
     call fimport_0();
@@ -6885,8 +6885,8 @@ label$11_end_206:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_215;
-label$7_end_197:
+    goto func_exit_114;
+label$7_end_103:
     call push(0.0);
     call loc3 := popArgs1();
     call push(arg2);
@@ -6918,7 +6918,7 @@ label$7_end_197:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_196;
+        goto label$6_end_102;
     }
     call push(loc7);
     call push(loc5);
@@ -6935,7 +6935,7 @@ label$7_end_197:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-label$6_end_196:
+label$6_end_102:
     call push(loc3);
     call push(0.0);
     call popToTmp1();
@@ -7041,7 +7041,7 @@ label$6_end_196:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_215:
+func_exit_114:
 }
 
 procedure {:inline 1} func_15();
@@ -7267,7 +7267,7 @@ implementation func_15()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_226;
+        goto label$2_end_116;
     }
     call push(loc4);
     call push(arg3);
@@ -7308,8 +7308,8 @@ implementation func_15()
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto label$1_end_225;
-label$2_end_226:
+    goto label$1_end_115;
+label$2_end_116:
     call push(arg2);
     call push(24.0);
     call popToTmp1();
@@ -7331,7 +7331,7 @@ label$2_end_226:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call func_24();
-label$1_end_225:
+label$1_end_115:
     call push(arg1);
     call push(arg4);
     call popToTmp2();
@@ -7364,7 +7364,7 @@ label$1_end_225:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_229;
+        goto label$3_end_117;
     }
     call push(arg4);
     call popToTmp1();
@@ -7379,7 +7379,7 @@ label$1_end_225:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_230;
+        goto label$4_end_118;
     }
     call push(arg4);
     call push(24.0);
@@ -7391,10 +7391,10 @@ label$1_end_225:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$4_end_230:
+label$4_end_118:
     call push(arg4);
     call func_38();
-label$3_end_229:
+label$3_end_117:
     call push(loc1);
     call push(48.0);
     call popToTmp1();
@@ -7472,9 +7472,9 @@ implementation func_16()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_232;
+        goto label$1_end_119;
     }
-label$3_start_236:
+label$3_start_121:
     call push(loc4);
     call push(-8.0);
     call popToTmp1();
@@ -7490,7 +7490,7 @@ label$3_start_236:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_235;
+        goto label$2_end_120;
     }
     call push(loc3);
     call push(loc4);
@@ -7505,10 +7505,10 @@ label$3_start_236:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_236;
+        goto label$3_start_121;
     }
-    goto label$1_end_232;
-label$2_end_235:
+    goto label$1_end_119;
+label$2_end_120:
     call push(loc3);
     call push(loc4);
     call popToTmp1();
@@ -7516,7 +7516,7 @@ label$2_end_235:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_232;
+        goto label$1_end_119;
     }
     call push(loc4);
     call push(-24.0);
@@ -7535,8 +7535,8 @@ label$2_end_235:
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
     call push(loc4);
-    goto func_exit_240;
-label$1_end_232:
+    goto func_exit_123;
+label$1_end_119:
     call push(arg2);
     call push(0.0);
     call push(0.0);
@@ -7560,13 +7560,13 @@ label$1_end_232:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_243;
+        goto label$5_end_125;
     }
     call push(loc3);
     call func_47();
     call loc1 := popArgs1();
-    goto label$4_end_242;
-label$5_end_243:
+    goto label$4_end_124;
+label$5_end_125:
     call push(loc1);
     call push(loc3);
     call push(15.0);
@@ -7583,7 +7583,7 @@ label$5_end_243:
     call loc1 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-label$4_end_242:
+label$4_end_124:
     call push(arg2);
     call push(loc1);
     call push(loc3);
@@ -7953,7 +7953,7 @@ label$4_end_242:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_249;
+        goto label$8_end_128;
     }
     call push(loc7);
     call push(loc5);
@@ -8001,10 +8001,10 @@ label$4_end_242:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_248;
+        goto label$7_end_127;
     }
-    goto label$6_end_247;
-label$8_end_249:
+    goto label$6_end_126;
+label$8_end_128:
     call push(arg1);
     call push(24.0);
     call popToTmp1();
@@ -8033,12 +8033,12 @@ label$8_end_249:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_247;
+        goto label$6_end_126;
     }
-label$7_end_248:
+label$7_end_127:
     call push(loc1);
     call func_50();
-label$6_end_247:
+label$6_end_126:
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (32);
@@ -8057,7 +8057,7 @@ label$6_end_247:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_252;
+        goto label$9_end_129;
     }
     call push(arg2);
     call popToTmp1();
@@ -8072,7 +8072,7 @@ label$6_end_247:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_253;
+        goto label$10_end_130;
     }
     call push(arg2);
     call push(24.0);
@@ -8084,10 +8084,10 @@ label$6_end_247:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$10_end_253:
+label$10_end_130:
     call push(arg2);
     call func_38();
-label$9_end_252:
+label$9_end_129:
     call push(loc2);
     call push(112.0);
     call popToTmp1();
@@ -8095,7 +8095,7 @@ label$9_end_252:
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
     call push(loc4);
-func_exit_240:
+func_exit_123:
 }
 
 procedure {:inline 1} func_17();
@@ -8331,7 +8331,7 @@ implementation func_17()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc11 := popArgs1();
-label$1_start_258:
+label$1_start_131:
     call push(arg4);
     call push(1.0);
     call popToTmp1();
@@ -8351,7 +8351,7 @@ label$1_start_258:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_start_258;
+        goto label$1_start_131;
     }
     call push(arg4);
     call push(513.0);
@@ -8360,13 +8360,13 @@ label$1_start_258:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_262;
+        goto label$3_end_134;
     }
     call push(arg4);
     call func_47();
     call loc1 := popArgs1();
-    goto label$2_end_261;
-label$3_end_262:
+    goto label$2_end_133;
+label$3_end_134:
     call push(loc1);
     call push(arg4);
     call push(15.0);
@@ -8383,7 +8383,7 @@ label$3_end_262:
     call loc1 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-label$2_end_261:
+label$2_end_133:
     call push(loc2);
     call push(loc1);
     call popToTmp2();
@@ -8598,7 +8598,7 @@ label$2_end_261:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_266;
+        goto label$6_end_137;
     }
     call push(loc3);
     call push(arg1);
@@ -8611,10 +8611,10 @@ label$2_end_261:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_265;
+        goto label$5_end_136;
     }
-    goto label$4_end_264;
-label$6_end_266:
+    goto label$4_end_135;
+label$6_end_137:
     call push(loc1);
     call func_50();
     call push(loc3);
@@ -8628,9 +8628,9 @@ label$6_end_266:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_264;
+        goto label$4_end_135;
     }
-label$5_end_265:
+label$5_end_136:
     call push(arg1);
     call push(16.0);
     call popToTmp1();
@@ -8666,15 +8666,15 @@ label$5_end_265:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_267;
-label$4_end_264:
+    goto func_exit_138;
+label$4_end_135:
     call push(loc2);
     call push(96.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_267:
+func_exit_138:
 }
 
 procedure {:inline 1} func_18();
@@ -8854,7 +8854,7 @@ implementation func_18()
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_272;
+        goto label$3_end_141;
     }
     call push(loc4);
     call popToTmp1();
@@ -8881,14 +8881,14 @@ implementation func_18()
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_271;
+        goto label$2_end_140;
     }
     call push(loc6);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_271;
+        goto label$2_end_140;
     }
     call push(arg2);
     call push(40.0);
@@ -8912,8 +8912,8 @@ implementation func_18()
     idx := (real_to_int($tmp1)) + (44);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto label$1_end_270;
-label$3_end_272:
+    goto label$1_end_139;
+label$3_end_141:
     call push(0.0);
     call arg4 := popArgs1();
     call push(loc4);
@@ -8932,7 +8932,7 @@ label$3_end_272:
     call load_i := mem_read_u8(idx);
     call push(int_to_real(load_i));
     call loc3 := popArgs1();
-label$2_end_271:
+label$2_end_140:
     call push(loc3);
     call push(255.0);
     call popToTmp1();
@@ -8942,31 +8942,31 @@ label$2_end_271:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_275;
+        goto label$4_end_142;
     }
     call push(8746.0);
     call fimport_5();
-    goto label$1_end_270;
-label$4_end_275:
+    goto label$1_end_139;
+label$4_end_142:
     call push(arg4);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_276;
+        goto label$5_end_143;
     }
     call push(loc7);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_270;
+        goto label$1_end_139;
     }
     call push(8779.0);
     call fimport_5();
-    goto label$1_end_270;
-label$5_end_276:
+    goto label$1_end_139;
+label$5_end_143:
     call push(8763.0);
     call fimport_5();
-label$1_end_270:
+label$1_end_139:
     call push(arg2);
     call push(68.0);
     call popToTmp1();
@@ -9057,7 +9057,7 @@ label$1_end_270:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc12 := popArgs1();
-label$6_start_279:
+label$6_start_144:
     call push(loc3);
     call push(1.0);
     call popToTmp1();
@@ -9077,7 +9077,7 @@ label$6_start_279:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_start_279;
+        goto label$6_start_144;
     }
     call push(loc3);
     call push(513.0);
@@ -9086,13 +9086,13 @@ label$6_start_279:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_283;
+        goto label$8_end_147;
     }
     call push(loc3);
     call func_47();
     call arg4 := popArgs1();
-    goto label$7_end_282;
-label$8_end_283:
+    goto label$7_end_146;
+label$8_end_147:
     call push(loc1);
     call push(loc3);
     call push(15.0);
@@ -9109,7 +9109,7 @@ label$8_end_283:
     call arg4 := popArgs1();
     call push(arg4);
     call global_0 := popArgs1();
-label$7_end_282:
+label$7_end_146:
     call push(loc2);
     call push(arg4);
     call popToTmp2();
@@ -9324,7 +9324,7 @@ label$7_end_282:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_287;
+        goto label$11_end_150;
     }
     call push(loc5);
     call push(arg1);
@@ -9337,10 +9337,10 @@ label$7_end_282:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_286;
+        goto label$10_end_149;
     }
-    goto label$9_end_285;
-label$11_end_287:
+    goto label$9_end_148;
+label$11_end_150:
     call push(arg4);
     call func_50();
     call push(loc5);
@@ -9354,9 +9354,9 @@ label$11_end_287:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_285;
+        goto label$9_end_148;
     }
-label$10_end_286:
+label$10_end_149:
     call push(arg1);
     call push(16.0);
     call popToTmp1();
@@ -9392,15 +9392,15 @@ label$10_end_286:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_288;
-label$9_end_285:
+    goto func_exit_151;
+label$9_end_148:
     call push(loc2);
     call push(96.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_288:
+func_exit_151:
 }
 
 procedure {:inline 1} func_19();
@@ -9580,7 +9580,7 @@ implementation func_19()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_293;
+        goto label$3_end_154;
     }
     call push(loc4);
     call popToTmp1();
@@ -9597,7 +9597,7 @@ implementation func_19()
     call push(arg4);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_294;
+        goto label$4_end_155;
     }
     call push(loc3);
     call push(255.0);
@@ -9608,7 +9608,7 @@ implementation func_19()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_294;
+        goto label$4_end_155;
     }
     call push(arg2);
     call push(60.0);
@@ -9632,20 +9632,20 @@ implementation func_19()
     idx := (real_to_int($tmp1)) + (52);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto label$1_end_291;
-label$4_end_294:
+    goto label$1_end_152;
+label$4_end_155:
     call push(arg4);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_292;
+        goto label$2_end_153;
     }
-label$3_end_293:
+label$3_end_154:
     call push(8800.0);
     call fimport_5();
-    goto label$1_end_291;
-label$2_end_292:
+    goto label$1_end_152;
+label$2_end_153:
     call push(loc3);
     call push(255.0);
     call popToTmp1();
@@ -9653,11 +9653,11 @@ label$2_end_292:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_291;
+        goto label$1_end_152;
     }
     call push(8818.0);
     call fimport_5();
-label$1_end_291:
+label$1_end_152:
     call push(arg2);
     call push(68.0);
     call popToTmp1();
@@ -9748,7 +9748,7 @@ label$1_end_291:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc12 := popArgs1();
-label$5_start_298:
+label$5_start_156:
     call push(loc3);
     call push(1.0);
     call popToTmp1();
@@ -9768,7 +9768,7 @@ label$5_start_298:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_start_298;
+        goto label$5_start_156;
     }
     call push(loc3);
     call push(513.0);
@@ -9777,13 +9777,13 @@ label$5_start_298:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_302;
+        goto label$7_end_159;
     }
     call push(loc3);
     call func_47();
     call arg4 := popArgs1();
-    goto label$6_end_301;
-label$7_end_302:
+    goto label$6_end_158;
+label$7_end_159:
     call push(loc1);
     call push(loc3);
     call push(15.0);
@@ -9800,7 +9800,7 @@ label$7_end_302:
     call arg4 := popArgs1();
     call push(arg4);
     call global_0 := popArgs1();
-label$6_end_301:
+label$6_end_158:
     call push(loc2);
     call push(arg4);
     call popToTmp2();
@@ -10015,7 +10015,7 @@ label$6_end_301:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_306;
+        goto label$10_end_162;
     }
     call push(loc5);
     call push(arg1);
@@ -10028,10 +10028,10 @@ label$6_end_301:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_305;
+        goto label$9_end_161;
     }
-    goto label$8_end_304;
-label$10_end_306:
+    goto label$8_end_160;
+label$10_end_162:
     call push(arg4);
     call func_50();
     call push(loc5);
@@ -10045,9 +10045,9 @@ label$10_end_306:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_304;
+        goto label$8_end_160;
     }
-label$9_end_305:
+label$9_end_161:
     call push(arg1);
     call push(16.0);
     call popToTmp1();
@@ -10083,15 +10083,15 @@ label$9_end_305:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_307;
-label$8_end_304:
+    goto func_exit_163;
+label$8_end_160:
     call push(loc2);
     call push(96.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_307:
+func_exit_163:
 }
 
 procedure {:inline 1} func_20();
@@ -10271,7 +10271,7 @@ implementation func_20()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_311;
+        goto label$2_end_165;
     }
     call push(loc4);
     call popToTmp1();
@@ -10292,7 +10292,7 @@ implementation func_20()
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_312;
+        goto label$3_end_166;
     }
     call push(loc3);
     call push(255.0);
@@ -10303,7 +10303,7 @@ implementation func_20()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_312;
+        goto label$3_end_166;
     }
     call push(arg2);
     call push(60.0);
@@ -10340,8 +10340,8 @@ implementation func_20()
     idx := (real_to_int($tmp1)) + (56);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto label$1_end_310;
-label$3_end_312:
+    goto label$1_end_164;
+label$3_end_166:
     call push(arg4);
     call push(1.0);
     call popToTmp1();
@@ -10349,7 +10349,7 @@ label$3_end_312:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_311;
+        goto label$2_end_165;
     }
     call push(loc3);
     call push(255.0);
@@ -10358,15 +10358,15 @@ label$3_end_312:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_310;
+        goto label$1_end_164;
     }
     call push(8853.0);
     call fimport_5();
-    goto label$1_end_310;
-label$2_end_311:
+    goto label$1_end_164;
+label$2_end_165:
     call push(8840.0);
     call fimport_5();
-label$1_end_310:
+label$1_end_164:
     call push(arg2);
     call push(68.0);
     call popToTmp1();
@@ -10457,7 +10457,7 @@ label$1_end_310:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc12 := popArgs1();
-label$4_start_316:
+label$4_start_167:
     call push(loc3);
     call push(1.0);
     call popToTmp1();
@@ -10477,7 +10477,7 @@ label$4_start_316:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_start_316;
+        goto label$4_start_167;
     }
     call push(loc3);
     call push(513.0);
@@ -10486,13 +10486,13 @@ label$4_start_316:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_320;
+        goto label$6_end_170;
     }
     call push(loc3);
     call func_47();
     call arg4 := popArgs1();
-    goto label$5_end_319;
-label$6_end_320:
+    goto label$5_end_169;
+label$6_end_170:
     call push(loc1);
     call push(loc3);
     call push(15.0);
@@ -10509,7 +10509,7 @@ label$6_end_320:
     call arg4 := popArgs1();
     call push(arg4);
     call global_0 := popArgs1();
-label$5_end_319:
+label$5_end_169:
     call push(loc2);
     call push(arg4);
     call popToTmp2();
@@ -10724,7 +10724,7 @@ label$5_end_319:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_324;
+        goto label$9_end_173;
     }
     call push(loc5);
     call push(arg1);
@@ -10737,10 +10737,10 @@ label$5_end_319:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_323;
+        goto label$8_end_172;
     }
-    goto label$7_end_322;
-label$9_end_324:
+    goto label$7_end_171;
+label$9_end_173:
     call push(arg4);
     call func_50();
     call push(loc5);
@@ -10754,9 +10754,9 @@ label$9_end_324:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_322;
+        goto label$7_end_171;
     }
-label$8_end_323:
+label$8_end_172:
     call push(arg1);
     call push(16.0);
     call popToTmp1();
@@ -10792,15 +10792,15 @@ label$8_end_323:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_325;
-label$7_end_322:
+    goto func_exit_174;
+label$7_end_171:
     call push(loc2);
     call push(96.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_325:
+func_exit_174:
 }
 
 procedure {:inline 1} func_21();
@@ -10882,9 +10882,9 @@ implementation func_21()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_327;
+        goto label$1_end_175;
     }
-label$3_start_331:
+label$3_start_177:
     call push(loc4);
     call push(-8.0);
     call popToTmp1();
@@ -10900,7 +10900,7 @@ label$3_start_331:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_330;
+        goto label$2_end_176;
     }
     call push(loc3);
     call push(loc4);
@@ -10915,10 +10915,10 @@ label$3_start_331:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_331;
+        goto label$3_start_177;
     }
-    goto label$1_end_327;
-label$2_end_330:
+    goto label$1_end_175;
+label$2_end_176:
     call push(loc3);
     call push(loc4);
     call popToTmp1();
@@ -10926,7 +10926,7 @@ label$2_end_330:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_327;
+        goto label$1_end_175;
     }
     call push(loc4);
     call push(-24.0);
@@ -10945,8 +10945,8 @@ label$2_end_330:
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
     call push(loc4);
-    goto func_exit_335;
-label$1_end_327:
+    goto func_exit_179;
+label$1_end_175:
     call push(arg2);
     call push(0.0);
     call push(0.0);
@@ -10970,13 +10970,13 @@ label$1_end_327:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_338;
+        goto label$5_end_181;
     }
     call push(loc5);
     call func_47();
     call loc6 := popArgs1();
-    goto label$4_end_337;
-label$5_end_338:
+    goto label$4_end_180;
+label$5_end_181:
     call push(loc1);
     call push(loc5);
     call push(15.0);
@@ -10993,7 +10993,7 @@ label$5_end_338:
     call loc6 := popArgs1();
     call push(loc6);
     call global_0 := popArgs1();
-label$4_end_337:
+label$4_end_180:
     call push(arg1);
     call push(24.0);
     call popToTmp1();
@@ -11048,7 +11048,7 @@ label$4_end_337:
     call loc11 := popArgs1();
     call push(0.0);
     call loc4 := popArgs1();
-label$8_start_343:
+label$8_start_184:
     call push(loc11);
     // // wrap: no-op under real semantics
     call push(24.0);
@@ -11065,7 +11065,7 @@ label$8_start_343:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_342;
+        goto label$7_end_183;
     }
     call push(loc11);
     call push(8.0);
@@ -11084,7 +11084,7 @@ label$8_start_343:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_345;
+        goto label$9_end_186;
     }
     call push(loc12);
     call loc11 := popArgs1();
@@ -11105,13 +11105,13 @@ label$8_start_343:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_start_343;
+        goto label$8_start_184;
     }
-    goto label$6_end_341;
-label$9_end_345:
+    goto label$6_end_182;
+label$9_end_186:
     call push(loc12);
     call loc11 := popArgs1();
-label$10_start_347:
+label$10_start_187:
     call push(loc11);
     call push(65280.0);
     call popToTmp1();
@@ -11123,7 +11123,7 @@ label$10_start_347:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_342;
+        goto label$7_end_183;
     }
     call push(loc11);
     call push(8.0);
@@ -11148,7 +11148,7 @@ label$10_start_347:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_start_347;
+        goto label$10_start_187;
     }
     call push(1.0);
     call loc3 := popArgs1();
@@ -11165,13 +11165,13 @@ label$10_start_347:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_start_343;
+        goto label$8_start_184;
     }
-    goto label$6_end_341;
-label$7_end_342:
+    goto label$6_end_182;
+label$7_end_183:
     call push(0.0);
     call loc3 := popArgs1();
-label$6_end_341:
+label$6_end_182:
     call push(loc3);
     call push(8422.0);
     call fimport_0();
@@ -11287,7 +11287,7 @@ label$6_end_341:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_end_353;
+        goto label$13_end_191;
     }
     call push(loc4);
     call push(-2147483648.0);
@@ -11335,10 +11335,10 @@ label$6_end_341:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_352;
+        goto label$12_end_190;
     }
-    goto label$11_end_351;
-label$13_end_353:
+    goto label$11_end_189;
+label$13_end_191:
     call push(loc7);
     call push(loc2);
     call push(24.0);
@@ -11363,12 +11363,12 @@ label$13_end_353:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_351;
+        goto label$11_end_189;
     }
-label$12_end_352:
+label$12_end_190:
     call push(loc6);
     call func_50();
-label$11_end_351:
+label$11_end_189:
     call push(loc2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (24);
@@ -11387,11 +11387,11 @@ label$11_end_351:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$14_end_356;
+        goto label$14_end_192;
     }
     call push(loc4);
     call func_38();
-label$14_end_356:
+label$14_end_192:
     call push(loc2);
     call push(32.0);
     call popToTmp1();
@@ -11399,7 +11399,7 @@ label$14_end_356:
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
     call push(loc8);
-func_exit_335:
+func_exit_179:
 }
 
 procedure {:inline 1} func_22();
@@ -11458,7 +11458,7 @@ implementation func_22()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_360;
+        goto label$3_end_195;
     }
     call push(loc2);
     call push(-24.0);
@@ -11484,10 +11484,10 @@ implementation func_22()
     call push(loc2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_359;
+        goto label$2_end_194;
     }
-    goto label$1_end_358;
-label$3_end_360:
+    goto label$1_end_193;
+label$3_end_195:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -11509,7 +11509,7 @@ label$3_end_360:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_358;
+        goto label$1_end_193;
     }
     call push(arg1);
     call push(loc2);
@@ -11526,7 +11526,7 @@ label$3_end_360:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call push(8269.0);
     call fimport_0();
-label$2_end_359:
+label$2_end_194:
     call push(loc1);
     call push(arg2);
     call popToTmp2();
@@ -11548,8 +11548,8 @@ label$2_end_359:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_365;
-label$1_end_358:
+    goto func_exit_196;
+label$1_end_193:
     call push(loc1);
     call push(arg2);
     call popToTmp2();
@@ -11572,7 +11572,7 @@ label$1_end_358:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_365:
+func_exit_196:
 }
 
 procedure {:inline 1} func_23();
@@ -11681,7 +11681,7 @@ implementation func_23()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
-label$1_start_369:
+label$1_start_197:
     call push(loc4);
     call push(1.0);
     call popToTmp1();
@@ -11701,7 +11701,7 @@ label$1_start_369:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_start_369;
+        goto label$1_start_197;
     }
     call push(loc4);
     call push(513.0);
@@ -11710,13 +11710,13 @@ label$1_start_369:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_373;
+        goto label$3_end_200;
     }
     call push(loc4);
     call func_47();
     call loc1 := popArgs1();
-    goto label$2_end_372;
-label$3_end_373:
+    goto label$2_end_199;
+label$3_end_200:
     call push(loc1);
     call push(loc4);
     call push(15.0);
@@ -11733,7 +11733,7 @@ label$3_end_373:
     call loc1 := popArgs1();
     call push(loc1);
     call global_0 := popArgs1();
-label$2_end_372:
+label$2_end_199:
     call push(loc2);
     call push(loc1);
     call popToTmp2();
@@ -11994,7 +11994,7 @@ label$2_end_372:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_378;
+        goto label$6_end_203;
     }
     call push(loc6);
     call push(loc3);
@@ -12007,10 +12007,10 @@ label$2_end_372:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_377;
+        goto label$5_end_202;
     }
-    goto label$4_end_376;
-label$6_end_378:
+    goto label$4_end_201;
+label$6_end_203:
     call push(loc1);
     call func_50();
     call push(loc6);
@@ -12024,9 +12024,9 @@ label$6_end_378:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_376;
+        goto label$4_end_201;
     }
-label$5_end_377:
+label$5_end_202:
     call push(loc3);
     call push(16.0);
     call popToTmp1();
@@ -12062,15 +12062,15 @@ label$5_end_377:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-    goto func_exit_379;
-label$4_end_376:
+    goto func_exit_204;
+label$4_end_201:
     call push(loc2);
     call push(96.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call global_0 := popArgs1();
-func_exit_379:
+func_exit_204:
 }
 
 procedure {:inline 1} func_24();
@@ -12139,7 +12139,7 @@ implementation func_24()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_381;
+        goto label$2_end_206;
     }
     call push(178956976.0);
     call loc4 := popArgs1();
@@ -12164,7 +12164,7 @@ implementation func_24()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_386;
+        goto label$4_end_208;
     }
     call push(loc3);
     call push(loc1);
@@ -12193,9 +12193,9 @@ implementation func_24()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_385;
+        goto label$3_end_207;
     }
-label$4_end_386:
+label$4_end_208:
     call push(loc4);
     call push(24.0);
     call popToTmp1();
@@ -12203,18 +12203,18 @@ label$4_end_386:
     call push(($tmp2) * ($tmp1));
     call func_36();
     call loc1 := popArgs1();
-    goto label$1_end_380;
-label$3_end_385:
+    goto label$1_end_205;
+label$3_end_207:
     call push(0.0);
     call loc4 := popArgs1();
     call push(0.0);
     call loc1 := popArgs1();
-    goto label$1_end_380;
-label$2_end_381:
+    goto label$1_end_205;
+label$2_end_206:
     call push(arg1);
     call func_45();
     assume (false);
-label$1_end_380:
+label$1_end_205:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -12308,7 +12308,7 @@ label$1_end_380:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_393;
+        goto label$6_end_210;
     }
     call push(loc1);
     call push(loc5);
@@ -12320,7 +12320,7 @@ label$1_end_380:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call arg2 := popArgs1();
-label$7_start_396:
+label$7_start_211:
     call push(arg3);
     call push(-24.0);
     call popToTmp1();
@@ -12400,7 +12400,7 @@ label$7_start_396:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_start_396;
+        goto label$7_start_211;
     }
     call push(arg2);
     call push(24.0);
@@ -12424,11 +12424,11 @@ label$7_start_396:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call arg3 := popArgs1();
-    goto label$5_end_392;
-label$6_end_393:
+    goto label$5_end_209;
+label$6_end_210:
     call push(loc4);
     call arg3 := popArgs1();
-label$5_end_392:
+label$5_end_209:
     call push(arg1);
     call push(arg2);
     call popToTmp2();
@@ -12465,9 +12465,9 @@ label$5_end_392:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_399;
+        goto label$8_end_213;
     }
-label$9_start_400:
+label$9_start_214:
     call push(loc4);
     call push(-24.0);
     call popToTmp1();
@@ -12492,7 +12492,7 @@ label$9_start_400:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_403;
+        goto label$10_end_216;
     }
     call push(arg2);
     call popToTmp1();
@@ -12507,7 +12507,7 @@ label$9_start_400:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_404;
+        goto label$11_end_217;
     }
     call push(arg2);
     call push(24.0);
@@ -12519,10 +12519,10 @@ label$9_start_400:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$11_end_404:
+label$11_end_217:
     call push(arg2);
     call func_38();
-label$10_end_403:
+label$10_end_216:
     call push(arg3);
     call push(loc4);
     call popToTmp1();
@@ -12530,19 +12530,19 @@ label$10_end_403:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_start_400;
+        goto label$9_start_214;
     }
-label$8_end_399:
+label$8_end_213:
     call push(arg3);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_405;
+        goto label$12_end_218;
     }
     call push(arg3);
     call func_38();
-label$12_end_405:
+label$12_end_218:
 }
 
 procedure {:inline 1} func_25();
@@ -12719,7 +12719,7 @@ implementation func_25()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_410;
+        goto label$1_end_219;
     }
     call push(arg1);
     call push(16.0);
@@ -12732,7 +12732,7 @@ implementation func_25()
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u64(idx, store_i);
-label$1_end_410:
+label$1_end_219:
     call push(loc1);
     call push(32.0);
     call popToTmp1();
@@ -12857,7 +12857,7 @@ implementation func_26()
     call arg3 := popArgs1();
     call push(0.0);
     call arg4 := popArgs1();
-label$3_start_415:
+label$3_start_222:
     call push(arg3);
     // // wrap: no-op under real semantics
     call push(24.0);
@@ -12874,7 +12874,7 @@ label$3_start_415:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_414;
+        goto label$2_end_221;
     }
     call push(arg3);
     call push(8.0);
@@ -12893,7 +12893,7 @@ label$3_start_415:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_417;
+        goto label$4_end_224;
     }
     call push(loc3);
     call arg3 := popArgs1();
@@ -12914,13 +12914,13 @@ label$3_start_415:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_415;
+        goto label$3_start_222;
     }
-    goto label$1_end_413;
-label$4_end_417:
+    goto label$1_end_220;
+label$4_end_224:
     call push(loc3);
     call arg3 := popArgs1();
-label$5_start_419:
+label$5_start_225:
     call push(arg3);
     call push(65280.0);
     call popToTmp1();
@@ -12932,7 +12932,7 @@ label$5_start_419:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_414;
+        goto label$2_end_221;
     }
     call push(arg3);
     call push(8.0);
@@ -12957,7 +12957,7 @@ label$5_start_419:
     call push(loc4);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_start_419;
+        goto label$5_start_225;
     }
     call push(1.0);
     call loc4 := popArgs1();
@@ -12974,13 +12974,13 @@ label$5_start_419:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_415;
+        goto label$3_start_222;
     }
-    goto label$1_end_413;
-label$2_end_414:
+    goto label$1_end_220;
+label$2_end_221:
     call push(0.0);
     call loc4 := popArgs1();
-label$1_end_413:
+label$1_end_220:
     call push(loc4);
     call push(8422.0);
     call fimport_0();
@@ -13052,7 +13052,7 @@ label$1_end_413:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_424;
+        goto label$7_end_228;
     }
     call push(arg4);
     call push(-2147483648.0);
@@ -13093,8 +13093,8 @@ label$1_end_413:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto label$6_end_423;
-label$7_end_424:
+    goto label$6_end_227;
+label$7_end_228:
     call push(arg2);
     call push(24.0);
     call popToTmp1();
@@ -13116,7 +13116,7 @@ label$7_end_424:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call func_27();
-label$6_end_423:
+label$6_end_227:
     call push(arg1);
     call push(loc2);
     call popToTmp2();
@@ -13149,11 +13149,11 @@ label$6_end_423:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_427;
+        goto label$8_end_229;
     }
     call push(arg4);
     call func_38();
-label$8_end_427:
+label$8_end_229:
     call push(loc1);
     call push(48.0);
     call popToTmp1();
@@ -13228,7 +13228,7 @@ implementation func_27()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_429;
+        goto label$2_end_231;
     }
     call push(178956976.0);
     call loc4 := popArgs1();
@@ -13253,7 +13253,7 @@ implementation func_27()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_434;
+        goto label$4_end_233;
     }
     call push(loc3);
     call push(loc1);
@@ -13282,9 +13282,9 @@ implementation func_27()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_433;
+        goto label$3_end_232;
     }
-label$4_end_434:
+label$4_end_233:
     call push(loc4);
     call push(24.0);
     call popToTmp1();
@@ -13292,18 +13292,18 @@ label$4_end_434:
     call push(($tmp2) * ($tmp1));
     call func_36();
     call loc1 := popArgs1();
-    goto label$1_end_428;
-label$3_end_433:
+    goto label$1_end_230;
+label$3_end_232:
     call push(0.0);
     call loc4 := popArgs1();
     call push(0.0);
     call loc1 := popArgs1();
-    goto label$1_end_428;
-label$2_end_429:
+    goto label$1_end_230;
+label$2_end_231:
     call push(arg1);
     call func_45();
     assume (false);
-label$1_end_428:
+label$1_end_230:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -13397,7 +13397,7 @@ label$1_end_428:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_441;
+        goto label$6_end_235;
     }
     call push(loc1);
     call push(loc5);
@@ -13409,7 +13409,7 @@ label$1_end_428:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call arg2 := popArgs1();
-label$7_start_444:
+label$7_start_236:
     call push(arg3);
     call push(-24.0);
     call popToTmp1();
@@ -13489,7 +13489,7 @@ label$7_start_444:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_start_444;
+        goto label$7_start_236;
     }
     call push(arg2);
     call push(24.0);
@@ -13513,11 +13513,11 @@ label$7_start_444:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call arg3 := popArgs1();
-    goto label$5_end_440;
-label$6_end_441:
+    goto label$5_end_234;
+label$6_end_235:
     call push(loc4);
     call arg3 := popArgs1();
-label$5_end_440:
+label$5_end_234:
     call push(arg1);
     call push(arg2);
     call popToTmp2();
@@ -13554,9 +13554,9 @@ label$5_end_440:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_447;
+        goto label$8_end_238;
     }
-label$9_start_448:
+label$9_start_239:
     call push(loc4);
     call push(-24.0);
     call popToTmp1();
@@ -13581,11 +13581,11 @@ label$9_start_448:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_451;
+        goto label$10_end_241;
     }
     call push(arg2);
     call func_38();
-label$10_end_451:
+label$10_end_241:
     call push(arg3);
     call push(loc4);
     call popToTmp1();
@@ -13593,19 +13593,19 @@ label$10_end_451:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_start_448;
+        goto label$9_start_239;
     }
-label$8_end_447:
+label$8_end_238:
     call push(arg3);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_452;
+        goto label$11_end_242;
     }
     call push(arg3);
     call func_38();
-label$11_end_452:
+label$11_end_242:
 }
 
 procedure {:inline 1} func_28();
@@ -13785,7 +13785,7 @@ implementation func_28()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_457;
+        goto label$1_end_243;
     }
     call push(loc2);
     call push(16.0);
@@ -13798,7 +13798,7 @@ implementation func_28()
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u64(idx, store_i);
-label$1_end_457:
+label$1_end_243:
     call push(loc1);
     call push(32.0);
     call popToTmp1();
@@ -14260,7 +14260,7 @@ implementation func_29()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_463;
+        goto label$1_end_244;
     }
     call push(loc3);
     call popToTmp1();
@@ -14268,7 +14268,7 @@ implementation func_29()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call func_38();
-label$1_end_463:
+label$1_end_244:
     call push(loc1);
     call push(112.0);
     call popToTmp1();
@@ -15297,7 +15297,7 @@ implementation func_31()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_486;
+        goto label$4_end_248;
     }
     call push(loc3);
     call push(-4.0);
@@ -15309,7 +15309,7 @@ implementation func_31()
     call arg2 := popArgs1();
     call push(loc3);
     call loc2 := popArgs1();
-label$5_start_488:
+label$5_start_249:
     call push(loc1);
     call push(12.0);
     call popToTmp1();
@@ -15370,7 +15370,7 @@ label$5_start_488:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_start_488;
+        goto label$5_start_249;
     }
     call push(loc4);
     call push(loc5);
@@ -15401,10 +15401,10 @@ label$5_start_488:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_484;
+        goto label$2_end_246;
     }
-    goto label$3_end_485;
-label$4_end_486:
+    goto label$3_end_247;
+label$4_end_248:
     call push(loc3);
     call loc2 := popArgs1();
     call push(loc3);
@@ -15414,9 +15414,9 @@ label$4_end_486:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_484;
+        goto label$2_end_246;
     }
-label$3_end_485:
+label$3_end_247:
     call push(loc3);
     call push(2.0);
     call popToTmp1();
@@ -15424,7 +15424,7 @@ label$3_end_485:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_494;
+        goto label$6_end_251;
     }
     call push(loc3);
     call push(3.0);
@@ -15433,7 +15433,7 @@ label$3_end_485:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_483;
+        goto label$1_end_245;
     }
     call push(loc4);
     call popToTmp1();
@@ -15449,7 +15449,7 @@ label$3_end_485:
     call popToTmp2();
     call push(bv_xor($tmp2, $tmp1));
     call loc2 := popArgs1();
-label$6_end_494:
+label$6_end_251:
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (1);
@@ -15464,7 +15464,7 @@ label$6_end_494:
     call popToTmp2();
     call push(bv_xor($tmp2, $tmp1));
     call loc2 := popArgs1();
-label$2_end_484:
+label$2_end_246:
     call push(loc2);
     call push(loc4);
     call popToTmp1();
@@ -15479,7 +15479,7 @@ label$2_end_484:
     call popToTmp2();
     call push(($tmp2) * ($tmp1));
     call loc2 := popArgs1();
-label$1_end_483:
+label$1_end_245:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -15605,7 +15605,7 @@ implementation func_32()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-label$1_start_498:
+label$1_start_252:
     call push(loc3);
     // // wrap: no-op under real semantics
     call loc6 := popArgs1();
@@ -15688,7 +15688,7 @@ label$1_start_498:
     call push(loc7);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_start_498;
+        goto label$1_start_252;
     }
     call push(arg2);
     call push(4.0);
@@ -15731,7 +15731,7 @@ label$1_start_498:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_503;
+        goto label$2_end_254;
     }
     call push(arg2);
     call popToTmp1();
@@ -15802,7 +15802,7 @@ label$1_start_498:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$2_end_503:
+label$2_end_254:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -16758,7 +16758,7 @@ implementation func_34()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
-label$1_start_524:
+label$1_start_255:
     call push(loc1);
     call push(loc4);
     call popToTmp1();
@@ -16829,7 +16829,7 @@ label$1_start_524:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_start_524;
+        goto label$1_start_255;
     }
     call push(arg2);
     call popToTmp1();
@@ -16859,7 +16859,7 @@ label$1_start_524:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_530;
+        goto label$3_end_258;
     }
     call push(arg2);
     call push(loc5);
@@ -16894,8 +16894,8 @@ label$1_start_524:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc6 := popArgs1();
-    goto label$2_end_529;
-label$3_end_530:
+    goto label$2_end_257;
+label$3_end_258:
     call push(loc4);
     call push(loc5);
     call popToTmp1();
@@ -16903,7 +16903,7 @@ label$3_end_530:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_529;
+        goto label$2_end_257;
     }
     call push(arg2);
     call push(4.0);
@@ -16922,7 +16922,7 @@ label$3_end_530:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$2_end_529:
+label$2_end_257:
     call push(arg1);
     call push(8.0);
     call popToTmp1();
@@ -17037,7 +17037,7 @@ implementation func_35()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_542;
+        goto label$5_end_263;
     }
     call push(loc2);
     call push(arg1);
@@ -17064,7 +17064,7 @@ implementation func_35()
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_540;
+        goto label$3_end_261;
     }
     call push(2147483647.0);
     call loc6 := popArgs1();
@@ -17081,7 +17081,7 @@ implementation func_35()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_548;
+        goto label$6_end_264;
     }
     call push(loc5);
     call push(loc1);
@@ -17110,21 +17110,21 @@ implementation func_35()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_541;
+        goto label$4_end_262;
     }
-label$6_end_548:
+label$6_end_264:
     call push(loc6);
     call func_36();
     call loc1 := popArgs1();
-    goto label$2_end_539;
-label$5_end_542:
+    goto label$2_end_260;
+label$5_end_263:
     call push(arg1);
     call push(4.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call arg1 := popArgs1();
-label$7_start_552:
+label$7_start_265:
     call push(loc2);
     call push(0.0);
     call popToTmp2();
@@ -17158,20 +17158,20 @@ label$7_start_552:
     call push(arg2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_start_552;
+        goto label$7_start_265;
     }
-    goto label$1_end_538;
-label$4_end_541:
+    goto label$1_end_259;
+label$4_end_262:
     call push(0.0);
     call loc6 := popArgs1();
     call push(0.0);
     call loc1 := popArgs1();
-    goto label$2_end_539;
-label$3_end_540:
+    goto label$2_end_260;
+label$3_end_261:
     call push(arg1);
     call func_45();
     assume (false);
-label$2_end_539:
+label$2_end_260:
     call push(loc1);
     call push(loc6);
     call popToTmp1();
@@ -17196,7 +17196,7 @@ label$2_end_539:
     call loc4 := popArgs1();
     call push(loc4);
     call loc2 := popArgs1();
-label$8_start_557:
+label$8_start_267:
     call push(loc2);
     call push(0.0);
     call popToTmp2();
@@ -17219,7 +17219,7 @@ label$8_start_557:
     call push(arg2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_start_557;
+        goto label$8_start_267;
     }
     call push(loc1);
     call push(loc3);
@@ -17262,7 +17262,7 @@ label$8_start_557:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_563;
+        goto label$9_end_269;
     }
     call push(loc1);
     call push(arg2);
@@ -17275,7 +17275,7 @@ label$8_start_557:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call arg2 := popArgs1();
-label$9_end_563:
+label$9_end_269:
     call push(arg1);
     call push(loc1);
     call popToTmp2();
@@ -17306,13 +17306,13 @@ label$9_end_563:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_538;
+        goto label$1_end_259;
     }
     call push(arg2);
     call func_38();
-    goto func_exit_564;
-label$1_end_538:
-func_exit_564:
+    goto func_exit_270;
+label$1_end_259:
+func_exit_270:
 }
 
 procedure {:inline 1} popDiscard1();
@@ -17367,9 +17367,9 @@ implementation func_36()
     call push(arg1);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_565;
+        goto label$1_end_271;
     }
-label$2_start_568:
+label$2_start_272:
     call push(0.0);
     call arg1 := popArgs1();
     call push(0.0);
@@ -17383,7 +17383,7 @@ label$2_start_568:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_565;
+        goto label$1_end_271;
     }
     call push(loc2);
     call popDiscard1();
@@ -17395,9 +17395,9 @@ label$2_start_568:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_start_568;
+        goto label$2_start_272;
     }
-label$1_end_565:
+label$1_end_271:
     call push(arg1);
 }
 
@@ -17450,11 +17450,11 @@ implementation func_38()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_572;
+        goto label$1_end_274;
     }
     call push(arg1);
     call func_50();
-label$1_end_572:
+label$1_end_274:
 }
 
 procedure {:inline 1} func_39();
@@ -17563,7 +17563,7 @@ implementation func_41()
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_574;
+        goto label$1_end_275;
     }
     call push(arg1);
     call push(arg2);
@@ -17592,8 +17592,8 @@ implementation func_41()
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(arg1);
-    goto func_exit_576;
-label$1_end_574:
+    goto func_exit_276;
+label$1_end_275:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (4);
@@ -17607,7 +17607,7 @@ label$1_end_574:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_577;
+        goto label$2_end_277;
     }
     call push(arg2);
     call popToTmp1();
@@ -17622,7 +17622,7 @@ label$1_end_574:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_580;
+        goto label$4_end_279;
     }
     call push(arg1);
     call push(loc1);
@@ -17644,7 +17644,7 @@ label$1_end_574:
     call push(loc1);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_579;
+        goto label$3_end_278;
     }
     call push(arg2);
     call push(loc1);
@@ -17658,8 +17658,8 @@ label$1_end_574:
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
     call push(arg1);
-    goto func_exit_576;
-label$4_end_580:
+    goto func_exit_276;
+label$4_end_279:
     call push(loc1);
     call push(16.0);
     call popToTmp1();
@@ -17698,7 +17698,7 @@ label$4_end_580:
     idx := (real_to_int($tmp1)) + (4);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$3_end_579:
+label$3_end_278:
     call push(arg2);
     call push(loc2);
     call push(loc1);
@@ -17716,11 +17716,11 @@ label$3_end_579:
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
     call push(arg1);
-    goto func_exit_576;
-label$2_end_577:
+    goto func_exit_276;
+label$2_end_277:
     call fimport_13();
     assume (false);
-func_exit_576:
+func_exit_276:
 }
 
 procedure {:inline 1} func_42();
@@ -17763,7 +17763,7 @@ implementation func_42()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_587;
+        goto label$4_end_283;
     }
     call push(arg2);
     call popToTmp1();
@@ -17828,7 +17828,7 @@ implementation func_42()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_590;
+        goto label$5_end_284;
     }
     call push(arg1);
     call popToTmp1();
@@ -17844,7 +17844,7 @@ implementation func_42()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call arg2 := popArgs1();
-label$5_end_590:
+label$5_end_284:
     call push(loc4);
     call push(loc3);
     call push(loc2);
@@ -17864,12 +17864,12 @@ label$5_end_590:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_595;
+        goto label$8_end_287;
     }
     call push(loc6);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_594;
+        goto label$7_end_286;
     }
     call push(loc5);
     call push(1.0);
@@ -17877,12 +17877,12 @@ label$5_end_590:
     call popToTmp2();
     call push(bv_shr_u($tmp2, $tmp1));
     call loc3 := popArgs1();
-    goto label$6_end_593;
-label$8_end_595:
+    goto label$6_end_285;
+label$8_end_287:
     call push(loc6);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_586;
+        goto label$3_end_282;
     }
     call push(arg1);
     call push(1.0);
@@ -17893,17 +17893,17 @@ label$8_end_595:
     call push(loc1);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_585;
+        goto label$2_end_281;
     }
-    goto label$1_end_584;
-label$7_end_594:
+    goto label$1_end_280;
+label$7_end_286:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (4);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc3 := popArgs1();
-label$6_end_593:
+label$6_end_285:
     call push(arg1);
     call push(arg2);
     call push(loc1);
@@ -17917,10 +17917,10 @@ label$6_end_593:
     call push(loc1);
     call push(loc2);
     call func_43();
-label$4_end_587:
+label$4_end_283:
     call push(arg1);
-    goto func_exit_597;
-label$3_end_586:
+    goto func_exit_288;
+label$3_end_282:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -17932,15 +17932,15 @@ label$3_end_586:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_584;
+        goto label$1_end_280;
     }
-label$2_end_585:
+label$2_end_281:
     call push(arg2);
     call push(loc2);
     call push(loc1);
     call fimport_15();
     call pop();
-label$1_end_584:
+label$1_end_280:
     call push(arg2);
     call push(loc1);
     call popToTmp1();
@@ -17963,7 +17963,7 @@ label$1_end_584:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_598;
+        goto label$9_end_289;
     }
     call push(arg1);
     call push(loc1);
@@ -17977,8 +17977,8 @@ label$1_end_584:
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
     call push(arg1);
-    goto func_exit_597;
-label$9_end_598:
+    goto func_exit_288;
+label$9_end_289:
     call push(arg1);
     call push(loc1);
     call popToTmp2();
@@ -17987,7 +17987,7 @@ label$9_end_598:
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(arg1);
-func_exit_597:
+func_exit_288:
 }
 
 procedure {:inline 1} popArgs8() returns (a1: real, a2: real, a3: real, a4: real, a5: real, a6: real, a7: real, a8: real);
@@ -18069,7 +18069,7 @@ implementation func_43()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_600;
+        goto label$1_end_290;
     }
     call push(arg1);
     call popToTmp1();
@@ -18082,7 +18082,7 @@ implementation func_43()
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_603;
+        goto label$4_end_293;
     }
     call push(arg1);
     call push(1.0);
@@ -18099,10 +18099,10 @@ implementation func_43()
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_602;
+        goto label$3_end_292;
     }
-    goto label$2_end_601;
-label$4_end_603:
+    goto label$2_end_291;
+label$4_end_293:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -18118,9 +18118,9 @@ label$4_end_603:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_601;
+        goto label$2_end_291;
     }
-label$3_end_602:
+label$3_end_292:
     call push(11.0);
     call loc2 := popArgs1();
     call push(arg2);
@@ -18158,7 +18158,7 @@ label$3_end_602:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_601;
+        goto label$2_end_291;
     }
     call push(arg3);
     call push(16.0);
@@ -18170,7 +18170,7 @@ label$3_end_602:
     call popToTmp2();
     call push(bv_and($tmp2, $tmp1));
     call loc2 := popArgs1();
-label$2_end_601:
+label$2_end_291:
     call push(loc2);
     call func_36();
     call arg3 := popArgs1();
@@ -18179,20 +18179,20 @@ label$2_end_601:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_607;
+        goto label$5_end_294;
     }
     call push(arg3);
     call push(loc1);
     call push(arg5);
     call fimport_3();
     call pop();
-label$5_end_607:
+label$5_end_294:
     call push(arg7);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_608;
+        goto label$6_end_295;
     }
     call push(arg3);
     call push(arg5);
@@ -18203,7 +18203,7 @@ label$5_end_607:
     call push(arg7);
     call fimport_3();
     call pop();
-label$6_end_608:
+label$6_end_295:
     call push(arg4);
     call push(arg6);
     call popToTmp1();
@@ -18221,7 +18221,7 @@ label$6_end_608:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_609;
+        goto label$7_end_296;
     }
     call push(arg3);
     call push(arg5);
@@ -18244,7 +18244,7 @@ label$6_end_608:
     call push(arg8);
     call fimport_3();
     call pop();
-label$7_end_609:
+label$7_end_296:
     call push(arg2);
     call push(10.0);
     call popToTmp1();
@@ -18252,11 +18252,11 @@ label$7_end_609:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_612;
+        goto label$8_end_297;
     }
     call push(loc1);
     call func_38();
-label$8_end_612:
+label$8_end_297:
     call push(arg1);
     call push(arg3);
     call popToTmp2();
@@ -18299,11 +18299,11 @@ label$8_end_612:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-    goto func_exit_614;
-label$1_end_600:
+    goto func_exit_298;
+label$1_end_290:
     call fimport_13();
     assume (false);
-func_exit_614:
+func_exit_298:
 }
 
 procedure {:inline 1} func_44();
@@ -18348,7 +18348,7 @@ implementation func_44()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_618;
+        goto label$4_end_302;
     }
     call push(arg1);
     call popToTmp1();
@@ -18363,7 +18363,7 @@ implementation func_44()
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_620;
+        goto label$6_end_304;
     }
     call push(loc1);
     call push(1.0);
@@ -18373,8 +18373,8 @@ implementation func_44()
     call loc2 := popArgs1();
     call push(10.0);
     call loc3 := popArgs1();
-    goto label$5_end_619;
-label$6_end_620:
+    goto label$5_end_303;
+label$6_end_304:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -18397,7 +18397,7 @@ label$6_end_620:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc2 := popArgs1();
-label$5_end_619:
+label$5_end_303:
     call push(10.0);
     call loc4 := popArgs1();
     call push(loc2);
@@ -18423,7 +18423,7 @@ label$5_end_619:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_623;
+        goto label$7_end_305;
     }
     call push(arg2);
     call push(16.0);
@@ -18439,7 +18439,7 @@ label$5_end_619:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc4 := popArgs1();
-label$7_end_623:
+label$7_end_305:
     call push(loc4);
     call push(loc3);
     call popToTmp1();
@@ -18447,7 +18447,7 @@ label$7_end_623:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_627;
+        goto label$10_end_308;
     }
     call push(loc4);
     call push(10.0);
@@ -18456,7 +18456,7 @@ label$7_end_623:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_628;
+        goto label$11_end_309;
     }
     call push(1.0);
     call loc5 := popArgs1();
@@ -18483,10 +18483,10 @@ label$7_end_623:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_625;
+        goto label$8_end_306;
     }
-    goto label$3_end_617;
-label$11_end_628:
+    goto label$3_end_301;
+label$11_end_309:
     call push(loc4);
     call push(1.0);
     call popToTmp1();
@@ -18501,16 +18501,16 @@ label$11_end_628:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_626;
+        goto label$9_end_307;
     }
     call push(arg2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_626;
+        goto label$9_end_307;
     }
-label$10_end_627:
-    goto func_exit_629;
-label$9_end_626:
+label$10_end_308:
+    goto func_exit_310;
+label$9_end_307:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -18524,7 +18524,7 @@ label$9_end_626:
     call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_630;
+        goto label$12_end_311;
     }
     call push(1.0);
     call loc6 := popArgs1();
@@ -18547,10 +18547,10 @@ label$9_end_626:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_617;
+        goto label$3_end_301;
     }
-    goto label$8_end_625;
-label$12_end_630:
+    goto label$8_end_306;
+label$12_end_311:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -18572,9 +18572,9 @@ label$12_end_630:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_617;
+        goto label$3_end_301;
     }
-label$8_end_625:
+label$8_end_306:
     call push(arg1);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (4);
@@ -18590,13 +18590,13 @@ label$8_end_625:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_615;
+        goto label$1_end_299;
     }
-    goto label$2_end_616;
-label$4_end_618:
+    goto label$2_end_300;
+label$4_end_302:
     call fimport_13();
     assume (false);
-label$3_end_617:
+label$3_end_301:
     call push(loc1);
     call push(254.0);
     call popToTmp1();
@@ -18616,31 +18616,31 @@ label$3_end_617:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_615;
+        goto label$1_end_299;
     }
-label$2_end_616:
+label$2_end_300:
     call push(arg2);
     call push(loc3);
     call push(loc1);
     call fimport_3();
     call pop();
-label$1_end_615:
+label$1_end_299:
     call push(loc5);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_end_634;
+        goto label$13_end_312;
     }
     call push(loc3);
     call func_38();
-label$13_end_634:
+label$13_end_312:
     call push(loc6);
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$14_end_635;
+        goto label$14_end_313;
     }
     call push(arg1);
     call push(loc2);
@@ -18671,8 +18671,8 @@ label$13_end_634:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-    goto func_exit_629;
-label$14_end_635:
+    goto func_exit_310;
+label$14_end_313:
     call push(arg1);
     call push(loc2);
     call push(1.0);
@@ -18684,7 +18684,7 @@ label$14_end_635:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u8(idx, store_i);
-func_exit_629:
+func_exit_310:
 }
 
 procedure {:inline 1} func_45();
@@ -18808,7 +18808,7 @@ implementation func_48()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_636;
+        goto label$1_end_314;
     }
     call push(arg1);
     call popToTmp1();
@@ -18819,7 +18819,7 @@ implementation func_48()
     call push(loc1);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_637;
+        goto label$2_end_315;
     }
     call push(16.0);
     call loc1 := popArgs1();
@@ -18834,7 +18834,7 @@ implementation func_48()
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$2_end_637:
+label$2_end_315:
     call push(arg2);
     call push(8.0);
     call popToTmp1();
@@ -18878,7 +18878,7 @@ label$2_end_637:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_642;
+        goto label$5_end_318;
     }
     call push(arg1);
     call push(loc3);
@@ -18897,7 +18897,7 @@ label$2_end_637:
     call push(loc3);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_644;
+        goto label$6_end_319;
     }
     call push(arg1);
     call push(8196.0);
@@ -18912,7 +18912,7 @@ label$2_end_637:
     call push(int_to_real(load_i));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_644;
+        goto label$6_end_319;
     }
     call push(arg2);
     call push(8192.0);
@@ -18928,14 +18928,14 @@ label$2_end_637:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$6_end_644:
+label$6_end_319:
     call push(loc2);
     call push(4.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc3 := popArgs1();
-label$7_start_646:
+label$7_start_320:
     call push(arg2);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (8);
@@ -18957,7 +18957,7 @@ label$7_start_646:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_648;
+        goto label$8_end_322;
     }
     call push(arg2);
     call popToTmp1();
@@ -19033,18 +19033,18 @@ label$7_start_646:
     call push(arg2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_641;
+        goto label$4_end_317;
     }
-label$8_end_648:
+label$8_end_322:
     call push(arg1);
     call func_49();
     call arg2 := popArgs1();
     call push(arg2);
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_start_646;
+        goto label$7_start_320;
     }
-label$5_end_642:
+label$5_end_318:
     call push(2147483647.0);
     call push(loc2);
     call popToTmp1();
@@ -19071,7 +19071,7 @@ label$5_end_642:
     call loc7 := popArgs1();
     call push(loc7);
     call loc1 := popArgs1();
-label$9_start_655:
+label$9_start_323:
     call push(arg1);
     call push(loc1);
     call push(12.0);
@@ -19123,7 +19123,7 @@ label$9_start_655:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-label$10_start_660:
+label$10_start_325:
     call push(loc9);
     call push(loc8);
     call popToTmp1();
@@ -19159,7 +19159,7 @@ label$10_start_660:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_664;
+        goto label$11_end_327;
     }
     call push(arg2);
     call push(loc2);
@@ -19168,9 +19168,9 @@ label$10_start_660:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_665;
+        goto label$12_end_328;
     }
-label$13_start_666:
+label$13_start_329:
     call push(loc1);
     call push(arg2);
     call popToTmp1();
@@ -19184,7 +19184,7 @@ label$13_start_666:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_665;
+        goto label$12_end_328;
     }
     call push(loc3);
     call popToTmp1();
@@ -19199,7 +19199,7 @@ label$13_start_666:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_665;
+        goto label$12_end_328;
     }
     call push(arg2);
     call push(loc3);
@@ -19222,9 +19222,9 @@ label$13_start_666:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$13_start_666;
+        goto label$13_start_329;
     }
-label$12_end_665:
+label$12_end_328:
     call push(loc11);
     call push(arg2);
     call push(loc2);
@@ -19261,7 +19261,7 @@ label$12_end_665:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$14_end_671;
+        goto label$14_end_331;
     }
     call push(loc1);
     call push(loc2);
@@ -19282,7 +19282,7 @@ label$12_end_665:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$14_end_671:
+label$14_end_331:
     call push(arg2);
     call push(loc2);
     call popToTmp1();
@@ -19290,9 +19290,9 @@ label$14_end_671:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_640;
+        goto label$3_end_316;
     }
-label$11_end_664:
+label$11_end_327:
     call push(loc1);
     call push(arg2);
     call popToTmp1();
@@ -19310,7 +19310,7 @@ label$11_end_664:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_start_660;
+        goto label$10_start_325;
     }
     call push(0.0);
     call arg2 := popArgs1();
@@ -19358,12 +19358,12 @@ label$11_end_664:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_start_655;
+        goto label$9_start_323;
     }
-label$4_end_641:
+label$4_end_317:
     call push(arg2);
-    goto func_exit_676;
-label$3_end_640:
+    goto func_exit_332;
+label$3_end_316:
     call push(loc11);
     call push(loc11);
     call popToTmp1();
@@ -19380,10 +19380,10 @@ label$3_end_640:
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(loc1);
-    goto func_exit_676;
-label$1_end_636:
+    goto func_exit_332;
+label$1_end_314:
     call push(0.0);
-func_exit_676:
+func_exit_332:
 }
 
 procedure {:inline 1} func_49();
@@ -19437,7 +19437,7 @@ implementation func_49()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_679;
+        goto label$2_end_334;
     }
     call push(0.0);
     call popToTmp1();
@@ -19445,8 +19445,8 @@ implementation func_49()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc2 := popArgs1();
-    goto label$1_end_678;
-label$2_end_679:
+    goto label$1_end_333;
+label$2_end_334:
     call load_i := memory_size();
     call push(int_to_real(load_i));
     call loc2 := popArgs1();
@@ -19470,7 +19470,7 @@ label$2_end_679:
     idx := (real_to_int($tmp1)) + (8924);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$1_end_678:
+label$1_end_333:
     call push(loc2);
     call loc3 := popArgs1();
     call push(loc2);
@@ -19493,7 +19493,7 @@ label$1_end_678:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_684;
+        goto label$6_end_338;
     }
     call push(loc4);
     call push(loc5);
@@ -19515,7 +19515,7 @@ label$1_end_678:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_683;
+        goto label$5_end_337;
     }
     call push(0.0);
     call popToTmp1();
@@ -19523,7 +19523,7 @@ label$1_end_678:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc3 := popArgs1();
-label$6_end_684:
+label$6_end_338:
     call push(0.0);
     call loc5 := popArgs1();
     call push(0.0);
@@ -19540,7 +19540,7 @@ label$6_end_684:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_683;
+        goto label$5_end_337;
     }
     call push(loc1);
     call push(12.0);
@@ -19561,7 +19561,7 @@ label$6_end_684:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_688;
+        goto label$8_end_340;
     }
     call push(loc2);
     call push(65536.0);
@@ -19573,8 +19573,8 @@ label$6_end_684:
     call popToTmp2();
     call push(($tmp2) - ($tmp1));
     call loc5 := popArgs1();
-    goto label$7_end_687;
-label$8_end_688:
+    goto label$7_end_339;
+label$8_end_340:
     call push(loc2);
     call push(131072.0);
     call popToTmp1();
@@ -19589,7 +19589,7 @@ label$8_end_688:
     call popToTmp2();
     call push(($tmp2) - ($tmp1));
     call loc5 := popArgs1();
-label$7_end_687:
+label$7_end_339:
     call push(arg1);
     call push(loc4);
     call popToTmp1();
@@ -19609,7 +19609,7 @@ label$7_end_687:
     call push(int_to_real(load_i));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_690;
+        goto label$9_end_341;
     }
     call load_i := memory_size();
     call push(int_to_real(load_i));
@@ -19634,7 +19634,7 @@ label$7_end_687:
     idx := (real_to_int($tmp1)) + (8924);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$9_end_690:
+label$9_end_341:
     call push(loc4);
     call push(8192.0);
     call popToTmp1();
@@ -19648,7 +19648,7 @@ label$9_end_690:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_682;
+        goto label$4_end_336;
     }
     call push(loc3);
     call loc6 := popArgs1();
@@ -19686,7 +19686,7 @@ label$9_end_690:
     call push(bool_to_real(($tmp2) <= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$10_end_692;
+        goto label$10_end_342;
     }
     call push(loc5);
     call push(loc8);
@@ -19706,7 +19706,7 @@ label$9_end_690:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_682;
+        goto label$4_end_336;
     }
     call push(0.0);
     call popToTmp1();
@@ -19714,7 +19714,7 @@ label$9_end_690:
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc6 := popArgs1();
-label$10_end_692:
+label$10_end_342:
     call push(0.0);
     call push(loc6);
     call push(loc7);
@@ -19733,7 +19733,7 @@ label$10_end_692:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_682;
+        goto label$4_end_336;
     }
     call push(arg1);
     call push(loc1);
@@ -19772,7 +19772,7 @@ label$10_end_692:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_681;
+        goto label$3_end_335;
     }
     call push(loc5);
     call push(loc1);
@@ -19793,7 +19793,7 @@ label$10_end_692:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$11_end_699;
+        goto label$11_end_343;
     }
     call push(loc6);
     call push(loc1);
@@ -19854,7 +19854,7 @@ label$10_end_692:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$11_end_699:
+label$11_end_343:
     call push(arg1);
     call push(8388.0);
     call popToTmp1();
@@ -19912,10 +19912,10 @@ label$11_end_699:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$5_end_683:
+label$5_end_337:
     call push(loc5);
-    goto func_exit_708;
-label$4_end_682:
+    goto func_exit_344;
+label$4_end_336:
     call push(loc4);
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (0);
@@ -19951,7 +19951,7 @@ label$4_end_682:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$12_end_709;
+        goto label$12_end_345;
     }
     call push(loc3);
     call push(8196.0);
@@ -20020,7 +20020,7 @@ label$4_end_682:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-label$12_end_709:
+label$12_end_345:
     call push(arg1);
     call push(arg1);
     call push(8388.0);
@@ -20052,8 +20052,8 @@ label$12_end_709:
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(0.0);
-    goto func_exit_708;
-label$3_end_681:
+    goto func_exit_344;
+label$3_end_335:
     call push(loc4);
     call push(loc5);
     call push(loc2);
@@ -20066,7 +20066,7 @@ label$3_end_681:
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(loc4);
-func_exit_708:
+func_exit_344:
 }
 
 procedure {:inline 1} func_50();
@@ -20100,7 +20100,7 @@ implementation func_50()
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_719;
+        goto label$2_end_347;
     }
     call push(0.0);
     call popToTmp1();
@@ -20115,7 +20115,7 @@ implementation func_50()
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_719;
+        goto label$2_end_347;
     }
     call push(17120.0);
     call loc2 := popArgs1();
@@ -20129,7 +20129,7 @@ implementation func_50()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc3 := popArgs1();
-label$3_start_721:
+label$3_start_348:
     call push(loc2);
     call push(4.0);
     call popToTmp1();
@@ -20145,7 +20145,7 @@ label$3_start_721:
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_719;
+        goto label$2_end_347;
     }
     call push(loc1);
     call push(4.0);
@@ -20158,7 +20158,7 @@ label$3_start_721:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_724;
+        goto label$4_end_350;
     }
     call push(loc1);
     call push(loc2);
@@ -20175,9 +20175,9 @@ label$3_start_721:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$1_end_718;
+        goto label$1_end_346;
     }
-label$4_end_724:
+label$4_end_350:
     call push(loc2);
     call push(12.0);
     call popToTmp1();
@@ -20191,11 +20191,11 @@ label$4_end_724:
     call push(bool_to_real(($tmp2) < ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_start_721;
+        goto label$3_start_348;
     }
-label$2_end_719:
-    goto func_exit_726;
-label$1_end_718:
+label$2_end_347:
+    goto func_exit_351;
+label$1_end_346:
     call push(arg1);
     call push(-4.0);
     call popToTmp1();
@@ -20217,7 +20217,7 @@ label$1_end_718:
     idx := (real_to_int($tmp1)) + (0);
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
-func_exit_726:
+func_exit_351:
 }
 
 procedure {:inline 1} CorralChoice_pet_pet();

@@ -188,6 +188,34 @@ implementation mem_write_u64(a: int, v: int)
     call mem_write_u8((a) + (7), byte7_64(v));
 }
 
+procedure {:inline 1} memory_size() returns (result: int);
+implementation memory_size() returns (result: int)
+{
+    result := $mem_pages;
+}
+
+procedure {:inline 1} memory_grow(delta: int) returns (oldSize: int);
+modifies $mem_pages;
+implementation memory_grow(delta: int) returns (oldSize: int)
+{
+    oldSize := $mem_pages;
+    $mem_pages := ($mem_pages) + (delta);
+}
+
+procedure {:inline 1} memory_fill(dst: int, value: int, len: int);
+modifies $mem;
+implementation memory_fill(dst: int, value: int, len: int)
+{
+    havoc $mem;
+}
+
+procedure {:inline 1} memory_copy(dst: int, src: int, len: int);
+modifies $mem;
+implementation memory_copy(dst: int, src: int, len: int)
+{
+    havoc $mem;
+}
+
 function nd_real() returns (result: real);
 function bool_to_real(b: bool) : real
 {
@@ -234,6 +262,22 @@ function floor_real(r: real) returns (result: real);
 axiom(forall  r:real ::  ((floor_real(r)) <= (r)));
 
 axiom(forall  r:real ::  ((r) < ((floor_real(r)) + (1.0))));
+function ceil_real(x: real) returns (result: real);
+function trunc_real(x: real) returns (result: real);
+function copysign_real(x: real, y: real) returns (result: real);
+function bv_and(x: real, y: real) returns (result: real);
+function bv_or(x: real, y: real) returns (result: real);
+function bv_xor(x: real, y: real) returns (result: real);
+function bv_shl(x: real, y: real) returns (result: real);
+function bv_shr_s(x: real, y: real) returns (result: real);
+function bv_shr_u(x: real, y: real) returns (result: real);
+function bv_rotl(x: real, y: real) returns (result: real);
+function bv_rotr(x: real, y: real) returns (result: real);
+function int_rem_s(x: real, y: real) returns (result: real);
+function int_rem_u(x: real, y: real) returns (result: real);
+function int_clz(x: real) returns (result: real);
+function int_ctz(x: real) returns (result: real);
+function int_popcnt(x: real) returns (result: real);
 procedure {:inline 1} InitRuntime();
 modifies $sp;
 modifies $tmp1;
@@ -315,6 +359,37 @@ implementation pop()
     $sp := ($sp) - (1);
 }
 
+var $table: [int]real;
+var $table_size: int;
+procedure {:inline 1} table_get(idx: int) returns (result: real);
+implementation table_get(idx: int) returns (result: real)
+{
+    result := $table[idx];
+}
+
+procedure {:inline 1} table_set(idx: int, value: real);
+modifies $table;
+modifies $table_size;
+implementation table_set(idx: int, value: real)
+{
+    $table[idx] := value;
+}
+
+procedure {:inline 1} table_size() returns (result: int);
+implementation table_size() returns (result: int)
+{
+    result := $table_size;
+}
+
+procedure {:inline 1} table_grow(value: real, delta: int) returns (oldSize: int);
+modifies $table;
+modifies $table_size;
+implementation table_grow(value: real, delta: int) returns (oldSize: int)
+{
+    oldSize := $table_size;
+    $table_size := ($table_size) + (delta);
+}
+
 const global_0: real;
 
 axiom((global_0) == (1.0));
@@ -329,16 +404,19 @@ const global_5: real;
 axiom((global_5) == (-1723.0));
 var global_6: real;
 procedure {:inline 1} initGlobals();
+modifies $mem_pages;
 modifies global_1;
 modifies global_2;
 modifies global_4;
 modifies global_6;
+ensures(($mem_pages) == (0));
 ensures((global_1) == (32764.0));
 ensures((global_2) == (32764.0));
 ensures((global_4) == (1.0));
 ensures((global_6) == (0.0));
 implementation initGlobals()
 {
+    $mem_pages := 0;
     global_1 := 32764.0;
     global_2 := 32764.0;
     global_4 := 1.0;
@@ -568,7 +646,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_0()
 {
     var arg1: real;
@@ -588,7 +669,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_1()
 {
     var arg1: real;
@@ -608,7 +692,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_2()
 {
     var arg1: real;
@@ -642,7 +729,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_3()
 {
     var arg1: real;
@@ -661,7 +751,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_4()
 {
     var entry_sp: int;
@@ -677,7 +770,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_5()
 {
     var arg1: real;
@@ -696,7 +792,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_6()
 {
     var entry_sp: int;
@@ -712,7 +811,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_7()
 {
     var arg1: real;
@@ -731,7 +833,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_8()
 {
     var entry_sp: int;
@@ -747,7 +852,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_9()
 {
     var entry_sp: int;
@@ -763,7 +871,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_10()
 {
     var entry_sp: int;
@@ -779,7 +890,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_11()
 {
     var entry_sp: int;
@@ -795,7 +909,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_12()
 {
     var arg1: real;
@@ -814,7 +931,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_13()
 {
     var arg1: real;
@@ -833,7 +953,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_14()
 {
     var arg1: real;
@@ -853,7 +976,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_15()
 {
     var arg1: real;
@@ -872,7 +998,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_16()
 {
     var arg1: real;
@@ -891,7 +1020,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_17()
 {
     var arg1: real;
@@ -910,7 +1042,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_18()
 {
     var arg1: real;
@@ -929,7 +1064,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_19()
 {
     var arg1: real;
@@ -948,7 +1086,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_20()
 {
     var arg1: real;
@@ -967,7 +1108,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_21()
 {
     var arg1: real;
@@ -986,7 +1130,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_22()
 {
     var entry_sp: int;
@@ -1002,7 +1149,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_23()
 {
     var entry_sp: int;
@@ -1018,7 +1168,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation fimport_24()
 {
     var arg1: real;
@@ -1038,7 +1191,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_0()
 {
     var arg1: real;
@@ -1251,7 +1407,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_6;
 implementation func_1()
 {
@@ -1271,7 +1430,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_2()
 {
     var entry_sp: int;
@@ -1296,7 +1458,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_3()
 {
     var entry_sp: int;
@@ -1312,7 +1477,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_4()
 {
     var entry_sp: int;
@@ -1329,7 +1497,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_4;
 implementation func_5()
 {
@@ -1352,7 +1523,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_6()
 {
     var arg1: real;
@@ -1373,7 +1547,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_7()
 {
     var arg1: real;
@@ -1399,7 +1576,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_8()
 {
     var arg1: real;
@@ -1446,7 +1626,33 @@ label$1_start_23:
     if (real_to_bool($tmp1)) {
         goto label$2_end_25;
     }
-    // // unhandled raw instruction: i32.and
+    call push(loc5);
+    call push(loc6);
+    call push(loc2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) * ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_u64(idx);
+    call push(bits64_to_real(load_i));
+    call loc3 := popArgs1();
+    call push(loc3);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call push(loc2);
+    call push(2.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) >= ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc4);
@@ -1491,7 +1697,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_9()
 {
     var arg1: real;
@@ -1563,7 +1772,7 @@ implementation func_9()
     call loc9 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$3_start_27:
+label$3_start_28:
     call push(loc6);
     call push(arg2);
     call popToTmp1();
@@ -1571,7 +1780,7 @@ label$3_start_27:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_29;
+        goto label$4_end_30;
     }
     call push(loc8);
     call push(loc3);
@@ -1624,8 +1833,8 @@ label$3_start_27:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc6 := popArgs1();
-    goto label$3_start_27;
-label$4_end_29:
+    goto label$3_start_28;
+label$4_end_30:
     call push(loc9);
 }
 
@@ -1661,7 +1870,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_10()
 {
     var arg1: real;
@@ -1702,7 +1914,17 @@ implementation func_10()
     loc11 := 0.0;
     loc12 := 0.0;
     loc13 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_35();
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call push(arg1);
+    call func_50();
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(5.0);
@@ -1779,7 +2001,7 @@ implementation func_10()
     call mem_write_u32(idx, store_i);
     call push(1.0);
     call loc2 := popArgs1();
-label$7_start_33:
+label$7_start_34:
     call push(loc5);
     call push(loc4);
     call popToTmp1();
@@ -1787,7 +2009,7 @@ label$7_start_33:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_35;
+        goto label$8_end_36;
     }
     call push(loc6);
     call push(loc13);
@@ -1840,9 +2062,10 @@ label$7_start_33:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
-    goto label$7_start_33;
-label$8_end_35:
-    // // unhandled raw instruction: i32.trunc_f64_s
+    goto label$7_start_34;
+label$8_end_36:
+    call push(loc2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc3 := popArgs1();
     call push(loc4);
     call push(1.0);
@@ -1979,7 +2202,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_11()
 {
     var arg1: real;
@@ -2081,7 +2307,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_12()
 {
     var arg1: real;
@@ -2224,7 +2453,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_13()
 {
     var arg1: real;
@@ -2278,8 +2510,8 @@ implementation func_13()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    goto func_exit_42;
-func_exit_42:
+    goto func_exit_43;
+func_exit_43:
 }
 
 procedure {:inline 1} func_14();
@@ -2288,7 +2520,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_14()
 {
     var arg1: real;
@@ -2454,7 +2689,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_15()
 {
     var arg1: real;
@@ -2562,7 +2800,7 @@ implementation func_15()
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc3 := popArgs1();
-label$3_start_46:
+label$3_start_47:
     call push(loc2);
     call push(arg1);
     call popToTmp1();
@@ -2570,7 +2808,7 @@ label$3_start_46:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_48;
+        goto label$4_end_49;
     }
     call push(loc3);
     call push(8.0);
@@ -2593,8 +2831,8 @@ label$3_start_46:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$3_start_46;
-label$4_end_48:
+    goto label$3_start_47;
+label$4_end_49:
     call push(loc1);
     call push(arg4);
     call popToTmp2();
@@ -2647,7 +2885,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_16()
 {
     var arg1: real;
@@ -2796,7 +3037,8 @@ implementation func_16()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc4);
-        // // unhandled raw instruction: f64.convert_i32_s
+        call push(arg1);
+        // // numeric cast f64.convert_i32_s: no-op under real semantics
         call popToTmp2();
         call popToTmp1();
         idx := (real_to_int($tmp1)) + (8);
@@ -2818,7 +3060,8 @@ implementation func_16()
         store_i := real_to_int($tmp2);
         call mem_write_u64(idx, store_i);
         call push(loc4);
-        // // unhandled raw instruction: f64.convert_i32_s
+        call push(arg1);
+        // // numeric cast f64.convert_i32_s: no-op under real semantics
         call popToTmp2();
         call popToTmp1();
         idx := (real_to_int($tmp1)) + (16);
@@ -2852,7 +3095,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_17()
 {
     var entry_sp: int;
@@ -2861,8 +3107,8 @@ implementation func_17()
     var store_i: int;
     entry_sp := $sp;
     call push(global_1);
-    goto func_exit_56;
-func_exit_56:
+    goto func_exit_57;
+func_exit_57:
 }
 
 procedure {:inline 1} func_18();
@@ -2871,7 +3117,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_1;
 implementation func_18()
 {
@@ -2899,9 +3148,13 @@ implementation func_18()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(-1.0);
-        goto func_exit_58;
+        goto func_exit_59;
     }
-    // // unhandled raw instruction: i32.rem_s
+    call push(arg1);
+    call push(8.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(int_rem_s($tmp2, $tmp1));
     call loc1 := popArgs1();
     call push(loc1);
     call popToTmp1();
@@ -2929,9 +3182,8 @@ implementation func_18()
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
-    call popToTmp1();
-    idx := (real_to_int($tmp1)) + (0);
-    // // unsupported memory op: memory.size
+    call load_i := memory_size();
+    call push(int_to_real(load_i));
     call push(global_3);
     call popToTmp1();
     call popToTmp2();
@@ -2947,7 +3199,11 @@ implementation func_18()
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.rem_s
+        call push(loc3);
+        call push(global_3);
+        call popToTmp1();
+        call popToTmp2();
+        call push(int_rem_s($tmp2, $tmp1));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
             call push(loc3);
@@ -2972,8 +3228,9 @@ implementation func_18()
         }
         call push($tmp3);
         call popToTmp1();
-        idx := (real_to_int($tmp1)) + (0);
-        // // unsupported memory op: memory.grow
+        idx := real_to_int($tmp1);
+        call load_i := memory_grow(idx);
+        call push(int_to_real(load_i));
         call push(-1.0);
         call popToTmp1();
         call popToTmp2();
@@ -3033,8 +3290,8 @@ implementation func_18()
     call push(($tmp2) + ($tmp1));
     call global_1 := popArgs1();
     call push(loc4);
-    goto func_exit_58;
-func_exit_58:
+    goto func_exit_59;
+func_exit_59:
 }
 
 procedure {:inline 1} func_19();
@@ -3043,7 +3300,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_19()
 {
     var arg1: real;
@@ -3054,7 +3314,19 @@ implementation func_19()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call push(4.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
 }
 
 procedure {:inline 1} func_20();
@@ -3063,7 +3335,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_20()
 {
     var arg1: real;
@@ -3095,7 +3370,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_21()
 {
     var arg1: real;
@@ -3111,8 +3389,8 @@ implementation func_21()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    goto func_exit_62;
-func_exit_62:
+    goto func_exit_63;
+func_exit_63:
 }
 
 procedure {:inline 1} func_22();
@@ -3121,7 +3399,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_22()
 {
     var arg1: real;
@@ -3161,7 +3442,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_23()
 {
     var arg1: real;
@@ -3198,7 +3482,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_24()
 {
     var arg1: real;
@@ -3238,7 +3525,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_25()
 {
     var arg1: real;
@@ -3275,7 +3565,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_26()
 {
     var arg1: real;
@@ -3329,8 +3622,8 @@ implementation func_26()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_u64(idx);
     call push(bits64_to_real(load_i));
-    goto func_exit_63;
-func_exit_63:
+    goto func_exit_64;
+func_exit_64:
 }
 
 procedure {:inline 1} func_27();
@@ -3339,7 +3632,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_27()
 {
     var arg1: real;
@@ -3413,7 +3709,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_28()
 {
     var arg1: real;
@@ -3433,7 +3732,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_29()
 {
     var arg1: real;
@@ -3444,7 +3746,31 @@ implementation func_29()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call push(4.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call push(arg1);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (0);
+    call load_i := mem_read_s32(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
 }
 
 procedure {:inline 1} func_30();
@@ -3453,7 +3779,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_30()
 {
     var arg1: real;
@@ -3467,7 +3796,19 @@ implementation func_30()
     entry_sp := $sp;
     assume (($sp) >= (4));
     call arg1, arg2, arg3, arg4 := popArgs4();
-    // // unhandled raw instruction: i32.and
+    call push(arg2);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) >= ($tmp1)));
+    call push(arg2);
+    call push(4.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) <= ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call push(0.0);
     call fimport_24();
     call push(arg3);
@@ -3475,9 +3816,39 @@ implementation func_30()
     call popToTmp1();
     call popToTmp2();
     call push(bool_to_real(($tmp2) >= ($tmp1)));
-    // // unhandled raw instruction: i32.and
+    call push(arg3);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call push(arg3);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call fimport_24();
-    // // unhandled raw instruction: i32.and
+    call push(arg4);
+    call push(-1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) >= ($tmp1)));
+    call push(arg4);
+    call push(15.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) <= ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call push(2.0);
     call fimport_24();
     call push(arg1);
@@ -3502,7 +3873,19 @@ implementation func_30()
     store_i := real_to_int($tmp2);
     call mem_write_u32(idx, store_i);
     call push(arg1);
-    // // unhandled raw instruction: i32.or
+    call push(arg4);
+    call push(6.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call push(arg4);
+    call push(9.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp2();
     call popToTmp1();
     idx := (real_to_int($tmp1)) + (3);
@@ -3516,7 +3899,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_31()
 {
     var arg1: real;
@@ -3530,32 +3916,32 @@ implementation func_31()
     call popToTmp1();
     idx := real_to_int($tmp1);
     if (((idx) < (0)) || ((idx) >= (3))) {
-        goto label$2_end_67;
+        goto label$2_end_68;
     } else {
         if ((idx) == (0)) {
-            goto label$5_end_70;
+            goto label$5_end_71;
         }
         if ((idx) == (1)) {
-            goto label$4_end_69;
+            goto label$4_end_70;
         }
         if ((idx) == (2)) {
-            goto label$3_end_68;
+            goto label$3_end_69;
         }
-        goto label$2_end_67;
+        goto label$2_end_68;
     }
-label$5_end_70:
+label$5_end_71:
     call push(8.0);
-    goto func_exit_72;
-label$4_end_69:
+    goto func_exit_73;
+label$4_end_70:
     call push(4.0);
-    goto func_exit_72;
-label$3_end_68:
+    goto func_exit_73;
+label$3_end_69:
     call push(2.0);
-    goto func_exit_72;
-label$2_end_67:
+    goto func_exit_73;
+label$2_end_68:
     call push(1.0);
-    goto func_exit_72;
-func_exit_72:
+    goto func_exit_73;
+func_exit_73:
 }
 
 procedure {:inline 1} func_32();
@@ -3564,7 +3950,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_32()
 {
     var arg1: real;
@@ -3588,7 +3977,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_33()
 {
     var arg1: real;
@@ -3612,7 +4004,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_34()
 {
     var arg1: real;
@@ -3633,7 +4028,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_35()
 {
     var arg1: real;
@@ -3649,8 +4047,8 @@ implementation func_35()
     idx := (real_to_int($tmp1)) + (4);
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
-    goto func_exit_76;
-func_exit_76:
+    goto func_exit_77;
+func_exit_77:
 }
 
 procedure {:inline 1} func_36();
@@ -3659,7 +4057,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_36()
 {
     var arg1: real;
@@ -3683,7 +4084,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_37()
 {
     var arg1: real;
@@ -3694,7 +4098,15 @@ implementation func_37()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call popToTmp1();
+    idx := (real_to_int($tmp1)) + (21);
+    call load_i := mem_read_u8(idx);
+    call push(int_to_real(load_i));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
 }
 
 procedure {:inline 1} func_38();
@@ -3703,7 +4115,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_38()
 {
     var arg1: real;
@@ -3719,8 +4134,8 @@ implementation func_38()
     idx := (real_to_int($tmp1)) + (3);
     call load_i := mem_read_u8(idx);
     call push(int_to_real(load_i));
-    goto func_exit_77;
-func_exit_77:
+    goto func_exit_78;
+func_exit_78:
 }
 
 procedure {:inline 1} func_39();
@@ -3729,7 +4144,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_39()
 {
     var arg1: real;
@@ -3760,7 +4178,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_40()
 {
     var arg1: real;
@@ -3804,7 +4225,7 @@ implementation func_40()
     call push(0.0);
     call func_16();
     call loc1 := popArgs1();
-label$2_start_78:
+label$2_start_79:
     call push(loc2);
     call push(loc3);
     call popToTmp1();
@@ -3812,7 +4233,7 @@ label$2_start_78:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_80;
+        goto label$3_end_81;
     }
     call push(loc4);
     call push(loc2);
@@ -3854,8 +4275,8 @@ label$2_start_78:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_78;
-label$3_end_80:
+    goto label$2_start_79;
+label$3_end_81:
     call push(loc1);
 }
 
@@ -3865,7 +4286,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_41()
 {
     var arg1: real;
@@ -3889,7 +4313,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_42()
 {
     var arg1: real;
@@ -3913,7 +4340,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_43()
 {
     var arg1: real;
@@ -3941,7 +4371,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_44()
 {
     var arg1: real;
@@ -3969,7 +4402,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_45()
 {
     var arg1: real;
@@ -3989,7 +4425,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_46()
 {
     var arg1: real;
@@ -4025,7 +4464,7 @@ implementation func_46()
     call push(arg1);
     call func_42();
     call loc4 := popArgs1();
-label$2_start_81:
+label$2_start_82:
     call push(loc2);
     call push(loc3);
     call popToTmp1();
@@ -4033,7 +4472,7 @@ label$2_start_81:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_83;
+        goto label$3_end_84;
     }
     call push(loc4);
     call push(loc2);
@@ -4061,8 +4500,8 @@ label$2_start_81:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_81;
-label$3_end_83:
+    goto label$2_start_82;
+label$3_end_84:
     call push(loc5);
 }
 
@@ -4072,7 +4511,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_47()
 {
     var arg1: real;
@@ -4120,7 +4562,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_48()
 {
     var arg1: real;
@@ -4152,7 +4597,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_49()
 {
     var arg1: real;
@@ -4185,7 +4633,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_50()
 {
     var arg1: real;
@@ -4237,7 +4688,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_51()
 {
     var arg1: real;
@@ -4289,7 +4743,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_52()
 {
     var arg1: real;
@@ -4300,7 +4757,13 @@ implementation func_52()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_51();
+    call push(arg1);
+    call func_50();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
 }
 
 procedure {:inline 1} func_53();
@@ -4309,7 +4772,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_53()
 {
     var arg1: real;
@@ -4349,7 +4815,7 @@ implementation func_53()
         call push(0.0);
         call push(1.0);
         call func_16();
-        goto func_exit_86;
+        goto func_exit_87;
     }
     call push(arg1);
     call push(arg2);
@@ -4378,11 +4844,22 @@ implementation func_53()
             call push(arg1);
             call func_27();
             call push(loc1);
-            goto func_exit_86;
+            goto func_exit_87;
         } else {
-            // // unhandled raw instruction: f64.trunc
+            call push(arg2);
+            call push(arg1);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) - ($tmp1));
+            call popToTmp1();
+            call push(trunc_real($tmp1));
             call loc2 := popArgs1();
-            // // unhandled raw instruction: i32.trunc_f64_u
+            call push(loc2);
+            call push(1.0);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) + ($tmp1));
+            // // numeric cast i32.trunc_f64_u: no-op under real semantics
             call push(0.0);
             call push(0.0);
             call push(0.0);
@@ -4406,7 +4883,7 @@ implementation func_53()
             call popToTmp2();
             call push(($tmp2) - ($tmp1));
             call arg1 := popArgs1();
-label$5_start_94:
+label$5_start_95:
             call push(loc3);
             call push(loc2);
             call popToTmp1();
@@ -4414,10 +4891,15 @@ label$5_start_94:
             call push(bool_to_real(($tmp2) > ($tmp1)));
             call popToTmp1();
             if (real_to_bool($tmp1)) {
-                goto label$6_end_96;
+                goto label$6_end_97;
             }
             call push(loc1);
-            // // unhandled raw instruction: i32.trunc_f64_s
+            call push(loc3);
+            call push(arg1);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) - ($tmp1));
+            // // numeric cast i32.trunc_f64_s: no-op under real semantics
             call push(loc3);
             call func_27();
             call push(loc3);
@@ -4426,10 +4908,10 @@ label$5_start_94:
             call popToTmp2();
             call push(($tmp2) + ($tmp1));
             call loc3 := popArgs1();
-            goto label$5_start_94;
-label$6_end_96:
+            goto label$5_start_95;
+label$6_end_97:
             call push(loc4);
-            goto func_exit_86;
+            goto func_exit_87;
         }
     } else {
         call push(0.0);
@@ -4439,9 +4921,9 @@ label$6_end_96:
         call push(1.0);
         call push(0.0);
         call func_16();
-        goto func_exit_86;
+        goto func_exit_87;
     }
-func_exit_86:
+func_exit_87:
 }
 
 procedure {:inline 1} func_54();
@@ -4450,7 +4932,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_54()
 {
     var arg1: real;
@@ -4487,7 +4972,7 @@ implementation func_54()
         call push(0.0);
         call push(0.0);
         call func_16();
-        goto func_exit_99;
+        goto func_exit_100;
     }
     call push(arg3);
     call push(arg1);
@@ -4513,7 +4998,24 @@ implementation func_54()
             call popToTmp2();
             $tmp3 := $tmp2;
         } else {
-            // // unhandled raw instruction: i32.trunc_f64_u
+            call push(arg3);
+            call push(arg1);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) - ($tmp1));
+            call push(arg2);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) / ($tmp1));
+            call popToTmp1();
+            call push(trunc_real($tmp1));
+            call loc1 := popArgs1();
+            call push(loc1);
+            call push(1.0);
+            call popToTmp1();
+            call popToTmp2();
+            call push(($tmp2) + ($tmp1));
+            // // numeric cast i32.trunc_f64_u: no-op under real semantics
             call push(0.0);
             call push(0.0);
             call push(0.0);
@@ -4537,7 +5039,7 @@ implementation func_54()
             call loc3 := popArgs1();
             call push(1.0);
             call arg1 := popArgs1();
-label$5_start_102:
+label$5_start_104:
             call push(loc3);
             call push(loc1);
             call popToTmp1();
@@ -4545,10 +5047,11 @@ label$5_start_102:
             call push(bool_to_real(($tmp2) > ($tmp1)));
             call popToTmp1();
             if (real_to_bool($tmp1)) {
-                goto label$6_end_104;
+                goto label$6_end_106;
             }
             call push(loc2);
-            // // unhandled raw instruction: i32.trunc_f64_s
+            call push(arg1);
+            // // numeric cast i32.trunc_f64_s: no-op under real semantics
             call push(loc3);
             call func_27();
             call push(loc3);
@@ -4563,8 +5066,8 @@ label$5_start_102:
             call popToTmp2();
             call push(($tmp2) + ($tmp1));
             call arg1 := popArgs1();
-            goto label$5_start_102;
-label$6_end_104:
+            goto label$5_start_104;
+label$6_end_106:
             call push(loc4);
             call popToTmp2();
             $tmp3 := $tmp2;
@@ -4613,7 +5116,24 @@ label$6_end_104:
                 call popToTmp2();
                 $tmp3 := $tmp2;
             } else {
-                // // unhandled raw instruction: i32.trunc_f64_u
+                call push(arg3);
+                call push(arg1);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) - ($tmp1));
+                call push(arg2);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) / ($tmp1));
+                call popToTmp1();
+                call push(trunc_real($tmp1));
+                call loc1 := popArgs1();
+                call push(loc1);
+                call push(1.0);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) + ($tmp1));
+                // // numeric cast i32.trunc_f64_u: no-op under real semantics
                 call push(0.0);
                 call push(0.0);
                 call push(0.0);
@@ -4637,7 +5157,7 @@ label$6_end_104:
                 call loc3 := popArgs1();
                 call push(1.0);
                 call arg1 := popArgs1();
-label$12_start_109:
+label$12_start_112:
                 call push(loc1);
                 call push(loc3);
                 call popToTmp1();
@@ -4645,10 +5165,11 @@ label$12_start_109:
                 call push(bool_to_real(($tmp2) > ($tmp1)));
                 call popToTmp1();
                 if (real_to_bool($tmp1)) {
-                    goto label$13_end_111;
+                    goto label$13_end_114;
                 }
                 call push(loc2);
-                // // unhandled raw instruction: i32.trunc_f64_s
+                call push(arg1);
+                // // numeric cast i32.trunc_f64_s: no-op under real semantics
                 call push(loc3);
                 call func_27();
                 call push(loc3);
@@ -4663,8 +5184,8 @@ label$12_start_109:
                 call popToTmp2();
                 call push(($tmp2) + ($tmp1));
                 call arg1 := popArgs1();
-                goto label$12_start_109;
-label$13_end_111:
+                goto label$12_start_112;
+label$13_end_114:
                 call push(loc5);
                 call popToTmp2();
                 $tmp3 := $tmp2;
@@ -4678,7 +5199,7 @@ label$13_end_111:
         $tmp3 := $tmp2;
     }
     call push($tmp3);
-func_exit_99:
+func_exit_100:
 }
 
 procedure {:inline 1} func_55();
@@ -4687,7 +5208,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_55()
 {
     var arg1: real;
@@ -4776,7 +5300,7 @@ implementation func_55()
         call push(0.0);
         call push(0.0);
         call func_16();
-        goto func_exit_115;
+        goto func_exit_118;
     } else {
         call push(arg1);
         call push(2.0);
@@ -4795,7 +5319,7 @@ implementation func_55()
             call push(0.0);
             call push(0.0);
             call func_16();
-            goto func_exit_115;
+            goto func_exit_118;
         } else {
             call push(loc5);
             call push(1.0);
@@ -4841,9 +5365,22 @@ implementation func_55()
                 call push(loc2);
                 call func_27();
                 call push(loc8);
-                goto func_exit_115;
+                goto func_exit_118;
             } else {
-                // // unhandled raw instruction: i32.trunc_f64_u
+                call push(loc3);
+                call push(loc2);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) - ($tmp1));
+                call popToTmp1();
+                call push(trunc_real($tmp1));
+                call loc9 := popArgs1();
+                call push(loc9);
+                call push(1.0);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) + ($tmp1));
+                // // numeric cast i32.trunc_f64_u: no-op under real semantics
                 call push(0.0);
                 call push(0.0);
                 call push(0.0);
@@ -4867,7 +5404,7 @@ implementation func_55()
                 call popToTmp2();
                 call push(($tmp2) - ($tmp1));
                 call loc2 := popArgs1();
-label$12_start_125:
+label$12_start_129:
                 call push(loc10);
                 call push(loc9);
                 call popToTmp1();
@@ -4875,10 +5412,15 @@ label$12_start_125:
                 call push(bool_to_real(($tmp2) > ($tmp1)));
                 call popToTmp1();
                 if (real_to_bool($tmp1)) {
-                    goto label$13_end_127;
+                    goto label$13_end_131;
                 }
                 call push(loc8);
-                // // unhandled raw instruction: i32.trunc_f64_s
+                call push(loc10);
+                call push(loc2);
+                call popToTmp1();
+                call popToTmp2();
+                call push(($tmp2) - ($tmp1));
+                // // numeric cast i32.trunc_f64_s: no-op under real semantics
                 call push(loc10);
                 call func_27();
                 call push(loc10);
@@ -4887,10 +5429,10 @@ label$12_start_125:
                 call popToTmp2();
                 call push(($tmp2) + ($tmp1));
                 call loc10 := popArgs1();
-                goto label$12_start_125;
-label$13_end_127:
+                goto label$12_start_129;
+label$13_end_131:
                 call push(loc11);
-                goto func_exit_115;
+                goto func_exit_118;
             }
         } else {
             call push(0.0);
@@ -4900,7 +5442,7 @@ label$13_end_127:
             call push(0.0);
             call push(0.0);
             call func_16();
-            goto func_exit_115;
+            goto func_exit_118;
         }
     } else {
         call push(arg1);
@@ -4920,7 +5462,7 @@ label$13_end_127:
             call push(0.0);
             call push(0.0);
             call func_16();
-            goto func_exit_115;
+            goto func_exit_118;
         } else {
             call push(loc7);
             call push(1.0);
@@ -4942,7 +5484,7 @@ label$13_end_127:
                 call push(0.0);
                 call push(0.0);
                 call func_16();
-                goto func_exit_115;
+                goto func_exit_118;
             }
             call push(loc12);
             call push(loc2);
@@ -4965,9 +5507,26 @@ label$13_end_127:
                     call push(0.0);
                     call push(0.0);
                     call func_16();
-                    goto func_exit_115;
+                    goto func_exit_118;
                 } else {
-                    // // unhandled raw instruction: i32.trunc_f64_u
+                    call push(loc4);
+                    call push(loc2);
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(($tmp2) - ($tmp1));
+                    call push(loc3);
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(($tmp2) / ($tmp1));
+                    call popToTmp1();
+                    call push(trunc_real($tmp1));
+                    call loc9 := popArgs1();
+                    call push(loc9);
+                    call push(1.0);
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(($tmp2) + ($tmp1));
+                    // // numeric cast i32.trunc_f64_u: no-op under real semantics
                     call push(0.0);
                     call push(0.0);
                     call push(0.0);
@@ -4991,7 +5550,7 @@ label$13_end_127:
                     call loc10 := popArgs1();
                     call push(1.0);
                     call loc2 := popArgs1();
-label$22_start_138:
+label$22_start_143:
                     call push(loc10);
                     call push(loc9);
                     call popToTmp1();
@@ -4999,10 +5558,11 @@ label$22_start_138:
                     call push(bool_to_real(($tmp2) > ($tmp1)));
                     call popToTmp1();
                     if (real_to_bool($tmp1)) {
-                        goto label$23_end_140;
+                        goto label$23_end_145;
                     }
                     call push(loc8);
-                    // // unhandled raw instruction: i32.trunc_f64_s
+                    call push(loc2);
+                    // // numeric cast i32.trunc_f64_s: no-op under real semantics
                     call push(loc10);
                     call func_27();
                     call push(loc10);
@@ -5017,10 +5577,10 @@ label$22_start_138:
                     call popToTmp2();
                     call push(($tmp2) + ($tmp1));
                     call loc2 := popArgs1();
-                    goto label$22_start_138;
-label$23_end_140:
+                    goto label$22_start_143;
+label$23_end_145:
                     call push(loc13);
-                    goto func_exit_115;
+                    goto func_exit_118;
                 }
             } else {
                 call push(loc2);
@@ -5043,7 +5603,7 @@ label$23_end_140:
                     call push(loc2);
                     call func_27();
                     call push(loc8);
-                    goto func_exit_115;
+                    goto func_exit_118;
                 } else {
                     call push(loc3);
                     call push(0.0);
@@ -5059,9 +5619,26 @@ label$23_end_140:
                         call push(0.0);
                         call push(0.0);
                         call func_16();
-                        goto func_exit_115;
+                        goto func_exit_118;
                     } else {
-                        // // unhandled raw instruction: i32.trunc_f64_u
+                        call push(loc4);
+                        call push(loc2);
+                        call popToTmp1();
+                        call popToTmp2();
+                        call push(($tmp2) - ($tmp1));
+                        call push(loc3);
+                        call popToTmp1();
+                        call popToTmp2();
+                        call push(($tmp2) / ($tmp1));
+                        call popToTmp1();
+                        call push(trunc_real($tmp1));
+                        call loc9 := popArgs1();
+                        call push(loc9);
+                        call push(1.0);
+                        call popToTmp1();
+                        call popToTmp2();
+                        call push(($tmp2) + ($tmp1));
+                        // // numeric cast i32.trunc_f64_u: no-op under real semantics
                         call push(0.0);
                         call push(0.0);
                         call push(0.0);
@@ -5085,7 +5662,7 @@ label$23_end_140:
                         call loc10 := popArgs1();
                         call push(1.0);
                         call loc2 := popArgs1();
-label$29_start_148:
+label$29_start_154:
                         call push(loc9);
                         call push(loc10);
                         call popToTmp1();
@@ -5093,10 +5670,11 @@ label$29_start_148:
                         call push(bool_to_real(($tmp2) > ($tmp1)));
                         call popToTmp1();
                         if (real_to_bool($tmp1)) {
-                            goto label$30_end_150;
+                            goto label$30_end_156;
                         }
                         call push(loc8);
-                        // // unhandled raw instruction: i32.trunc_f64_s
+                        call push(loc2);
+                        // // numeric cast i32.trunc_f64_s: no-op under real semantics
                         call push(loc10);
                         call func_27();
                         call push(loc10);
@@ -5111,16 +5689,16 @@ label$29_start_148:
                         call popToTmp2();
                         call push(($tmp2) + ($tmp1));
                         call loc2 := popArgs1();
-                        goto label$29_start_148;
-label$30_end_150:
+                        goto label$29_start_154;
+label$30_end_156:
                         call push(loc14);
-                        goto func_exit_115;
+                        goto func_exit_118;
                     }
                 }
             }
         }
     }
-func_exit_115:
+func_exit_118:
 }
 
 procedure {:inline 1} func_56();
@@ -5129,7 +5707,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_56()
 {
     var arg1: real;
@@ -5171,7 +5752,7 @@ implementation func_56()
     call loc1 := popArgs1();
     call push(loc1);
     call loc4 := popArgs1();
-label$2_start_152:
+label$2_start_158:
     call push(loc2);
     call push(loc3);
     call popToTmp1();
@@ -5179,7 +5760,7 @@ label$2_start_152:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_154;
+        goto label$3_end_160;
     }
     call push(loc1);
     call push(loc2);
@@ -5193,8 +5774,8 @@ label$2_start_152:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_152;
-label$3_end_154:
+    goto label$2_start_158;
+label$3_end_160:
     call push(loc4);
 }
 
@@ -5204,7 +5785,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_57()
 {
     var arg1: real;
@@ -5235,7 +5819,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_58()
 {
     var arg1: real;
@@ -5264,7 +5851,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_59()
 {
     var arg1: real;
@@ -5299,7 +5889,10 @@ implementation func_59()
     call loc3 := popArgs1();
     call push(1.0);
     call loc6 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    call push(1.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(1.0);
     call popToTmp1();
     call popToTmp2();
@@ -5307,7 +5900,7 @@ implementation func_59()
     call loc5 := popArgs1();
     call push(2.0);
     call loc4 := popArgs1();
-label$1_start_155:
+label$1_start_161:
     call push(loc4);
     call push(loc3);
     call popToTmp1();
@@ -5315,7 +5908,7 @@ label$1_start_155:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_157;
+        goto label$2_end_163;
     }
     call push(loc1);
     call push(8.0);
@@ -5340,7 +5933,18 @@ label$1_start_155:
     call push(($tmp2) * ($tmp1));
     call loc6 := popArgs1();
     call push(loc5);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc6);
+    call push(arg2);
+    call push(loc4);
+    call func_26();
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) * ($tmp1));
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
@@ -5351,8 +5955,8 @@ label$1_start_155:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc4 := popArgs1();
-    goto label$1_start_155;
-label$2_end_157:
+    goto label$1_start_161;
+label$2_end_163:
     call push(loc5);
 }
 
@@ -5362,7 +5966,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_60()
 {
     var arg1: real;
@@ -5380,7 +5987,13 @@ implementation func_60()
     loc1 := 0.0;
     loc2 := 0.0;
     loc3 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_47();
+    call push(arg2);
+    call func_47();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(6.0);
@@ -5423,7 +6036,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_61()
 {
     var arg1: real;
@@ -5442,7 +6058,13 @@ implementation func_61()
     loc1 := 0.0;
     loc2 := 0.0;
     loc3 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_47();
+    call push(arg2);
+    call func_47();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(6.0);
@@ -5468,7 +6090,7 @@ implementation func_61()
         call push(arg1);
         call func_56();
         call pop();
-        goto func_exit_163;
+        goto func_exit_169;
     } else {
         call push(loc3);
         call push(1.0);
@@ -5492,7 +6114,7 @@ implementation func_61()
     call push(0.0);
     call push(1.0);
     call func_62();
-func_exit_163:
+func_exit_169:
 }
 
 procedure {:inline 1} popArgs10() returns (a1: real, a2: real, a3: real, a4: real, a5: real, a6: real, a7: real, a8: real, a9: real, a10: real);
@@ -5542,7 +6164,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_62()
 {
     var arg1: real;
@@ -5583,7 +6208,7 @@ implementation func_62()
     call push(loc4);
     call func_39();
     call loc1 := popArgs1();
-label$1_start_164:
+label$1_start_170:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -5591,11 +6216,18 @@ label$1_start_164:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_166;
+        goto label$2_end_172;
     }
     call push(arg7);
     call push(arg6);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc4);
+    call push(1.0);
+    call push(loc2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(1.0);
     call popToTmp1();
     call popToTmp2();
@@ -5608,7 +6240,10 @@ label$1_start_164:
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
     call push(arg6);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg3);
+    call push(arg5);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) * ($tmp1));
@@ -5698,8 +6333,8 @@ label$1_start_164:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$1_start_164;
-label$2_end_166:
+    goto label$1_start_170;
+label$2_end_172:
 }
 
 procedure {:inline 1} func_63();
@@ -5708,7 +6343,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_63()
 {
     var arg1: real;
@@ -5752,7 +6390,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_64()
 {
     var arg1: real;
@@ -5827,7 +6468,7 @@ implementation func_64()
     call loc6 := popArgs1();
     call push(1.0);
     call loc11 := popArgs1();
-label$3_start_171:
+label$3_start_177:
     call push(loc4);
     call push(loc7);
     call popToTmp1();
@@ -5835,7 +6476,7 @@ label$3_start_171:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_173;
+        goto label$4_end_179;
     }
     call push(arg3);
     call push(loc6);
@@ -5846,15 +6487,28 @@ label$3_start_171:
     call push(loc9);
     call func_39();
     call loc8 := popArgs1();
-    // // unhandled raw instruction: i32.or
+    call push(loc12);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call push(loc6);
+    call push(loc12);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) <= ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc2);
         call push(loc6);
-        // // unhandled raw instruction: f64.convert_i32_s
+        call push(loc8);
+        // // numeric cast f64.convert_i32_s: no-op under real semantics
         call func_27();
     }
-label$6_start_175:
+label$6_start_181:
     call push(loc5);
     call push(loc8);
     call popToTmp1();
@@ -5862,7 +6516,7 @@ label$6_start_175:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_177;
+        goto label$7_end_183;
     }
     call push(loc9);
     call push(loc11);
@@ -5878,7 +6532,21 @@ label$6_start_175:
         call push(4.0);
         call func_0();
     }
-    // // unhandled raw instruction: i32.and
+    call push(loc7);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(loc10);
+    call push(arg2);
+    call push(loc6);
+    call func_26();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(3.0);
@@ -5891,7 +6559,8 @@ label$6_start_175:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc10);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call push(loc1);
         call popToTmp1();
         call popToTmp2();
@@ -5914,8 +6583,8 @@ label$6_start_175:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
-    goto label$6_start_175;
-label$7_end_177:
+    goto label$6_start_181;
+label$7_end_183:
     call push(0.0);
     call loc5 := popArgs1();
     call push(1.0);
@@ -5932,8 +6601,8 @@ label$7_end_177:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc4 := popArgs1();
-    goto label$3_start_171;
-label$4_end_173:
+    goto label$3_start_177;
+label$4_end_179:
     call push(loc7);
     call push(1.0);
     call popToTmp1();
@@ -5972,7 +6641,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_65()
 {
     var arg1: real;
@@ -6036,7 +6708,7 @@ implementation func_65()
     call loc11 := popArgs1();
     call push(1.0);
     call loc12 := popArgs1();
-label$1_start_181:
+label$1_start_187:
     call push(loc4);
     call push(loc6);
     call popToTmp1();
@@ -6044,9 +6716,28 @@ label$1_start_181:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_183;
+        goto label$2_end_189;
     }
-    // // unhandled raw instruction: i32.and
+    call push(arg3);
+    call push(1.0);
+    call push(loc4);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_13();
+    call loc9 := popArgs1();
+    call push(loc9);
+    call func_50();
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call push(loc6);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(5.0);
@@ -6060,10 +6751,28 @@ label$1_start_181:
         call push(1.0);
         call loc8 := popArgs1();
     }
-    // // unhandled raw instruction: i32.and
+    call push(loc9);
+    call func_39();
+    call loc7 := popArgs1();
+    call push(loc7);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(loc6);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc11);
+        call push(loc12);
+        call func_26();
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call loc13 := popArgs1();
         call push(loc13);
         call push(loc7);
@@ -6096,7 +6805,7 @@ label$1_start_181:
     call popToTmp2();
     call push(($tmp2) * ($tmp1));
     call loc8 := popArgs1();
-label$8_start_186:
+label$8_start_194:
     call push(loc5);
     call push(loc7);
     call popToTmp1();
@@ -6104,7 +6813,7 @@ label$8_start_186:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$9_end_188;
+        goto label$9_end_196;
     }
     call push(loc9);
     call push(1.0);
@@ -6124,7 +6833,25 @@ label$8_start_186:
         call push(4.0);
         call func_0();
     }
-    // // unhandled raw instruction: i32.and
+    call push(loc6);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(loc10);
+    call push(arg2);
+    call push(loc4);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call func_26();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(3.0);
@@ -6137,7 +6864,8 @@ label$8_start_186:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc10);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call push(loc1);
         call popToTmp1();
         call popToTmp2();
@@ -6154,8 +6882,8 @@ label$8_start_186:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc5 := popArgs1();
-    goto label$8_start_186;
-label$9_end_188:
+    goto label$8_start_194;
+label$9_end_196:
     call push(0.0);
     call loc5 := popArgs1();
     call push(loc4);
@@ -6164,8 +6892,8 @@ label$9_end_188:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc4 := popArgs1();
-    goto label$1_start_181;
-label$2_end_183:
+    goto label$1_start_187;
+label$2_end_189:
     call push(loc8);
     call push(arg4);
     call func_39();
@@ -6176,7 +6904,19 @@ label$2_end_183:
     call push(bool_to_real(($tmp2) != ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.and
+        call push(loc8);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(bool_to_real(($tmp2) > ($tmp1)));
+        call push(loc13);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(bool_to_real(($tmp2) == ($tmp1)));
+        call popToTmp1();
+        call popToTmp2();
+        call push(bv_and($tmp2, $tmp1));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
             call push(2.0);
@@ -6193,16 +6933,33 @@ label$2_end_183:
             call func_27();
             call push(loc14);
             call push(2.0);
-            // // unhandled raw instruction: f64.convert_i32_s
+            call push(loc8);
+            // // numeric cast f64.convert_i32_s: no-op under real semantics
             call func_27();
             call push(loc14);
             call push(arg4);
             call push(1.0);
             call func_26();
             call func_86();
-            goto func_exit_193;
+            goto func_exit_201;
         }
-        // // unhandled raw instruction: i32.and
+        call push(loc8);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(bool_to_real(($tmp2) == ($tmp1)));
+        call push(loc4);
+        call popToTmp1();
+        call push(bool_to_real(($tmp1) == (0.0)));
+        call popToTmp1();
+        call popToTmp2();
+        call push(bv_and($tmp2, $tmp1));
+        call push(loc13);
+        call popToTmp1();
+        call push(bool_to_real(($tmp1) == (0.0)));
+        call popToTmp1();
+        call popToTmp2();
+        call push(bv_and($tmp2, $tmp1));
         call popToTmp1();
         call push(bool_to_real(($tmp1) == (0.0)));
         call popToTmp1();
@@ -6211,11 +6968,11 @@ label$2_end_183:
             call func_0();
         } else {
             call push(1.0);
-            goto func_exit_193;
+            goto func_exit_201;
         }
     }
     call push(0.0);
-func_exit_193:
+func_exit_201:
 }
 
 procedure {:inline 1} func_66();
@@ -6224,7 +6981,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_66()
 {
     var arg1: real;
@@ -6252,7 +7012,13 @@ implementation func_66()
     loc6 := 0.0;
     loc7 := 0.0;
     loc8 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_47();
+    call push(arg2);
+    call func_47();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(6.0);
@@ -6310,7 +7076,7 @@ implementation func_66()
     call loc7 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$5_start_196:
+label$5_start_204:
     call push(loc6);
     call push(loc4);
     call popToTmp1();
@@ -6318,7 +7084,7 @@ label$5_start_196:
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_198;
+        goto label$6_end_206;
     }
     call push(loc8);
     call push(loc3);
@@ -6371,9 +7137,10 @@ label$5_start_196:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc6 := popArgs1();
-    goto label$5_start_196;
-label$6_end_198:
-    // // unhandled raw instruction: i32.trunc_f64_u
+    goto label$5_start_204;
+label$6_end_206:
+    call push(loc2);
+    // // numeric cast i32.trunc_f64_u: no-op under real semantics
     call push(arg1);
     call func_39();
     call popToTmp1();
@@ -6408,7 +7175,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_67()
 {
     var arg1: real;
@@ -6448,7 +7218,17 @@ implementation func_67()
         call push(12.0);
         call func_0();
     }
-    // // unhandled raw instruction: i32.or
+    call push(arg2);
+    call func_47();
+    call push(arg2);
+    call func_39();
+    call loc1 := popArgs1();
+    call push(loc1);
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(2.0);
@@ -6456,7 +7236,7 @@ implementation func_67()
         call push(0.0);
         call push(0.0);
         call func_15();
-        goto func_exit_202;
+        goto func_exit_211;
     }
     call push(arg2);
     call push(1.0);
@@ -6485,7 +7265,7 @@ implementation func_67()
     call loc5 := popArgs1();
     call push(2.0);
     call loc6 := popArgs1();
-label$4_start_204:
+label$4_start_213:
     call push(loc6);
     call push(loc1);
     call popToTmp1();
@@ -6493,7 +7273,7 @@ label$4_start_204:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_206;
+        goto label$5_end_215;
     }
     call push(arg2);
     call push(loc6);
@@ -6516,7 +7296,7 @@ label$4_start_204:
     }
     call push(1.0);
     call loc7 := popArgs1();
-label$7_start_208:
+label$7_start_217:
     call push(loc7);
     call push(loc3);
     call popToTmp1();
@@ -6524,9 +7304,25 @@ label$7_start_208:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_210;
+        goto label$8_end_219;
     }
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call push(loc7);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call push(loc4);
+    call push(loc7);
+    call func_26();
+    call push(loc9);
+    call push(loc7);
+    call func_26();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(11.0);
@@ -6538,8 +7334,8 @@ label$7_start_208:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc7 := popArgs1();
-    goto label$7_start_208;
-label$8_end_210:
+    goto label$7_start_217;
+label$8_end_219:
     call push(loc5);
     call push(loc9);
     call push(arg1);
@@ -6554,8 +7350,8 @@ label$8_end_210:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc6 := popArgs1();
-    goto label$4_start_204;
-label$5_end_206:
+    goto label$4_start_213;
+label$5_end_215:
     call push(loc4);
     call push(arg1);
     call push(loc5);
@@ -6566,8 +7362,8 @@ label$5_end_206:
     call push(0.0);
     call push(0.0);
     call func_10();
-    goto func_exit_202;
-func_exit_202:
+    goto func_exit_211;
+func_exit_211:
 }
 
 procedure {:inline 1} func_68();
@@ -6576,7 +7372,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_68()
 {
     var arg1: real;
@@ -6601,14 +7400,14 @@ implementation func_68()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc1);
-        goto func_exit_213;
+        goto func_exit_222;
     }
     call push(arg1);
     call push(loc1);
     call push(arg2);
     call func_69();
     call push(loc1);
-func_exit_213:
+func_exit_222:
 }
 
 procedure {:inline 1} func_69();
@@ -6617,7 +7416,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_69()
 {
     var arg1: real;
@@ -6644,14 +7446,19 @@ implementation func_69()
     loc5 := 0.0;
     loc6 := 0.0;
     loc7 := 0.0;
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    call push(0.0);
+    call func_40();
+    call push(arg1);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc1 := popArgs1();
     call push(arg3);
     call func_39();
     call loc6 := popArgs1();
     call push(1.0);
     call loc3 := popArgs1();
-label$1_start_214:
+label$1_start_223:
     call push(loc3);
     call push(loc6);
     call popToTmp1();
@@ -6659,7 +7466,7 @@ label$1_start_214:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_216;
+        goto label$2_end_225;
     }
     call push(arg3);
     call push(loc3);
@@ -6682,7 +7489,10 @@ label$1_start_214:
     call push(1.0);
     call func_71();
     call push(loc4);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc7);
+    call push(arg1);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
@@ -6693,8 +7503,8 @@ label$1_start_214:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc3 := popArgs1();
-    goto label$1_start_214;
-label$2_end_216:
+    goto label$1_start_223;
+label$2_end_225:
 }
 
 procedure {:inline 1} func_70();
@@ -6703,7 +7513,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_70()
 {
     var loc1: real;
@@ -6776,7 +7589,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_71()
 {
     var arg1: real;
@@ -6813,14 +7629,17 @@ implementation func_71()
     loc6 := 0.0;
     loc7 := 0.0;
     loc8 := 0.0;
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg5);
+    call push(arg7);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc2 := popArgs1();
     call push(arg5);
     call func_39();
     call loc3 := popArgs1();
     call push(1.0);
     call loc1 := popArgs1();
-label$1_start_218:
+label$1_start_227:
     call push(loc1);
     call push(loc2);
     call popToTmp1();
@@ -6828,7 +7647,7 @@ label$1_start_218:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_220;
+        goto label$2_end_229;
     }
     call push(loc1);
     call push(1.0);
@@ -6942,8 +7761,8 @@ label$1_start_218:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$1_start_218;
-label$2_end_220:
+    goto label$1_start_227;
+label$2_end_229:
 }
 
 procedure {:inline 1} func_72();
@@ -6952,7 +7771,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_72()
 {
     var arg1: real;
@@ -6974,7 +7796,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_73()
 {
     var arg1: real;
@@ -6996,7 +7821,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_74()
 {
     var entry_sp: int;
@@ -7013,7 +7841,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_75()
 {
     var arg1: real;
@@ -7073,7 +7904,10 @@ implementation func_75()
         call push(5.0);
         call func_0();
     }
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg1);
+    call push(1.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc2 := popArgs1();
     call push(loc2);
     call push(0.0);
@@ -7096,7 +7930,10 @@ implementation func_75()
     call push(bool_to_real(($tmp2) == ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(arg1);
+        call push(2.0);
+        call func_26();
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call loc3 := popArgs1();
         call push(loc3);
         call popToTmp2();
@@ -7133,7 +7970,7 @@ implementation func_75()
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-label$10_start_230:
+label$10_start_239:
         call push(loc1);
         call push(loc2);
         call popToTmp1();
@@ -7141,7 +7978,7 @@ label$10_start_230:
         call push(bool_to_real(($tmp2) >= ($tmp1)));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
-            goto label$11_end_232;
+            goto label$11_end_241;
         }
         call push(loc4);
         call push(1.0);
@@ -7165,8 +8002,8 @@ label$10_start_230:
         call popToTmp2();
         call push(($tmp2) + ($tmp1));
         call loc1 := popArgs1();
-        goto label$10_start_230;
-label$11_end_232:
+        goto label$10_start_239;
+label$11_end_241:
     }
     call push(loc4);
 }
@@ -7177,7 +8014,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_76()
 {
     var arg1: real;
@@ -7197,7 +8037,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_77()
 {
     var arg1: real;
@@ -7253,17 +8096,25 @@ implementation func_77()
         call push(19.0);
         call func_0();
     }
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc5);
+    call push(1.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc3 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc5);
+    call push(2.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc4 := popArgs1();
     call push(loc5);
     call push(1.0);
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(loc4);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
     call func_27();
     call push(loc5);
     call push(2.0);
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(loc3);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
     call func_27();
     call push(loc5);
     call push(0.0);
@@ -7274,7 +8125,7 @@ implementation func_77()
     call loc6 := popArgs1();
     call push(loc6);
     call loc7 := popArgs1();
-label$4_start_234:
+label$4_start_243:
     call push(loc1);
     call push(loc3);
     call popToTmp1();
@@ -7282,11 +8133,11 @@ label$4_start_234:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$5_end_236;
+        goto label$5_end_245;
     }
     call push(0.0);
     call loc2 := popArgs1();
-label$6_start_237:
+label$6_start_246:
     call push(loc2);
     call push(loc4);
     call popToTmp1();
@@ -7294,7 +8145,7 @@ label$6_start_237:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$7_end_239;
+        goto label$7_end_248;
     }
     call push(loc6);
     call push(1.0);
@@ -7332,16 +8183,16 @@ label$6_start_237:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$6_start_237;
-label$7_end_239:
+    goto label$6_start_246;
+label$7_end_248:
     call push(loc1);
     call push(1.0);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$4_start_234;
-label$5_end_236:
+    goto label$4_start_243;
+label$5_end_245:
     call push(loc7);
 }
 
@@ -7351,7 +8202,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_78()
 {
     var arg1: real;
@@ -7378,7 +8232,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_79()
 {
     var arg1: real;
@@ -7405,7 +8262,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_80()
 {
     var arg1: real;
@@ -7432,7 +8292,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_81()
 {
     var arg1: real;
@@ -7459,7 +8322,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_82()
 {
     var arg1: real;
@@ -7501,7 +8367,7 @@ implementation func_82()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call loc4 := popArgs1();
-label$1_start_241:
+label$1_start_250:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -7509,7 +8375,7 @@ label$1_start_241:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_243;
+        goto label$2_end_252;
     }
     call push(loc4);
     call push(loc2);
@@ -7532,8 +8398,8 @@ label$1_start_241:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$1_start_241;
-label$2_end_243:
+    goto label$1_start_250;
+label$2_end_252:
     call push(loc5);
 }
 
@@ -7543,7 +8409,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_83()
 {
     var arg1: real;
@@ -7574,7 +8443,7 @@ implementation func_83()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(1.0);
-        goto func_exit_245;
+        goto func_exit_254;
     }
     call push(arg2);
     call push(0.0);
@@ -7607,7 +8476,7 @@ implementation func_83()
     idx := (real_to_int($tmp1)) + (0);
     call load_i := mem_read_u64(idx);
     call push(bits64_to_real(load_i));
-func_exit_245:
+func_exit_254:
 }
 
 procedure {:inline 1} func_84();
@@ -7616,7 +8485,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_84()
 {
     var arg1: real;
@@ -7629,7 +8501,8 @@ implementation func_84()
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
     call push(arg1);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call func_83();
 }
 
@@ -7639,7 +8512,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_85()
 {
     var arg1: real;
@@ -7661,7 +8537,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_86()
 {
     var arg1: real;
@@ -7690,7 +8569,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_87()
 {
     var arg1: real;
@@ -7719,7 +8601,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_88()
 {
     var arg1: real;
@@ -7737,7 +8622,8 @@ implementation func_88()
     call load_i := mem_read_s32(idx);
     call push(int_to_real(load_i));
     call push(8.0);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(1.0);
     call popToTmp1();
     call popToTmp2();
@@ -7770,7 +8656,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_89()
 {
     var arg1: real;
@@ -7798,7 +8687,7 @@ implementation func_89()
     call loc1 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$2_start_246:
+label$2_start_255:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -7806,7 +8695,7 @@ label$2_start_246:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_248;
+        goto label$3_end_257;
     }
     call push(arg1);
     call push(loc2);
@@ -7819,8 +8708,8 @@ label$2_start_246:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_246;
-label$3_end_248:
+    goto label$2_start_255;
+label$3_end_257:
     call push(arg1);
 }
 
@@ -7840,7 +8729,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_90()
 {
     var arg1: real;
@@ -7869,7 +8761,7 @@ implementation func_90()
     call loc1 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$2_start_249:
+label$2_start_258:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -7877,7 +8769,7 @@ label$2_start_249:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_251;
+        goto label$3_end_260;
     }
     call push(arg1);
     call push(loc2);
@@ -7891,8 +8783,8 @@ label$2_start_249:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_249;
-label$3_end_251:
+    goto label$2_start_258;
+label$3_end_260:
     call push(arg1);
 }
 
@@ -7902,7 +8794,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_91()
 {
     var arg1: real;
@@ -7920,7 +8815,19 @@ implementation func_91()
     loc1 := 0.0;
     loc2 := 0.0;
     loc3 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_47();
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call push(arg1);
+    call func_165();
+    call popToTmp1();
+    call push(bool_to_real(($tmp1) == (0.0)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(6.0);
@@ -7936,7 +8843,7 @@ implementation func_91()
     call loc1 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$2_start_252:
+label$2_start_261:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -7944,7 +8851,7 @@ label$2_start_252:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_254;
+        goto label$3_end_263;
     }
     call push(loc3);
     call push(loc2);
@@ -7960,8 +8867,8 @@ label$2_start_252:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_252;
-label$3_end_254:
+    goto label$2_start_261;
+label$3_end_263:
     call push(loc3);
 }
 
@@ -7981,7 +8888,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_92()
 {
     var arg1: real;
@@ -8018,7 +8928,7 @@ implementation func_92()
     call loc1 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$2_start_255:
+label$2_start_264:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -8026,7 +8936,7 @@ label$2_start_255:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_257;
+        goto label$3_end_266;
     }
     call push(loc3);
     call push(loc2);
@@ -8059,8 +8969,8 @@ label$2_start_255:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$2_start_255;
-label$3_end_257:
+    goto label$2_start_264;
+label$3_end_266:
     call push(loc3);
 }
 
@@ -8070,7 +8980,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_93()
 {
     var arg1: real;
@@ -8092,7 +9005,7 @@ implementation func_93()
     call loc1 := popArgs1();
     call push(1.0);
     call loc2 := popArgs1();
-label$1_start_258:
+label$1_start_267:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -8100,7 +9013,7 @@ label$1_start_258:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_260;
+        goto label$2_end_269;
     }
     call push(arg1);
     call push(loc2);
@@ -8116,8 +9029,8 @@ label$1_start_258:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$1_start_258;
-label$2_end_260:
+    goto label$1_start_267;
+label$2_end_269:
 }
 
 procedure {:inline 1} func_94();
@@ -8126,7 +9039,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_94()
 {
     var arg1: real;
@@ -8149,7 +9065,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_95()
 {
     var arg1: real;
@@ -8172,7 +9091,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_96()
 {
     var arg1: real;
@@ -8207,7 +9129,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_97()
 {
     var arg1: real;
@@ -8219,7 +9144,14 @@ implementation func_97()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i64_s
+    call push(arg1);
+    // // numeric cast i64.trunc_f64_s: no-op under real semantics
+    call push(arg2);
+    // // numeric cast i64.trunc_f64_s: no-op under real semantics
+    call popToTmp1();
+    call popToTmp2();
+    call push(int_rem_s($tmp2, $tmp1));
+    // // numeric cast f64.convert_i64_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_98();
@@ -8228,7 +9160,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_98()
 {
     var arg1: real;
@@ -8253,7 +9188,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_99()
 {
     var arg1: real;
@@ -8276,7 +9214,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_100()
 {
     var arg1: real;
@@ -8301,7 +9242,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_101()
 {
     var arg1: real;
@@ -8326,7 +9270,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_102()
 {
     var arg1: real;
@@ -8338,7 +9285,12 @@ implementation func_102()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) <= ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_103();
@@ -8347,7 +9299,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_103()
 {
     var arg1: real;
@@ -8359,7 +9314,12 @@ implementation func_103()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_104();
@@ -8368,7 +9328,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_104()
 {
     var arg1: real;
@@ -8380,7 +9343,12 @@ implementation func_104()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) >= ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_105();
@@ -8389,7 +9357,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_105()
 {
     var arg1: real;
@@ -8401,7 +9372,12 @@ implementation func_105()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_106();
@@ -8410,7 +9386,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_106()
 {
     var arg1: real;
@@ -8422,7 +9401,12 @@ implementation func_106()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_107();
@@ -8431,7 +9415,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_107()
 {
     var arg1: real;
@@ -8443,7 +9430,38 @@ implementation func_107()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        call push(arg2);
+        call push(0.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(bool_to_real(($tmp2) != ($tmp1)));
+        call popToTmp1();
+        if (real_to_bool($tmp1)) {
+            call push(1.0);
+            call popToTmp2();
+            $tmp3 := $tmp2;
+        } else {
+            call push(0.0);
+            call popToTmp2();
+            $tmp3 := $tmp2;
+        }
+        call push($tmp3);
+        call popToTmp2();
+        $tmp3 := $tmp2;
+    } else {
+        call push(0.0);
+        call popToTmp2();
+        $tmp3 := $tmp2;
+    }
+    call push($tmp3);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_108();
@@ -8452,7 +9470,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_108()
 {
     var arg1: real;
@@ -8464,7 +9485,38 @@ implementation func_108()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        call push(1.0);
+        call popToTmp2();
+        $tmp3 := $tmp2;
+    } else {
+        call push(arg2);
+        call push(0.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(bool_to_real(($tmp2) != ($tmp1)));
+        call popToTmp1();
+        if (real_to_bool($tmp1)) {
+            call push(1.0);
+            call popToTmp2();
+            $tmp3 := $tmp2;
+        } else {
+            call push(0.0);
+            call popToTmp2();
+            $tmp3 := $tmp2;
+        }
+        call push($tmp3);
+        call popToTmp2();
+        $tmp3 := $tmp2;
+    }
+    call push($tmp3);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_109();
@@ -8473,7 +9525,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_109()
 {
     var arg1: real;
@@ -8485,7 +9540,12 @@ implementation func_109()
     entry_sp := $sp;
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) != ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_110();
@@ -8494,7 +9554,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_110()
 {
     var arg1: real;
@@ -8527,7 +9590,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_111()
 {
     var arg1: real;
@@ -8549,7 +9615,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_112()
 {
     var arg1: real;
@@ -8574,7 +9643,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_113()
 {
     var arg1: real;
@@ -8590,8 +9662,8 @@ implementation func_113()
     call push(arg2);
     call push(5.0);
     call func_162();
-    goto func_exit_261;
-func_exit_261:
+    goto func_exit_270;
+func_exit_270:
 }
 
 procedure {:inline 1} func_114();
@@ -8600,7 +9672,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_114()
 {
     var arg1: real;
@@ -8625,7 +9700,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_115()
 {
     var arg1: real;
@@ -8650,7 +9728,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_116()
 {
     var arg1: real;
@@ -8675,7 +9756,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_117()
 {
     var arg1: real;
@@ -8691,8 +9775,8 @@ implementation func_117()
     call push(arg2);
     call push(6.0);
     call func_162();
-    goto func_exit_262;
-func_exit_262:
+    goto func_exit_271;
+func_exit_271:
 }
 
 procedure {:inline 1} func_118();
@@ -8701,7 +9785,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_118()
 {
     var arg1: real;
@@ -8726,7 +9813,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_119()
 {
     var arg1: real;
@@ -8751,7 +9841,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_120()
 {
     var arg1: real;
@@ -8768,8 +9861,8 @@ implementation func_120()
     call push(0.0);
     call push(9.0);
     call func_92();
-    goto func_exit_263;
-func_exit_263:
+    goto func_exit_272;
+func_exit_272:
 }
 
 procedure {:inline 1} func_121();
@@ -8778,7 +9871,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_121()
 {
     var arg1: real;
@@ -8795,8 +9891,8 @@ implementation func_121()
     call push(1.0);
     call push(9.0);
     call func_92();
-    goto func_exit_264;
-func_exit_264:
+    goto func_exit_273;
+func_exit_273:
 }
 
 procedure {:inline 1} func_122();
@@ -8805,7 +9901,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_122()
 {
     var arg1: real;
@@ -8821,8 +9920,8 @@ implementation func_122()
     call push(arg2);
     call push(9.0);
     call func_162();
-    goto func_exit_265;
-func_exit_265:
+    goto func_exit_274;
+func_exit_274:
 }
 
 procedure {:inline 1} func_123();
@@ -8831,7 +9930,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_123()
 {
     var arg1: real;
@@ -8856,7 +9958,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_124()
 {
     var arg1: real;
@@ -8881,7 +9986,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_125()
 {
     var arg1: real;
@@ -8897,8 +10005,8 @@ implementation func_125()
     call push(arg2);
     call push(7.0);
     call func_162();
-    goto func_exit_266;
-func_exit_266:
+    goto func_exit_275;
+func_exit_275:
 }
 
 procedure {:inline 1} func_126();
@@ -8907,7 +10015,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_126()
 {
     var arg1: real;
@@ -8932,7 +10043,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_127()
 {
     var arg1: real;
@@ -8957,7 +10071,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_128()
 {
     var arg1: real;
@@ -8973,8 +10090,8 @@ implementation func_128()
     call push(arg2);
     call push(8.0);
     call func_162();
-    goto func_exit_267;
-func_exit_267:
+    goto func_exit_276;
+func_exit_276:
 }
 
 procedure {:inline 1} func_129();
@@ -8983,7 +10100,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_129()
 {
     var arg1: real;
@@ -9008,7 +10128,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_130()
 {
     var arg1: real;
@@ -9033,7 +10156,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_131()
 {
     var arg1: real;
@@ -9049,8 +10175,8 @@ implementation func_131()
     call push(arg2);
     call push(10.0);
     call func_162();
-    goto func_exit_268;
-func_exit_268:
+    goto func_exit_277;
+func_exit_277:
 }
 
 procedure {:inline 1} func_132();
@@ -9059,7 +10185,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_132()
 {
     var arg1: real;
@@ -9084,7 +10213,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_133()
 {
     var arg1: real;
@@ -9109,7 +10241,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_134()
 {
     var arg1: real;
@@ -9125,8 +10260,8 @@ implementation func_134()
     call push(arg1);
     call push(10.0);
     call func_162();
-    goto func_exit_269;
-func_exit_269:
+    goto func_exit_278;
+func_exit_278:
 }
 
 procedure {:inline 1} func_135();
@@ -9135,7 +10270,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_135()
 {
     var arg1: real;
@@ -9160,7 +10298,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_136()
 {
     var arg1: real;
@@ -9185,7 +10326,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_137()
 {
     var arg1: real;
@@ -9201,8 +10345,8 @@ implementation func_137()
     call push(arg2);
     call push(11.0);
     call func_162();
-    goto func_exit_270;
-func_exit_270:
+    goto func_exit_279;
+func_exit_279:
 }
 
 procedure {:inline 1} func_138();
@@ -9211,7 +10355,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_138()
 {
     var arg1: real;
@@ -9236,7 +10383,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_139()
 {
     var arg1: real;
@@ -9261,7 +10411,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_140()
 {
     var arg1: real;
@@ -9277,8 +10430,8 @@ implementation func_140()
     call push(arg2);
     call push(12.0);
     call func_162();
-    goto func_exit_271;
-func_exit_271:
+    goto func_exit_280;
+func_exit_280:
 }
 
 procedure {:inline 1} func_141();
@@ -9287,7 +10440,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_141()
 {
     var arg1: real;
@@ -9312,7 +10468,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_142()
 {
     var arg1: real;
@@ -9337,7 +10496,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_143()
 {
     var arg1: real;
@@ -9353,8 +10515,8 @@ implementation func_143()
     call push(arg2);
     call push(13.0);
     call func_162();
-    goto func_exit_272;
-func_exit_272:
+    goto func_exit_281;
+func_exit_281:
 }
 
 procedure {:inline 1} func_144();
@@ -9363,7 +10525,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_144()
 {
     var arg1: real;
@@ -9388,7 +10553,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_145()
 {
     var arg1: real;
@@ -9413,7 +10581,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_146()
 {
     var arg1: real;
@@ -9429,8 +10600,8 @@ implementation func_146()
     call push(arg2);
     call push(14.0);
     call func_162();
-    goto func_exit_273;
-func_exit_273:
+    goto func_exit_282;
+func_exit_282:
 }
 
 procedure {:inline 1} func_147();
@@ -9439,7 +10610,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_147()
 {
     var arg1: real;
@@ -9464,7 +10638,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_148()
 {
     var arg1: real;
@@ -9489,7 +10666,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_149()
 {
     var arg1: real;
@@ -9505,8 +10685,8 @@ implementation func_149()
     call push(arg2);
     call push(15.0);
     call func_162();
-    goto func_exit_274;
-func_exit_274:
+    goto func_exit_283;
+func_exit_283:
 }
 
 procedure {:inline 1} func_150();
@@ -9515,7 +10695,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_150()
 {
     var arg1: real;
@@ -9540,7 +10723,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_151()
 {
     var arg1: real;
@@ -9565,7 +10751,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_152()
 {
     var arg1: real;
@@ -9581,8 +10770,8 @@ implementation func_152()
     call push(arg2);
     call push(16.0);
     call func_162();
-    goto func_exit_275;
-func_exit_275:
+    goto func_exit_284;
+func_exit_284:
 }
 
 procedure {:inline 1} func_153();
@@ -9591,7 +10780,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_153()
 {
     var arg1: real;
@@ -9616,7 +10808,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_154()
 {
     var arg1: real;
@@ -9641,7 +10836,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_155()
 {
     var arg1: real;
@@ -9657,8 +10855,8 @@ implementation func_155()
     call push(arg2);
     call push(17.0);
     call func_162();
-    goto func_exit_276;
-func_exit_276:
+    goto func_exit_285;
+func_exit_285:
 }
 
 procedure {:inline 1} func_156();
@@ -9667,7 +10865,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_156()
 {
     var arg1: real;
@@ -9692,7 +10893,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_157()
 {
     var arg1: real;
@@ -9717,7 +10921,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_158()
 {
     var arg1: real;
@@ -9733,8 +10940,8 @@ implementation func_158()
     call push(arg2);
     call push(18.0);
     call func_162();
-    goto func_exit_277;
-func_exit_277:
+    goto func_exit_286;
+func_exit_286:
 }
 
 procedure {:inline 1} func_159();
@@ -9743,7 +10950,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_159()
 {
     var arg1: real;
@@ -9768,7 +10978,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_160()
 {
     var arg1: real;
@@ -9793,7 +11006,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_161()
 {
     var arg1: real;
@@ -9809,8 +11025,8 @@ implementation func_161()
     call push(arg2);
     call push(19.0);
     call func_162();
-    goto func_exit_278;
-func_exit_278:
+    goto func_exit_287;
+func_exit_287:
 }
 
 procedure {:inline 1} func_162();
@@ -9819,7 +11035,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_162()
 {
     var arg1: real;
@@ -9869,8 +11088,8 @@ implementation func_162()
         call func_164();
     }
     call push(loc1);
-    goto func_exit_280;
-func_exit_280:
+    goto func_exit_289;
+func_exit_289:
 }
 
 procedure {:inline 1} func_163();
@@ -9879,7 +11098,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_163()
 {
     var arg1: real;
@@ -9909,7 +11131,13 @@ implementation func_163()
     loc7 := 0.0;
     loc8 := 0.0;
     loc9 := 0.0;
-    // // unhandled raw instruction: i32.or
+    call push(arg1);
+    call func_47();
+    call push(arg2);
+    call func_47();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(5.0);
@@ -9955,7 +11183,7 @@ implementation func_163()
     call loc6 := popArgs1();
     call push(1.0);
     call loc7 := popArgs1();
-label$2_start_281:
+label$2_start_290:
     call push(loc7);
     call push(loc5);
     call popToTmp1();
@@ -9963,7 +11191,7 @@ label$2_start_281:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$3_end_283;
+        goto label$3_end_292;
     }
     call push(loc7);
     call push(loc3);
@@ -10017,7 +11245,19 @@ label$2_start_281:
                 call push(loc8);
                 call func_27();
             } else {
-                // // unhandled raw instruction: i32.and
+                call push(loc8);
+                call push(1.0);
+                call popToTmp1();
+                call popToTmp2();
+                call push(bool_to_real(($tmp2) == ($tmp1)));
+                call push(loc9);
+                call push(1.0);
+                call popToTmp1();
+                call popToTmp2();
+                call push(bool_to_real(($tmp2) != ($tmp1)));
+                call popToTmp1();
+                call popToTmp2();
+                call push(bv_and($tmp2, $tmp1));
                 call popToTmp1();
                 if (real_to_bool($tmp1)) {
                     call push(loc6);
@@ -10025,7 +11265,19 @@ label$2_start_281:
                     call push(loc9);
                     call func_27();
                 } else {
-                    // // unhandled raw instruction: i32.and
+                    call push(loc9);
+                    call push(1.0);
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(bool_to_real(($tmp2) == ($tmp1)));
+                    call push(loc8);
+                    call push(1.0);
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(bool_to_real(($tmp2) != ($tmp1)));
+                    call popToTmp1();
+                    call popToTmp2();
+                    call push(bv_and($tmp2, $tmp1));
                     call popToTmp1();
                     if (real_to_bool($tmp1)) {
                         call push(loc6);
@@ -10046,8 +11298,8 @@ label$2_start_281:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc7 := popArgs1();
-    goto label$2_start_281;
-label$3_end_283:
+    goto label$2_start_290;
+label$3_end_292:
     call push(loc6);
     call push(0.0);
     call push(0.0);
@@ -10115,7 +11367,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_164()
 {
     var arg1: real;
@@ -10161,12 +11416,15 @@ implementation func_164()
     loc9 := 0.0;
     loc10 := 0.0;
     loc11 := 0.0;
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    call push(arg8);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc1 := popArgs1();
     call push(arg2);
     call func_39();
     call loc11 := popArgs1();
-label$1_start_288:
+label$1_start_297:
     call push(loc2);
     call push(loc1);
     call popToTmp1();
@@ -10174,7 +11432,7 @@ label$1_start_288:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_290;
+        goto label$2_end_299;
     }
     call push(arg9);
     call push(loc2);
@@ -10187,14 +11445,37 @@ label$1_start_288:
     call push(($tmp2) + ($tmp1));
     call loc3 := popArgs1();
     call push(arg10);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    call push(arg8);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) * ($tmp1));
     call loc4 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg4);
+    call push(arg8);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc10 := popArgs1();
-    // // unhandled raw instruction: i32.or
+    call push(arg8);
+    call push(arg4);
+    call func_39();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(loc2);
+    call push(loc10);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(arg11);
@@ -10219,9 +11500,29 @@ label$1_start_288:
         call push(($tmp2) * ($tmp1));
         call loc6 := popArgs1();
     }
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg6);
+    call push(arg8);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc9 := popArgs1();
-    // // unhandled raw instruction: i32.or
+    call push(arg8);
+    call push(arg6);
+    call func_39();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(loc2);
+    call push(loc9);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(arg13);
@@ -10303,8 +11604,8 @@ label$1_start_288:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc2 := popArgs1();
-    goto label$1_start_288;
-label$2_end_290:
+    goto label$1_start_297;
+label$2_end_299:
 }
 
 procedure {:inline 1} func_165();
@@ -10313,7 +11614,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_165()
 {
     var arg1: real;
@@ -10329,7 +11633,7 @@ implementation func_165()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(0.0);
-        goto func_exit_296;
+        goto func_exit_305;
     }
     call push(arg1);
     call func_32();
@@ -10340,10 +11644,10 @@ implementation func_165()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(0.0);
-        goto func_exit_296;
+        goto func_exit_305;
     }
     call push(1.0);
-func_exit_296:
+func_exit_305:
 }
 
 procedure {:inline 1} func_166();
@@ -10352,7 +11656,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_166()
 {
     var arg1: real;
@@ -10374,7 +11681,7 @@ implementation func_166()
     call loc2 := popArgs1();
     call push(1.0);
     call loc1 := popArgs1();
-label$1_start_298:
+label$1_start_307:
     call push(loc1);
     call push(loc2);
     call popToTmp1();
@@ -10382,7 +11689,7 @@ label$1_start_298:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_300;
+        goto label$2_end_309;
     }
     call push(arg1);
     call push(loc1);
@@ -10396,7 +11703,7 @@ label$1_start_298:
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc1);
-        goto func_exit_303;
+        goto func_exit_312;
     }
     call push(1.0);
     call push(loc1);
@@ -10404,10 +11711,10 @@ label$1_start_298:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$1_start_298;
-label$2_end_300:
+    goto label$1_start_307;
+label$2_end_309:
     call push(-1.0);
-func_exit_303:
+func_exit_312:
 }
 
 procedure {:inline 1} func_167();
@@ -10416,7 +11723,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_167()
 {
     var arg1: real;
@@ -10479,7 +11789,20 @@ implementation func_167()
         call func_166();
         call arg2 := popArgs1();
     }
-    // // unhandled raw instruction: i32.or
+    call push(arg2);
+    call push(loc1);
+    call func_39();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(-1.0);
+    call push(arg2);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_or($tmp2, $tmp1));
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
@@ -10554,7 +11877,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_168()
 {
     var arg1: real;
@@ -10574,7 +11900,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_169()
 {
     var arg1: real;
@@ -10597,7 +11926,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_170()
 {
     var arg1: real;
@@ -10610,7 +11942,8 @@ implementation func_170()
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
     call push(arg1);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(0.0);
     call func_176();
 }
@@ -10621,7 +11954,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_171()
 {
     var arg1: real;
@@ -10635,8 +11971,10 @@ implementation func_171()
     assume (($sp) >= (3));
     call arg1, arg2, arg3 := popArgs3();
     call push(arg1);
-    // // unhandled raw instruction: i32.trunc_f64_s
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
+    call push(arg3);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call func_174();
 }
 
@@ -10646,7 +11984,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_172()
 {
     var arg1: real;
@@ -10659,7 +12000,8 @@ implementation func_172()
     assume (($sp) >= (2));
     call arg1, arg2 := popArgs2();
     call push(arg1);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg2);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(0.0);
     call func_174();
 }
@@ -10670,7 +12012,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_173()
 {
     var arg1: real;
@@ -10693,7 +12038,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_174()
 {
     var arg1: real;
@@ -10736,7 +12084,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_175()
 {
     var arg1: real;
@@ -10761,7 +12112,7 @@ implementation func_175()
     call push(arg1);
     call func_41();
     call loc4 := popArgs1();
-label$1_start_308:
+label$1_start_317:
     call push(loc1);
     call push(loc4);
     call popToTmp1();
@@ -10769,7 +12120,7 @@ label$1_start_308:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_310;
+        goto label$2_end_319;
     }
     call push(loc2);
     call push(loc1);
@@ -10793,7 +12144,7 @@ label$1_start_308:
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(loc3);
-        goto func_exit_313;
+        goto func_exit_322;
     }
     call push(loc1);
     call push(1.0);
@@ -10801,10 +12152,10 @@ label$1_start_308:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$1_start_308;
-label$2_end_310:
+    goto label$1_start_317;
+label$2_end_319:
     call push(0.0);
-func_exit_313:
+func_exit_322:
 }
 
 procedure {:inline 1} func_176();
@@ -10813,7 +12164,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_176()
 {
     var arg1: real;
@@ -10841,7 +12195,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_177()
 {
     var arg1: real;
@@ -10868,7 +12225,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_178()
 {
     var arg1: real;
@@ -10888,7 +12248,7 @@ implementation func_178()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(0.0);
-        goto func_exit_315;
+        goto func_exit_324;
     }
     call push(arg1);
     call push(arg2);
@@ -10906,7 +12266,7 @@ implementation func_178()
         $tmp3 := $tmp2;
     }
     call push($tmp3);
-func_exit_315:
+func_exit_324:
 }
 
 procedure {:inline 1} func_179();
@@ -10915,7 +12275,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_179()
 {
     var arg1: real;
@@ -10936,22 +12299,46 @@ implementation func_179()
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(0.0);
-        goto func_exit_317;
+        goto func_exit_326;
     }
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call push(arg3);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call push(arg2);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(1.0);
-        goto func_exit_317;
+        goto func_exit_326;
     }
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call push(arg3);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) < ($tmp1)));
+    call push(arg2);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) > ($tmp1)));
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(2.0);
-        goto func_exit_317;
+        goto func_exit_326;
     }
     call push(0.0);
-func_exit_317:
+func_exit_326:
 }
 
 procedure {:inline 1} func_180();
@@ -10960,7 +12347,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_180()
 {
     var arg1: real;
@@ -10973,7 +12363,7 @@ implementation func_180()
     assume (($sp) >= (1));
     call arg1 := popArgs1();
     loc1 := 0.0;
-label$1_start_320:
+label$1_start_329:
     call push(loc1);
     call push(arg1);
     call func_35();
@@ -10982,15 +12372,18 @@ label$1_start_320:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_322;
+        goto label$2_end_331;
     }
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg1);
+    call push(loc1);
+    call func_25();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
         call push(0.0);
-        goto func_exit_324;
+        goto func_exit_333;
     }
     call push(loc1);
     call push(1.0);
@@ -10998,10 +12391,10 @@ label$1_start_320:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$1_start_320;
-label$2_end_322:
+    goto label$1_start_329;
+label$2_end_331:
     call push(1.0);
-func_exit_324:
+func_exit_333:
 }
 
 procedure {:inline 1} func_181();
@@ -11010,7 +12403,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_181()
 {
     var arg1: real;
@@ -11037,7 +12433,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_182()
 {
     var arg1: real;
@@ -11065,7 +12464,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_183()
 {
     var arg1: real;
@@ -11146,7 +12548,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_184()
 {
     var arg1: real;
@@ -11186,14 +12591,17 @@ implementation func_184()
     loc7 := 0.0;
     loc8 := 0.0;
     loc9 := 0.0;
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(arg3);
+    call push(arg8);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc2 := popArgs1();
     call push(arg3);
     call func_39();
     call loc3 := popArgs1();
     call push(1.0);
     call loc1 := popArgs1();
-label$1_start_326:
+label$1_start_335:
     call push(loc1);
     call push(loc2);
     call popToTmp1();
@@ -11201,7 +12609,7 @@ label$1_start_326:
     call push(bool_to_real(($tmp2) > ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$2_end_328;
+        goto label$2_end_337;
     }
     call push(loc1);
     call push(1.0);
@@ -11280,7 +12688,7 @@ label$1_start_326:
             call fimport_13();
             call popToTmp1();
             if (real_to_bool($tmp1)) {
-                goto label$5_end_331;
+                goto label$5_end_340;
             }
         }
         call push(loc6);
@@ -11311,7 +12719,7 @@ label$1_start_326:
             call popDiscard2();
             call func_27();
         }
-label$5_end_331:
+label$5_end_340:
     } else {
         call push(arg1);
         call push(arg2);
@@ -11337,8 +12745,8 @@ label$5_end_331:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc1 := popArgs1();
-    goto label$1_start_326;
-label$2_end_328:
+    goto label$1_start_335;
+label$2_end_337:
 }
 
 procedure {:inline 1} func_185();
@@ -11347,7 +12755,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_185()
 {
     var arg1: real;
@@ -11383,7 +12794,13 @@ implementation func_185()
     loc10 := 0.0;
     loc11 := 0.0;
     loc12 := 0.0;
-    // // unhandled raw instruction: i32.and
+    call push(arg1);
+    call func_48();
+    call push(arg2);
+    call func_48();
+    call popToTmp1();
+    call popToTmp2();
+    call push(bv_and($tmp2, $tmp1));
     call popToTmp1();
     call push(bool_to_real(($tmp1) == (0.0)));
     call popToTmp1();
@@ -11399,14 +12816,26 @@ implementation func_185()
     call push(0.0);
     call func_40();
     call loc2 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc1);
+    call push(1.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc3 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc2);
+    call push(2.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc6 := popArgs1();
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc2);
+    call push(1.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc4 := popArgs1();
     call push(loc4);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc1);
+    call push(2.0);
+    call func_26();
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call loc5 := popArgs1();
     call push(loc5);
     call popToTmp1();
@@ -11427,16 +12856,18 @@ implementation func_185()
     call loc7 := popArgs1();
     call push(loc7);
     call push(1.0);
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(loc3);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
     call func_27();
     call push(loc7);
     call push(2.0);
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(loc6);
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
     call func_27();
     call push(loc7);
     call func_78();
     call loc8 := popArgs1();
-label$3_start_334:
+label$3_start_343:
     call push(loc9);
     call push(loc3);
     call popToTmp1();
@@ -11444,11 +12875,11 @@ label$3_start_334:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$4_end_336;
+        goto label$4_end_345;
     }
     call push(0.0);
     call loc10 := popArgs1();
-label$5_start_337:
+label$5_start_346:
     call push(loc10);
     call push(loc6);
     call popToTmp1();
@@ -11456,13 +12887,13 @@ label$5_start_337:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$6_end_339;
+        goto label$6_end_348;
     }
     call push(0.0);
     call loc12 := popArgs1();
     call push(0.0);
     call loc11 := popArgs1();
-label$7_start_340:
+label$7_start_349:
     call push(loc11);
     call push(loc4);
     call popToTmp1();
@@ -11470,7 +12901,7 @@ label$7_start_340:
     call push(bool_to_real(($tmp2) >= ($tmp1)));
     call popToTmp1();
     if (real_to_bool($tmp1)) {
-        goto label$8_end_342;
+        goto label$8_end_351;
     }
     call push(loc12);
     call push(arg1);
@@ -11516,8 +12947,8 @@ label$7_start_340:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc11 := popArgs1();
-    goto label$7_start_340;
-label$8_end_342:
+    goto label$7_start_349;
+label$8_end_351:
     call push(loc8);
     call push(1.0);
     call push(loc9);
@@ -11540,16 +12971,16 @@ label$8_end_342:
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc10 := popArgs1();
-    goto label$5_start_337;
-label$6_end_339:
+    goto label$5_start_346;
+label$6_end_348:
     call push(1.0);
     call push(loc9);
     call popToTmp1();
     call popToTmp2();
     call push(($tmp2) + ($tmp1));
     call loc9 := popArgs1();
-    goto label$3_start_334;
-label$4_end_336:
+    goto label$3_start_343;
+label$4_end_345:
     call push(loc8);
 }
 
@@ -11559,7 +12990,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_186()
 {
     var arg1: real;
@@ -11581,7 +13015,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_187()
 {
     var arg1: real;
@@ -11603,7 +13040,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_188()
 {
     var arg1: real;
@@ -11625,7 +13065,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_189()
 {
     var arg1: real;
@@ -11636,7 +13079,9 @@ implementation func_189()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: f64.ceil
+    call push(arg1);
+    call popToTmp1();
+    call push(ceil_real($tmp1));
 }
 
 procedure {:inline 1} func_190();
@@ -11645,7 +13090,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_190()
 {
     var arg1: real;
@@ -11667,7 +13115,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_191()
 {
     var arg1: real;
@@ -11689,7 +13140,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_192()
 {
     var arg1: real;
@@ -11711,7 +13165,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_193()
 {
     var arg1: real;
@@ -11735,7 +13192,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_194()
 {
     var arg1: real;
@@ -11757,7 +13217,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_195()
 {
     var arg1: real;
@@ -11781,7 +13244,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_196()
 {
     var arg1: real;
@@ -11803,7 +13269,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_197()
 {
     var arg1: real;
@@ -11825,7 +13294,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_198()
 {
     var arg1: real;
@@ -11847,7 +13319,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_199()
 {
     var arg1: real;
@@ -11858,7 +13333,12 @@ implementation func_199()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: f64.convert_i32_s
+    call push(arg1);
+    call push(0.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(bool_to_real(($tmp2) == ($tmp1)));
+    // // numeric cast f64.convert_i32_s: no-op under real semantics
 }
 
 procedure {:inline 1} func_200();
@@ -11867,7 +13347,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_200()
 {
     var arg1: real;
@@ -11889,7 +13372,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_201()
 {
     var arg1: real;
@@ -11900,7 +13386,9 @@ implementation func_201()
     entry_sp := $sp;
     assume (($sp) >= (1));
     call arg1 := popArgs1();
-    // // unhandled raw instruction: f64.trunc
+    call push(arg1);
+    call popToTmp1();
+    call push(trunc_real($tmp1));
 }
 
 procedure {:inline 1} func_202();
@@ -11909,7 +13397,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_202()
 {
     var arg1: real;
@@ -11931,7 +13422,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_203()
 {
     var arg1: real;
@@ -11953,7 +13447,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_204()
 {
     var arg1: real;
@@ -11975,7 +13472,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_205()
 {
     var arg1: real;
@@ -11997,7 +13497,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_206()
 {
     var arg1: real;
@@ -12019,7 +13522,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_207()
 {
     var arg1: real;
@@ -12041,7 +13547,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_208()
 {
     var arg1: real;
@@ -12063,7 +13572,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_209()
 {
     var arg1: real;
@@ -12085,7 +13597,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_210()
 {
     var arg1: real;
@@ -12107,7 +13622,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_211()
 {
     var arg1: real;
@@ -12194,26 +13712,26 @@ implementation func_211()
         call popToTmp1();
         idx := real_to_int($tmp1);
         if (((idx) < (0)) || ((idx) >= (2))) {
-            goto label$3_end_344;
+            goto label$3_end_353;
         } else {
             if ((idx) == (0)) {
-                goto label$5_end_346;
+                goto label$5_end_355;
             }
             if ((idx) == (1)) {
-                goto label$4_end_345;
+                goto label$4_end_354;
             }
-            goto label$3_end_344;
+            goto label$3_end_353;
         }
-label$5_end_346:
+label$5_end_355:
         call push(loc7);
         call loc5 := popArgs1();
         call push(loc6);
         call push(loc2);
         call func_212();
         call loc3 := popArgs1();
-        goto label$2_end_343;
-label$4_end_345:
-label$7_start_348:
+        goto label$2_end_352;
+label$4_end_354:
+label$7_start_357:
         call push(loc11);
         call popToTmp1();
         if (real_to_bool($tmp1)) {
@@ -12236,19 +13754,19 @@ label$7_start_348:
         call push(bool_to_real(($tmp2) < ($tmp1)));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
-            goto label$10_end_351;
+            goto label$10_end_360;
         }
         call push(loc6);
         call push(loc2);
         call func_212();
         call loc3 := popArgs1();
-        goto label$7_start_348;
-label$10_end_351:
+        goto label$7_start_357;
+label$10_end_360:
         call push(0.0);
         call loc11 := popArgs1();
-        goto label$2_end_343;
-label$3_end_344:
-label$11_start_352:
+        goto label$2_end_352;
+label$3_end_353:
+label$11_start_361:
         call push(loc12);
         call popToTmp1();
         if (real_to_bool($tmp1)) {
@@ -12271,18 +13789,18 @@ label$11_start_352:
         call push(bool_to_real(($tmp2) > ($tmp1)));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
-            goto label$14_end_355;
+            goto label$14_end_364;
         }
         call push(loc6);
         call push(loc2);
         call func_212();
         call loc3 := popArgs1();
-        goto label$11_start_352;
-label$14_end_355:
+        goto label$11_start_361;
+label$14_end_364:
         call push(0.0);
         call loc12 := popArgs1();
-        goto label$2_end_343;
-label$2_end_343:
+        goto label$2_end_352;
+label$2_end_352:
     }
     call func_2();
     call loc4 := popArgs1();
@@ -12296,7 +13814,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 implementation func_212()
 {
     var arg1: real;
@@ -12463,11 +13984,35 @@ implementation func_212()
     call func_78();
     call loc9 := popArgs1();
     call push(arg2);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc15);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call func_26();
     call loc28 := popArgs1();
     call push(arg1);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc15);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call push(arg1);
+    call push(1.0);
+    call func_88();
+    call push(loc15);
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) - ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) * ($tmp1));
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call push(1.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call func_26();
     call loc16 := popArgs1();
     call push(loc28);
@@ -12480,7 +14025,8 @@ implementation func_212()
     call func_187();
     call loc4 := popArgs1();
     call push(loc9);
-    // // unhandled raw instruction: i32.trunc_f64_s
+    call push(loc15);
+    // // numeric cast i32.trunc_f64_s: no-op under real semantics
     call push(loc4);
     call func_27();
     call push(1.0);
@@ -12507,17 +14053,17 @@ implementation func_212()
         call popToTmp1();
         idx := real_to_int($tmp1);
         if (((idx) < (0)) || ((idx) >= (2))) {
-            goto label$3_end_357;
+            goto label$3_end_366;
         } else {
             if ((idx) == (0)) {
-                goto label$5_end_359;
+                goto label$5_end_368;
             }
             if ((idx) == (1)) {
-                goto label$4_end_358;
+                goto label$4_end_367;
             }
-            goto label$3_end_357;
+            goto label$3_end_366;
         }
-label$5_end_359:
+label$5_end_368:
         call push(loc20);
         call loc1 := popArgs1();
         call push(loc1);
@@ -12640,7 +14186,8 @@ label$5_end_359:
         call func_25();
         call loc23 := popArgs1();
         call push(arg2);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc19 := popArgs1();
         call push(loc23);
@@ -12652,7 +14199,30 @@ label$5_end_359:
         call push(($tmp2) - ($tmp1));
         call loc17 := popArgs1();
         call push(arg1);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call push(arg1);
+        call push(1.0);
+        call func_88();
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) * ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc8 := popArgs1();
         call push(loc17);
@@ -12665,12 +14235,13 @@ label$5_end_359:
         call func_187();
         call loc12 := popArgs1();
         call push(loc9);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call push(loc12);
         call func_27();
-        goto label$2_end_356;
-label$4_end_358:
-label$7_start_361:
+        goto label$2_end_365;
+label$4_end_367:
+label$7_start_370:
         call push(loc44);
         call popToTmp1();
         if (real_to_bool($tmp1)) {
@@ -12693,7 +14264,7 @@ label$7_start_361:
         call push(bool_to_real(($tmp2) < ($tmp1)));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
-            goto label$10_end_364;
+            goto label$10_end_373;
         }
         call push(loc1);
         call loc10 := popArgs1();
@@ -12815,7 +14386,8 @@ label$7_start_361:
         call func_25();
         call loc23 := popArgs1();
         call push(arg2);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc19 := popArgs1();
         call push(loc23);
@@ -12827,7 +14399,30 @@ label$7_start_361:
         call push(($tmp2) - ($tmp1));
         call loc17 := popArgs1();
         call push(arg1);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call push(arg1);
+        call push(1.0);
+        call func_88();
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) * ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc8 := popArgs1();
         call push(loc17);
@@ -12840,16 +14435,17 @@ label$7_start_361:
         call func_187();
         call loc12 := popArgs1();
         call push(loc9);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call push(loc12);
         call func_27();
-        goto label$7_start_361;
-label$10_end_364:
+        goto label$7_start_370;
+label$10_end_373:
         call push(0.0);
         call loc44 := popArgs1();
-        goto label$2_end_356;
-label$3_end_357:
-label$11_start_365:
+        goto label$2_end_365;
+label$3_end_366:
+label$11_start_374:
         call push(loc55);
         call popToTmp1();
         if (real_to_bool($tmp1)) {
@@ -12872,7 +14468,7 @@ label$11_start_365:
         call push(bool_to_real(($tmp2) > ($tmp1)));
         call popToTmp1();
         if (real_to_bool($tmp1)) {
-            goto label$14_end_368;
+            goto label$14_end_377;
         }
         call push(loc1);
         call loc10 := popArgs1();
@@ -12994,7 +14590,8 @@ label$11_start_365:
         call func_25();
         call loc23 := popArgs1();
         call push(arg2);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc19 := popArgs1();
         call push(loc23);
@@ -13006,7 +14603,30 @@ label$11_start_365:
         call push(($tmp2) - ($tmp1));
         call loc17 := popArgs1();
         call push(arg1);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call push(arg1);
+        call push(1.0);
+        call func_88();
+        call push(loc1);
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) - ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) * ($tmp1));
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        call push(1.0);
+        call popToTmp1();
+        call popToTmp2();
+        call push(($tmp2) + ($tmp1));
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call func_26();
         call loc8 := popArgs1();
         call push(loc17);
@@ -13019,15 +14639,16 @@ label$11_start_365:
         call func_187();
         call loc12 := popArgs1();
         call push(loc9);
-        // // unhandled raw instruction: i32.trunc_f64_s
+        call push(loc1);
+        // // numeric cast i32.trunc_f64_s: no-op under real semantics
         call push(loc12);
         call func_27();
-        goto label$11_start_365;
-label$14_end_368:
+        goto label$11_start_374;
+label$14_end_377:
         call push(0.0);
         call loc55 := popArgs1();
-        goto label$2_end_356;
-label$2_end_356:
+        goto label$2_end_365;
+label$2_end_365:
     }
     call push(loc9);
 }
@@ -13038,7 +14659,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_1;
 modifies global_2;
 modifies global_4;
@@ -14910,7 +16534,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_1;
 modifies global_2;
 modifies global_4;
@@ -16788,7 +18415,10 @@ modifies $tmp2;
 modifies $tmp3;
 modifies $sp;
 modifies $stack;
+modifies $table;
+modifies $table_size;
 modifies $mem;
+modifies $mem_pages;
 modifies global_1;
 modifies global_2;
 modifies global_4;
