@@ -19,3 +19,4 @@ request.inst
 .vscode/
 *.user
 *.suo
+output.txt
