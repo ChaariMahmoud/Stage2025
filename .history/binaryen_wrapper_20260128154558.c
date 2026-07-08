@@ -121,14 +121,14 @@ EXPORT BinaryenModuleRef LoadWasmTextFile(const char* filename) {
         fprintf(stderr, "Error: BinaryenModuleRead failed for %s\n", filename);
         return NULL;
     }
-/*
+
     // Optionnel: afficher le module (debug)
     char* text = BinaryenModuleAllocateAndWriteText(module);
     if (text) {
         printf("%s\n", text);
         free(text);
     }
-*/
+
     return module;
 }
 

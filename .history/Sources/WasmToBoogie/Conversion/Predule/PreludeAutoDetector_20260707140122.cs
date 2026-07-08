@@ -48,8 +48,8 @@ namespace WasmToBoogie.Conversion
                 s |= PreludeSection.IntOps;
             if (u.UsesIntUnaryOps)
                 s |= PreludeSection.IntUnaryOps;
-            if (u.UsesTable)
-                s |= PreludeSection.Table;
+                if (u.UsesTable)
+    s |= PreludeSection.Table;
 
             // EnableMemory doit être cohérent avec la présence de la section
             bool enableMemory = u.UsesMemory;
@@ -128,17 +128,17 @@ namespace WasmToBoogie.Conversion
                     if (un.Operand != null)
                         Walk(un.Operand, u);
                     break;
-                case TableOpNode t:
-                    u.UsesTable = true;
+case TableOpNode t:
+    u.UsesTable = true;
 
-                    if (t.Index != null)
-                        Walk(t.Index, u);
-                    if (t.Value != null)
-                        Walk(t.Value, u);
-                    if (t.Delta != null)
-                        Walk(t.Delta, u);
+    if (t.Index != null)
+        Walk(t.Index, u);
+    if (t.Value != null)
+        Walk(t.Value, u);
+    if (t.Delta != null)
+        Walk(t.Delta, u);
 
-                    break;
+    break;
                 case BinaryOpNode bn:
                     // comparaisons -> bool_to_real
                     if (IsComparison(bn.Op))
@@ -223,35 +223,31 @@ namespace WasmToBoogie.Conversion
                     Walk(rci.CalleeIndex, u);
                     break;
 
-                case RawInstructionNode raw:
-                {
-                    var op = raw.Instruction;
+case RawInstructionNode raw:
+{
+    var op = raw.Instruction;
 
-                    if (IsBitwise(op))
-                        u.UsesBitwise = true;
+    if (IsBitwise(op))
+        u.UsesBitwise = true;
 
-                    if (op is "i32.rem_s" or "i64.rem_s" or "i32.rem_u" or "i64.rem_u")
-                        u.UsesIntOps = true;
+    if (op is "i32.rem_s" or "i64.rem_s" or "i32.rem_u" or "i64.rem_u")
+        u.UsesIntOps = true;
 
-                    if (
-                        op
-                        is "i32.clz"
-                            or "i64.clz"
-                            or "i32.ctz"
-                            or "i64.ctz"
-                            or "i32.popcnt"
-                            or "i64.popcnt"
-                    )
-                        u.UsesIntUnaryOps = true;
+    if (
+        op is "i32.clz" or "i64.clz"
+            or "i32.ctz" or "i64.ctz"
+            or "i32.popcnt" or "i64.popcnt"
+    )
+        u.UsesIntUnaryOps = true;
 
-                    if (IsMathUnary(op) || op is "f32.copysign" or "f64.copysign")
-                        u.UsesMath = true;
+    if (IsMathUnary(op) || op is "f32.copysign" or "f64.copysign")
+        u.UsesMath = true;
 
-                    if (LooksLikeNumericCast(op))
-                        u.UsesNumericCasts = true;
+    if (LooksLikeNumericCast(op))
+        u.UsesNumericCasts = true;
 
-                    break;
-                }
+    break;
+}
 
                 default:
                     // safe fallback: si on ne connait pas le noeud, on garde core+stack

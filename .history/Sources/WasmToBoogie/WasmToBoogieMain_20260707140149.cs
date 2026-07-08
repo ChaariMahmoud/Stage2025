@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using BoogieAST;
 using WasmToBoogie.Conversion;
 using WasmToBoogie.Parser;
 using WasmToBoogie.Parser.Ast;
+using System.Threading;
 
 namespace WasmToBoogie
 {
@@ -30,31 +30,28 @@ namespace WasmToBoogie
 
             var converter = new WasmAstToBoogie(contractName);
             BoogieProgram? boogieProgram = null;
-            Exception? threadException = null;
+Exception? threadException = null;
 
-            var t = new Thread(
-                () =>
-                {
-                    try
-                    {
-                        boogieProgram = converter.Convert(wasmAst);
-                    }
-                    catch (Exception ex)
-                    {
-                        threadException = ex;
-                    }
-                },
-                256 * 1024 * 1024
-            ); // 256 MB stack
+var t = new Thread(() =>
+{
+    try
+    {
+        boogieProgram = converter.Convert(wasmAst);
+    }
+    catch (Exception ex)
+    {
+        threadException = ex;
+    }
+}, 256 * 1024 * 1024); // 256 MB stack
 
-            t.Start();
-            t.Join();
+t.Start();
+t.Join();
 
-            if (threadException != null)
-                throw threadException;
+if (threadException != null)
+    throw threadException;
 
-            if (boogieProgram == null)
-                throw new Exception("Boogie conversion failed.");
+if (boogieProgram == null)
+    throw new Exception("Boogie conversion failed.");
 
             Console.WriteLine("✅ WAT → Boogie conversion completed.");
             return boogieProgram;

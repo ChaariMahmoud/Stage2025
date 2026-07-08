@@ -22,347 +22,68 @@ namespace WasmToBoogie.Conversion
 
         private static void AddMemoryFillCopyProcedures(BoogieProgram program)
         {
-            var memModSet = new List<BoogieGlobalVariable>
+            var mods = new List<BoogieGlobalVariable>
             {
                 new BoogieGlobalVariable(
                     new BoogieTypedIdent("$mem", new BoogieMapType(BoogieType.Int, BoogieType.Int))
                 ),
             };
 
-            AddMemoryFillProcedure(program, memModSet);
-            AddMemoryCopyProcedure(program, memModSet);
-        }
-
-        private static void AddMemoryFillProcedure(
-            BoogieProgram program,
-            List<BoogieGlobalVariable> memModSet
-        )
-        {
-            var ins = new List<BoogieVariable>
+            var fillIns = new List<BoogieVariable>
             {
                 new BoogieFormalParam(new BoogieTypedIdent("dst", BoogieType.Int)),
                 new BoogieFormalParam(new BoogieTypedIdent("value", BoogieType.Int)),
                 new BoogieFormalParam(new BoogieTypedIdent("len", BoogieType.Int)),
             };
 
-            /*
-             * requires len >= 0;
-             */
-            var preconditions = new List<BoogieExpr>
-            {
-                new BoogieBinaryOperation(
-                    BoogieBinaryOperation.Opcode.GE,
-                    new BoogieIdentifierExpr("len"),
-                    new BoogieLiteralExpr(0)
-                ),
-            };
-
-            /*
-             * ensures forall i:int ::
-             *     0 <= i && i < len
-             *     ==>
-             *     $mem[dst + i] == to_u8(value);
-             */
-            var i = new BoogieIdentifierExpr("i");
-
-            var iGeZero = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LE,
-                new BoogieLiteralExpr(0),
-                i
-            );
-
-            var iLtLen = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LT,
-                i,
-                new BoogieIdentifierExpr("len")
-            );
-
-            var iInRange = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.AND,
-                iGeZero,
-                iLtLen
-            );
-
-            var dstPlusI = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.ADD,
-                new BoogieIdentifierExpr("dst"),
-                i
-            );
-
-            var destinationValue = new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), dstPlusI);
-
-            var byteValue = new BoogieFunctionCall(
-                "to_u8",
-                new List<BoogieExpr> { new BoogieIdentifierExpr("value") }
-            );
-
-            var destinationHasValue = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.EQ,
-                destinationValue,
-                byteValue
-            );
-
-            var fillEffect = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.IMP,
-                iInRange,
-                destinationHasValue
-            );
-
-            var fillPostcondition = new BoogieQuantifiedExpr(
-                true,
-                new List<BoogieIdentifierExpr> { i },
-                new List<BoogieType> { BoogieType.Int },
-                fillEffect
-            );
-
-            /*
-             * ensures forall a:int ::
-             *     a < dst || a >= dst + len
-             *     ==>
-             *     $mem[a] == old($mem[a]);
-             */
-            var a = new BoogieIdentifierExpr("a");
-
-            var beforeDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LT,
-                a,
-                new BoogieIdentifierExpr("dst")
-            );
-
-            var dstPlusLen = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.ADD,
-                new BoogieIdentifierExpr("dst"),
-                new BoogieIdentifierExpr("len")
-            );
-
-            var afterDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.GE,
-                a,
-                dstPlusLen
-            );
-
-            var outsideDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.OR,
-                beforeDestination,
-                afterDestination
-            );
-
-            var currentMemoryValue = new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), a);
-
-            var oldMemoryValue = new BoogieOldExpr(
-                new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), a)
-            );
-
-            var memoryUnchanged = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.EQ,
-                currentMemoryValue,
-                oldMemoryValue
-            );
-
-            var frameEffect = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.IMP,
-                outsideDestination,
-                memoryUnchanged
-            );
-
-            var framePostcondition = new BoogieQuantifiedExpr(
-                true,
-                new List<BoogieIdentifierExpr> { a },
-                new List<BoogieType> { BoogieType.Int },
-                frameEffect
-            );
-
-            var postconditions = new List<BoogieExpr> { fillPostcondition, framePostcondition };
-
             program.Declarations.Add(
                 new BoogieProcedure(
                     "memory_fill",
-                    ins,
-                    new List<BoogieVariable>(),
-                    null,
-                    memModSet,
-                    preconditions,
-                    postconditions
+                    fillIns,
+                    new(),
+                    new() { new BoogieAttribute("inline", 1) },
+                    mods,
+                    new(),
+                    new()
                 )
             );
 
-            /*
-             * Pas de BoogieImplementation.
-             *
-             * La procédure est modélisée abstraitement par son contrat.
-             * Il ne faut donc plus générer :
-             *
-             * implementation memory_fill(...)
-             * {
-             *     havoc $mem;
-             * }
-             */
-        }
+            var fillBody = new BoogieStmtList();
 
-        private static void AddMemoryCopyProcedure(
-            BoogieProgram program,
-            List<BoogieGlobalVariable> memModSet
-        )
-        {
-            var ins = new List<BoogieVariable>
+            // modèle abstrait : on havoc la mémoire pour représenter la modification
+            fillBody.AddStatement(new BoogieHavocCmd(new BoogieIdentifierExpr("$mem")));
+
+            program.Declarations.Add(
+                new BoogieImplementation("memory_fill", fillIns, new(), new(), fillBody)
+            );
+
+            var copyIns = new List<BoogieVariable>
             {
                 new BoogieFormalParam(new BoogieTypedIdent("dst", BoogieType.Int)),
                 new BoogieFormalParam(new BoogieTypedIdent("src", BoogieType.Int)),
                 new BoogieFormalParam(new BoogieTypedIdent("len", BoogieType.Int)),
             };
 
-            /*
-             * requires len >= 0;
-             */
-            var preconditions = new List<BoogieExpr>
-            {
-                new BoogieBinaryOperation(
-                    BoogieBinaryOperation.Opcode.GE,
-                    new BoogieIdentifierExpr("len"),
-                    new BoogieLiteralExpr(0)
-                ),
-            };
-
-            /*
-             * ensures forall i:int ::
-             *     0 <= i && i < len
-             *     ==>
-             *     $mem[dst + i] == old($mem[src + i]);
-             */
-            var i = new BoogieIdentifierExpr("i");
-
-            var iGeZero = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LE,
-                new BoogieLiteralExpr(0),
-                i
-            );
-
-            var iLtLen = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LT,
-                i,
-                new BoogieIdentifierExpr("len")
-            );
-
-            var iInRange = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.AND,
-                iGeZero,
-                iLtLen
-            );
-
-            var destinationAddress = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.ADD,
-                new BoogieIdentifierExpr("dst"),
-                i
-            );
-
-            var sourceAddress = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.ADD,
-                new BoogieIdentifierExpr("src"),
-                i
-            );
-
-            var destinationValue = new BoogieMapSelect(
-                new BoogieIdentifierExpr("$mem"),
-                destinationAddress
-            );
-
-            var oldSourceValue = new BoogieOldExpr(
-                new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), sourceAddress)
-            );
-
-            var copiedValue = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.EQ,
-                destinationValue,
-                oldSourceValue
-            );
-
-            var copyEffect = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.IMP,
-                iInRange,
-                copiedValue
-            );
-
-            var copyPostcondition = new BoogieQuantifiedExpr(
-                true,
-                new List<BoogieIdentifierExpr> { i },
-                new List<BoogieType> { BoogieType.Int },
-                copyEffect
-            );
-
-            /*
-             * ensures forall a:int ::
-             *     a < dst || a >= dst + len
-             *     ==>
-             *     $mem[a] == old($mem[a]);
-             */
-            var a = new BoogieIdentifierExpr("a");
-
-            var beforeDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.LT,
-                a,
-                new BoogieIdentifierExpr("dst")
-            );
-
-            var dstPlusLen = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.ADD,
-                new BoogieIdentifierExpr("dst"),
-                new BoogieIdentifierExpr("len")
-            );
-
-            var afterDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.GE,
-                a,
-                dstPlusLen
-            );
-
-            var outsideDestination = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.OR,
-                beforeDestination,
-                afterDestination
-            );
-
-            var currentMemoryValue = new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), a);
-
-            var oldMemoryValue = new BoogieOldExpr(
-                new BoogieMapSelect(new BoogieIdentifierExpr("$mem"), a)
-            );
-
-            var memoryUnchanged = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.EQ,
-                currentMemoryValue,
-                oldMemoryValue
-            );
-
-            var frameEffect = new BoogieBinaryOperation(
-                BoogieBinaryOperation.Opcode.IMP,
-                outsideDestination,
-                memoryUnchanged
-            );
-
-            var framePostcondition = new BoogieQuantifiedExpr(
-                true,
-                new List<BoogieIdentifierExpr> { a },
-                new List<BoogieType> { BoogieType.Int },
-                frameEffect
-            );
-
-            var postconditions = new List<BoogieExpr> { copyPostcondition, framePostcondition };
-
             program.Declarations.Add(
                 new BoogieProcedure(
                     "memory_copy",
-                    ins,
-                    new List<BoogieVariable>(),
-                    null,
-                    memModSet,
-                    preconditions,
-                    postconditions
+                    copyIns,
+                    new(),
+                    new() { new BoogieAttribute("inline", 1) },
+                    mods,
+                    new(),
+                    new()
                 )
             );
 
-            /*
-             * Pas de BoogieImplementation.
-             */
+            var copyBody = new BoogieStmtList();
+
+            // modèle abstrait : memory.copy modifie la mémoire
+            copyBody.AddStatement(new BoogieHavocCmd(new BoogieIdentifierExpr("$mem")));
+
+            program.Declarations.Add(
+                new BoogieImplementation("memory_copy", copyIns, new(), new(), copyBody)
+            );
         }
 
         private static void AddMemoryGlobals(BoogieProgram program)
