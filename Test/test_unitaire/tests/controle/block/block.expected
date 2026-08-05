@@ -1,0 +1,3 @@
+call push(42.0);
+call arg1 := popArgs1();
+call push(arg1);

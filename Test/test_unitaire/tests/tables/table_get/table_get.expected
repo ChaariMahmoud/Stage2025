@@ -1,0 +1,6 @@
+call push(0.0);
+call popToTmp1();
+idx := real_to_int($tmp1);
+call $tmp1 := table_get(idx);
+call push($tmp1);
+call pop();

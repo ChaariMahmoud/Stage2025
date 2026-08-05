@@ -1,0 +1,8 @@
+label_start_1:
+    call push(5.0);
+    call push(7.0);
+    call popToTmp1();
+    call popToTmp2();
+    call push(($tmp2) + ($tmp1));
+    call pop();
+    goto label_start_1;

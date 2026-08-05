@@ -1,0 +1,2 @@
+call push(arg1);
+// // numeric cast f64.promote_f32: no-op under real semantics

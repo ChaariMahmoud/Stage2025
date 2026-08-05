@@ -1,0 +1,23 @@
+call popToTmp1(); 
+if (real_to_bool($tmp1)) {
+    
+    call popToTmp1();
+    if (real_to_bool($tmp1)) {
+        call push(42.0);
+        call popToTmp2();
+        $tmp3 := $tmp2;  
+    } else {
+        call push(0.0);
+        call popToTmp2();
+        $tmp3 := $tmp2;  
+    }
+    call push($tmp3);    
+    
+    call popToTmp2();   
+    $tmp4 := $tmp2;      
+} else {
+    call push(99.0);
+    call popToTmp2();
+    $tmp4 := $tmp2;      
+}
+call push($tmp4);      

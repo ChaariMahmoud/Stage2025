@@ -1,0 +1,2 @@
+call push(arg1);
+// // numeric cast f32.demote_f64: no-op under real semantics

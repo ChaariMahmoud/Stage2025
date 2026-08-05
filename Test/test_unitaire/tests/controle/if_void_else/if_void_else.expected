@@ -1,0 +1,8 @@
+call popToTmp1();
+if (real_to_bool($tmp1)) {
+    call push(10.0);
+    call popToLocalA(); 
+} else {
+    call push(20.0);
+    call popToLocalA(); 
+}

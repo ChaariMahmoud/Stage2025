@@ -1,0 +1,2 @@
+call push(100.0);
+call my_global := popArgs1();

@@ -1,0 +1,2 @@
+call push(1,5);
+call pop();

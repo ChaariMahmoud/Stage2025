@@ -390,36 +390,15 @@ implementation table_grow(value: real, delta: int) returns (oldSize: int)
     $table_size := ($table_size) + (delta);
 }
 
-var Counter: real;
-const Max: real;
-
-axiom((Max) == (100.0));
 procedure {:inline 1} initGlobals();
 modifies $mem_pages;
-modifies Counter;
 ensures(($mem_pages) == (0));
-ensures((Counter) == (41.0));
 implementation initGlobals()
 {
     $mem_pages := 0;
-    Counter := 41.0;
 }
 
-procedure {:inline 1} popArgs1() returns (a1: real);
-modifies $sp;
-modifies $stack;
-requires(($sp) >= (1));
-ensures(($sp) == ((old($sp)) - (1)));
-ensures((0) <= ($sp));
-ensures(forall  i:int ::  (($stack[i]) == (old($stack)[i])));
-ensures((a1) == (old($stack)[(old($sp)) - (1)]));
-implementation popArgs1() returns (a1: real)
-{
-    $sp := ($sp) - (1);
-    a1 := $stack[$sp];
-}
-
-procedure {:inline 1} inc_and_check();
+procedure {:inline 1} target();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -429,38 +408,16 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation inc_and_check()
+implementation target()
 {
     var entry_sp: int;
     var idx: int;
     var load_i: int;
     var store_i: int;
     entry_sp := $sp;
-    call push(Counter);
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call Counter := popArgs1();
-    call push(Counter);
-    call push(Max);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
 }
 
-procedure {:inline 1} popDiscard1();
-modifies $sp;
-requires(($sp) >= (1));
-ensures(($sp) == ((old($sp)) - (1)));
-ensures((0) <= ($sp));
-implementation popDiscard1()
-{
-    $sp := ($sp) - (1);
-}
-
-procedure {:inline 1} CorralChoice_dynamic_predule();
+procedure {:inline 1} table_set();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -470,19 +427,44 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation CorralChoice_dynamic_predule()
+implementation table_set()
+{
+    var entry_sp: int;
+    var idx: int;
+    var load_i: int;
+    var store_i: int;
+    entry_sp := $sp;
+    call push(0.0);
+    // // unhandled raw instruction: ref.func
+    call popToTmp1();
+    call popToTmp2();
+    idx := real_to_int($tmp2);
+    call table_set(idx, $tmp1);
+}
+
+procedure {:inline 1} CorralChoice_table_set();
+modifies $tmp1;
+modifies $tmp2;
+modifies $tmp3;
+modifies $sp;
+modifies $stack;
+modifies $table;
+modifies $table_size;
+modifies $mem;
+modifies $mem_pages;
+implementation CorralChoice_table_set()
 {
     var c: int;
     havoc c;
-    assume (((0) <= (c)) && ((c) < (1)));
+    assume (((0) <= (c)) && ((c) < (2)));
     if ((c) == (0)) {
-        call inc_and_check();
-        call popDiscard1();
+        call target();
+    } else if ((c) == (1)) {
+        call table_set();
     }
 }
 
-procedure BoogieEntry_dynamic_predule();
+procedure BoogieEntry_table_set();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -492,8 +474,7 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation BoogieEntry_dynamic_predule()
+implementation BoogieEntry_table_set()
 {
     var c: int;
     call initGlobals();
@@ -502,15 +483,16 @@ implementation BoogieEntry_dynamic_predule()
     invariant (0) <= ($sp);
     {
         havoc c;
-        assume (((0) <= (c)) && ((c) < (1)));
+        assume (((0) <= (c)) && ((c) < (2)));
         if ((c) == (0)) {
-            call inc_and_check();
-            call popDiscard1();
+            call target();
+        } else if ((c) == (1)) {
+            call table_set();
         }
     }
 }
 
-procedure CorralEntry_dynamic_predule();
+procedure CorralEntry_table_set();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -520,14 +502,13 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation CorralEntry_dynamic_predule()
+implementation CorralEntry_table_set()
 {
     call InitRuntime();
     call initGlobals();
     while (true)
     {
-        call CorralChoice_dynamic_predule();
+        call CorralChoice_table_set();
     }
 }
 

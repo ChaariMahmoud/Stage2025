@@ -1,0 +1,5 @@
+call push(arg1);
+call popToTmp1();
+idx := real_to_int($tmp1);
+call load_i := memory_grow(idx);
+call push(int_to_real(load_i));

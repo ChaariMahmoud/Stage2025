@@ -1,0 +1,5 @@
+goto block_end_1;
+call push(100.0);
+call arg1 := popArgs1();
+block_end_1:
+call push(arg1);

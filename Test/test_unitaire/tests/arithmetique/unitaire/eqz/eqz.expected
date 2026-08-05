@@ -1,0 +1,2 @@
+call popToTmp1();
+call push(bool_to_real(($tmp1) == (0.0)));

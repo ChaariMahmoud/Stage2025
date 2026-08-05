@@ -1,0 +1,2 @@
+call popToTmp1();
+call push(nearest_real($tmp1));

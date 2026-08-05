@@ -1,0 +1,2 @@
+call push(arg1);
+// // numeric cast f32.convert_i32_u: no-op under real semantics

@@ -1,0 +1,4 @@
+    call push(42.0);
+    call pop();
+    goto func_exit_1;
+func_exit_1:

@@ -1,0 +1,6 @@
+call push(0.0);
+call popToTmp1();
+idx := (real_to_int($tmp1)) + (0);
+call load_i := mem_read_u8(idx);
+call push(int_to_real(load_i));
+call pop();

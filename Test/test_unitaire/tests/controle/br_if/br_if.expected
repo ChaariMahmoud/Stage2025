@@ -1,0 +1,9 @@
+call push(arg1);
+call popToTmp1();
+if (real_to_bool($tmp1)) {
+    goto block_end_1;
+}
+call push(100.0);
+call arg2 := popArgs1();
+block_end_1:
+call push(arg2);

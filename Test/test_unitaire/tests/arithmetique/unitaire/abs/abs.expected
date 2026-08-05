@@ -1,0 +1,2 @@
+call popToTmp1();
+call push(abs_real($tmp1));

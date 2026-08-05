@@ -1,0 +1,6 @@
+call popToTmp1();
+if (real_to_bool($tmp1)) {
+    call push(100.0);
+    call popToTmp2();
+    arg2 := $tmp2;
+}

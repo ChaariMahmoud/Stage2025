@@ -1,0 +1,2 @@
+load_i := $mem_pages;
+call push(int_to_real(load_i));

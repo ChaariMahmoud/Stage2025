@@ -390,19 +390,12 @@ implementation table_grow(value: real, delta: int) returns (oldSize: int)
     $table_size := ($table_size) + (delta);
 }
 
-var Counter: real;
-const Max: real;
-
-axiom((Max) == (100.0));
 procedure {:inline 1} initGlobals();
 modifies $mem_pages;
-modifies Counter;
 ensures(($mem_pages) == (0));
-ensures((Counter) == (41.0));
 implementation initGlobals()
 {
     $mem_pages := 0;
-    Counter := 41.0;
 }
 
 procedure {:inline 1} popArgs1() returns (a1: real);
@@ -419,7 +412,7 @@ implementation popArgs1() returns (a1: real)
     a1 := $stack[$sp];
 }
 
-procedure {:inline 1} inc_and_check();
+procedure {:inline 1} block();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -429,25 +422,19 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation inc_and_check()
+implementation block()
 {
+    var arg1: real;
     var entry_sp: int;
     var idx: int;
     var load_i: int;
     var store_i: int;
     entry_sp := $sp;
-    call push(Counter);
-    call push(1.0);
-    call popToTmp1();
-    call popToTmp2();
-    call push(($tmp2) + ($tmp1));
-    call Counter := popArgs1();
-    call push(Counter);
-    call push(Max);
-    call popToTmp1();
-    call popToTmp2();
-    call push(bool_to_real(($tmp2) < ($tmp1)));
+    assume (($sp) >= (1));
+    call arg1 := popArgs1();
+    call push(42.0);
+    call arg1 := popArgs1();
+    call push(arg1);
 }
 
 procedure {:inline 1} popDiscard1();
@@ -460,7 +447,7 @@ implementation popDiscard1()
     $sp := ($sp) - (1);
 }
 
-procedure {:inline 1} CorralChoice_dynamic_predule();
+procedure {:inline 1} CorralChoice_block();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -470,19 +457,22 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation CorralChoice_dynamic_predule()
+implementation CorralChoice_block()
 {
     var c: int;
+    var argTmp: real;
     havoc c;
     assume (((0) <= (c)) && ((c) < (1)));
     if ((c) == (0)) {
-        call inc_and_check();
+        havoc argTmp;
+        assume ((argTmp) == (real(int(argTmp))));
+        call push(argTmp);
+        call block();
         call popDiscard1();
     }
 }
 
-procedure BoogieEntry_dynamic_predule();
+procedure BoogieEntry_block();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -492,10 +482,10 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation BoogieEntry_dynamic_predule()
+implementation BoogieEntry_block()
 {
     var c: int;
+    var argTmp: real;
     call initGlobals();
     call InitRuntime();
     while (true)
@@ -504,13 +494,16 @@ implementation BoogieEntry_dynamic_predule()
         havoc c;
         assume (((0) <= (c)) && ((c) < (1)));
         if ((c) == (0)) {
-            call inc_and_check();
+            havoc argTmp;
+            assume ((argTmp) == (real(int(argTmp))));
+            call push(argTmp);
+            call block();
             call popDiscard1();
         }
     }
 }
 
-procedure CorralEntry_dynamic_predule();
+procedure CorralEntry_block();
 modifies $tmp1;
 modifies $tmp2;
 modifies $tmp3;
@@ -520,14 +513,13 @@ modifies $table;
 modifies $table_size;
 modifies $mem;
 modifies $mem_pages;
-modifies Counter;
-implementation CorralEntry_dynamic_predule()
+implementation CorralEntry_block()
 {
     call InitRuntime();
     call initGlobals();
     while (true)
     {
-        call CorralChoice_dynamic_predule();
+        call CorralChoice_block();
     }
 }
 

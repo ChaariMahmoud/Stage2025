@@ -1,0 +1,13 @@
+    call popToTmp1();
+    idx := real_to_int($tmp1);
+    if (((idx) < (0)) || ((idx) >= (1))) {
+        goto block1_end_1;
+    } else {
+        if ((idx) == (0)) {
+            goto block_end_2;
+        }
+        goto block1_end_1;
+    }
+block_end_2:
+block1_end_1:
+

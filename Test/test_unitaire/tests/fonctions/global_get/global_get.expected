@@ -1,0 +1,2 @@
+call push(my_global);
+call pop();

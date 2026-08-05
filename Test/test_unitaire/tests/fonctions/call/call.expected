@@ -1,0 +1,3 @@
+call push(arg1);
+call push(42.0);
+call add_two();

@@ -1,0 +1,7 @@
+call push(0.0);
+call push(16.0);
+call push(8.0);
+call popToTmp1();
+call popToTmp2();
+call popToTmp3();
+call memory_copy(real_to_int($tmp3), real_to_int($tmp2), real_to_int($tmp1));

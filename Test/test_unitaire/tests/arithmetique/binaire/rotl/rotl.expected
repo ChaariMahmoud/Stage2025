@@ -1,0 +1,3 @@
+call popToTmp1();
+call popToTmp2();
+call push(bv_rotl($tmp2, $tmp1));

@@ -1,0 +1,7 @@
+call push(0.0);
+call push(1,5);
+call popToTmp2();
+call popToTmp1();
+idx := (real_to_int($tmp1)) + (0);
+store_i := real_to_int($tmp2);
+call mem_write_u32(idx, store_i);
