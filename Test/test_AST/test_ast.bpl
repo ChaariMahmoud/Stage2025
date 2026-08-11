@@ -48,18 +48,26 @@ datatype Instr {
   ConstI32(val: int),
   UnaryOpNode(uOp: UnOp, uOperand: Instr),
   BinaryOpNode(bOp: BinOp, bLeft: Instr, bRight: Instr),
-  MemoryOpNode(moOp: MemOp, moOffset: int, moAlign: int, moAddress: Option Instr, moValue: Option Instr, moLength: Option Instr, moMemoryIndex: int)
-  // J'ai retiré les noeuds inutilisés ici pour garder le code concis, 
-  // tu pourras recoller le reste de ton AST complet sans problème.
+  MemoryOpNode(moOp: MemOp, moOffset: int, moAlign: int, moAddress: Option Instr, moValue: Option Instr, moLength: Option Instr, moMemoryIndex: int),
+  TableOpNode(toOp: TableOp, toIndex: Option Instr, toValue: Option Instr, toDelta: Option Instr)
 }
 
 // ==============================================================================
-// 4. FONCTIONS SÉMANTIQUES PURES (Avec {:inline})
+// 4. FONCTIONS SÉMANTIQUES PURES (Toutes avec {:inline})
 // ==============================================================================
 
+// --- Opérations Binaires ---
 function {:inline} eval_Add(st: State): State {
   if (st->stStack is ConsStack && st->stStack->rest is ConsStack && st->stStack->rest->top is I32Val && st->stStack->top is I32Val) then
     State(ConsStack(I32Val(st->stStack->rest->top->i + st->stStack->top->i), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack && st->stStack->rest is ConsStack) then
+    State(ConsStack(UndefVal(), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
+}
+
+function {:inline} eval_Sub(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->rest is ConsStack && st->stStack->rest->top is I32Val && st->stStack->top is I32Val) then
+    State(ConsStack(I32Val(st->stStack->rest->top->i - st->stStack->top->i), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
   else if (st->stStack is ConsStack && st->stStack->rest is ConsStack) then
     State(ConsStack(UndefVal(), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
   else st
@@ -73,12 +81,48 @@ function {:inline} eval_Mul(st: State): State {
   else st
 }
 
-function {:inline} eval_BinOp(op: BinOp, st: State): State {
-  if (op is Add) then eval_Add(st)
-  else if (op is Mul) then eval_Mul(st)
-  else st // Remplacer par DivS et Sub si nécessaire
+function {:inline} eval_DivS(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->rest is ConsStack && st->stStack->rest->top is I32Val && st->stStack->top is I32Val && st->stStack->top->i != 0) then
+    State(ConsStack(I32Val(st->stStack->rest->top->i div st->stStack->top->i), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack && st->stStack->rest is ConsStack) then
+    State(ConsStack(UndefVal(), st->stStack->rest->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
 }
 
+function {:inline} eval_BinOp(op: BinOp, st: State): State {
+  if (op is Add) then eval_Add(st)
+  else if (op is Sub) then eval_Sub(st)
+  else if (op is Mul) then eval_Mul(st)
+  else if (op is DivS) then eval_DivS(st)
+  else st
+}
+
+// --- Opérations Unaires ---
+function {:inline} eval_Neg(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->top is I32Val) then
+    State(ConsStack(I32Val(-(st->stStack->top->i)), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack) then
+    State(ConsStack(UndefVal(), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
+}
+
+function {:inline} eval_Eqz(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->top is I32Val && st->stStack->top->i == 0) then
+    State(ConsStack(I32Val(1), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack && st->stStack->top is I32Val) then
+    State(ConsStack(I32Val(0), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack) then
+    State(ConsStack(UndefVal(), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
+}
+
+function {:inline} eval_UnOp(op: UnOp, st: State): State {
+  if (op is Neg) then eval_Neg(st)
+  else if (op is Eqz) then eval_Eqz(st)
+  else st
+}
+
+// --- Mémoire et Tables ---
 function {:inline} eval_StoreI32(st: State, offset: int): State {
   if (st->stStack is ConsStack && st->stStack->rest is ConsStack && 
       st->stStack->top is I32Val && st->stStack->rest->top is I32Val &&
@@ -100,12 +144,28 @@ function {:inline} eval_LoadI32(st: State, offset: int): State {
   else st
 }
 
+function {:inline} eval_TableSet(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->rest is ConsStack && 
+      st->stStack->rest->top is I32Val && st->stStack->rest->top->i >= 0) then
+    State(st->stStack->rest->rest, st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, 
+      (st->stTables)[st->stStack->rest->top->i := st->stStack->top])
+  else if (st->stStack is ConsStack && st->stStack->rest is ConsStack) then
+    State(st->stStack->rest->rest, st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
+}
+
+function {:inline} eval_TableGet(st: State): State {
+  if (st->stStack is ConsStack && st->stStack->top is I32Val && st->stStack->top->i >= 0) then
+    State(ConsStack((st->stTables)[st->stStack->top->i], st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else if (st->stStack is ConsStack) then
+    State(ConsStack(UndefVal(), st->stStack->rest), st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables)
+  else st
+}
+
 // ==============================================================================
-// 5. NOUVELLE PROCÉDURE D'ÉVALUATION (Remplacement de la fonction)
+// 5. PROCÉDURE D'ÉVALUATION (inline 4 pour tolérer des AST de profondeur 3)
 // ==============================================================================
 
-// On met un {:inline} pour que lors des tests, Boogie déploie le code 
-// de la procédure et puisse vérifier les assertions de fin.
 procedure {:inline 1} eval_Instr(e: Instr, st: State) returns (outSt: State)
 {
   if (e is ConstI32) {
@@ -114,11 +174,13 @@ procedure {:inline 1} eval_Instr(e: Instr, st: State) returns (outSt: State)
       st->stMemory, st->stMemSize, st->stLocals, st->stGlobals, st->stTables
     );
   } 
+  else if (e is UnaryOpNode) {
+    call outSt := eval_Instr(e->uOperand, st);
+    outSt := eval_UnOp(e->uOp, outSt);
+  }
   else if (e is BinaryOpNode) {
-    // Les appels récursifs sont sérialisés via la variable de retour outSt
     call outSt := eval_Instr(e->bLeft, st);
     call outSt := eval_Instr(e->bRight, outSt);
-    // On appelle la fonction pure finale pour résoudre le calcul
     outSt := eval_BinOp(e->bOp, outSt);
   } 
   else if (e is MemoryOpNode && e->moOp is Store) {
@@ -126,54 +188,104 @@ procedure {:inline 1} eval_Instr(e: Instr, st: State) returns (outSt: State)
   } 
   else if (e is MemoryOpNode && e->moOp is Load) {
     outSt := eval_LoadI32(st, e->moOffset);
-  } 
+  }
+  else if (e is TableOpNode && e->toOp is TableSet) {
+    outSt := eval_TableSet(st);
+  }
+  else if (e is TableOpNode && e->toOp is TableGet) {
+    outSt := eval_TableGet(st);
+  }
   else {
     outSt := st;
   }
 }
 
 // ==============================================================================
-// 6. TESTS SÉPARÉS
+// 6. BATTERIE DE TESTS (Utilisant le modèle Procédure/Call)
 // ==============================================================================
 
-procedure TestArithI32()
+// Helper pour éviter de recopier l'état de base
+function get_InitState(): State {
+  State(NilStack(), (lambda k: int :: 0), 1024, (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()))
+}
+
+// --- Test 1 : Arithmétique (Add, Mul) ---
+procedure Test_Arith_Add_Mul()
 {
-  var initSt: State;
   var outSt: State;
   var ast: Instr;
-
-  initSt := State(NilStack(), (lambda k: int :: 0), 1024, (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()));
-
-  // On veut évaluer l'AST : (10 + 2) * 3 = 36
-  ast := BinaryOpNode(Mul(), BinaryOpNode(Add(), ConstI32(10), ConstI32(2)), ConstI32(3));
   
-  // Utilisation de 'call' et stockage dans 'outSt'
-  call outSt := eval_Instr(ast, initSt);
-
-  // Z3 vérifie mathématiquement que la pile finale contient 36
+  // (10 + 2) * 3 = 36
+  ast := BinaryOpNode(Mul(), BinaryOpNode(Add(), ConstI32(10), ConstI32(2)), ConstI32(3));
+  call outSt := eval_Instr(ast, get_InitState());
+  
   assert outSt->stStack == ConsStack(I32Val(36), NilStack());
 }
 
-procedure TestMemoryI32()
+// --- Test 2 : Arithmétique (Sub, DivS) ---
+procedure Test_Arith_Sub_Div()
 {
-  var initSt: State;
+  var outSt: State;
+  var ast: Instr;
+  
+  // (20 - 4) / 2 = 8
+  ast := BinaryOpNode(DivS(), BinaryOpNode(Sub(), ConstI32(20), ConstI32(4)), ConstI32(2));
+  call outSt := eval_Instr(ast, get_InitState());
+  
+  assert outSt->stStack == ConsStack(I32Val(8), NilStack());
+}
+
+// --- Test 3 : Opérations Unaires (Neg, Eqz) ---
+procedure Test_Unary_Neg_Eqz()
+{
+  var outSt: State;
+  var ast: Instr;
+  
+  // Eqz(Neg(0)) -> -0 = 0 -> 0 == 0 -> 1 (vrai)
+  ast := UnaryOpNode(Eqz(), UnaryOpNode(Neg(), ConstI32(0)));
+  call outSt := eval_Instr(ast, get_InitState());
+  
+  assert outSt->stStack == ConsStack(I32Val(1), NilStack());
+}
+
+// --- Test 4 : Accès Mémoire (Store, Load) ---
+procedure Test_Memory_Store_Load()
+{
   var currentSt: State;
+  currentSt := get_InitState();
 
-  initSt := State(NilStack(), (lambda k: int :: 0), 1024, (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()), (lambda k: int :: UndefVal()));
-
-  // 1. On écrit la valeur 42 à l'adresse 100
-  call currentSt := eval_Instr(ConstI32(100), initSt);    // Empile l'adresse (100)
-  call currentSt := eval_Instr(ConstI32(42), currentSt);  // Empile la valeur (42)
+  // 1. Empiler l'adresse (100) puis la valeur (42) et déclencher Store
+  call currentSt := eval_Instr(ConstI32(100), currentSt);
+  call currentSt := eval_Instr(ConstI32(42), currentSt);
   call currentSt := eval_Instr(MemoryOpNode(Store(), 0, 0, NoneOpt(), NoneOpt(), NoneOpt(), 0), currentSt);
 
-  // La mémoire à l'adresse 100 doit valoir 42, et la pile doit être vide
   assert (currentSt->stMemory)[100] == 42;
   assert currentSt->stStack == NilStack();
 
-  // 2. On relit la mémoire à l'adresse 100
-  call currentSt := eval_Instr(ConstI32(100), currentSt); // Empile l'adresse (100)
+  // 2. Empiler l'adresse (100) et déclencher Load
+  call currentSt := eval_Instr(ConstI32(100), currentSt);
   call currentSt := eval_Instr(MemoryOpNode(Load(), 0, 0, NoneOpt(), NoneOpt(), NoneOpt(), 0), currentSt);
 
-  // La pile doit maintenant contenir la valeur lue (42)
   assert currentSt->stStack == ConsStack(I32Val(42), NilStack());
+}
+
+// --- Test 5 : Accès Table (TableSet, TableGet) ---
+procedure Test_Table_Set_Get()
+{
+  var currentSt: State;
+  currentSt := get_InitState();
+
+  // 1. Empiler l'index (10) puis la valeur (99) et déclencher TableSet
+  call currentSt := eval_Instr(ConstI32(10), currentSt);
+  call currentSt := eval_Instr(ConstI32(99), currentSt);
+  call currentSt := eval_Instr(TableOpNode(TableSet(), NoneOpt(), NoneOpt(), NoneOpt()), currentSt);
+
+  assert (currentSt->stTables)[10] == I32Val(99);
+  assert currentSt->stStack == NilStack();
+
+  // 2. Empiler l'index (10) et déclencher TableGet
+  call currentSt := eval_Instr(ConstI32(10), currentSt);
+  call currentSt := eval_Instr(TableOpNode(TableGet(), NoneOpt(), NoneOpt(), NoneOpt()), currentSt);
+
+  assert currentSt->stStack == ConsStack(I32Val(99), NilStack());
 }
